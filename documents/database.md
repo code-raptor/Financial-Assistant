@@ -1,19 +1,18 @@
-//https://dbdiagram.io/home
-
 Table Termek {
   termekID int PK
   termekNev varchar(100)
   termekJotallas bit
   termekKaros bit
+  TermekTulajdonsagID int
 }
 
-Table Egyseg {
-  egysegID int PK
-  egysegNev varchar(50)
+Table EgysegTulajdonsag{
+  EgysegTulajdonsagID int PK
+  egysegTulajdonsagNev varchar(50)
 }
-//lebeg
-Table Kategoria {
-  kategoriaID int PK
+
+Table KategoriaTulajdonsag {
+  KategoriaTulajdonsagID int PK
   KategoriaNev varchar(100)
 }
 
@@ -62,9 +61,34 @@ Table TermekNyugta_Kapcs {
   ar int
 }
 
+Table TermekTulajdonsag {
+  TermekTulajdonsagID int PK
+  name varchar(100)
+}
+
+Table TermekFlex {
+  termekID int
+  TermekTulajdonsagID int PK
+  value varchar(100)
+}
+
+Table EgysegFlex {
+  termekNyugta_KapcsID int
+  egysegTulajdonsagID int
+  jotallasID int
+  value int
+}
+
+Table KategoriaFlex {
+  KategoriaTulajdonsagID int
+  bevetelID int
+  rendszeresKiadID int
+  value int
+}
+
 Ref: Jotallas.termekID > Termek.termekID
 
-Ref: Jotallas.egysegID > Egyseg.egysegID
+Ref: EgysegTulajdonsag.EgysegTulajdonsagID > EgysegFlex.egysegTulajdonsagID
 
 Ref: RendszeresKiad_Kapcs.rendszeresKiadID > RendszeresKiad.rendszeresKiadID
 
@@ -74,8 +98,16 @@ Ref: Nyugta.termekNyugta_KapcsID > TermekNyugta_Kapcs.termekNyugta_KapcsID
 
 Ref: TermekNyugta_Kapcs.termekID > Termek.termekID
 
-Ref: TermekNyugta_Kapcs.egysegID > Egyseg.egysegID
+Ref: Bevetel.bevetelID > KategoriaFlex.bevetelID
 
-Ref: Bevetel.kategoriaID > Kategoria.kategoriaID
+Ref: RendszeresKiad.rendszeresKiadID > KategoriaFlex.rendszeresKiadID
 
-Ref: RendszeresKiad.kategoriaID > Kategoria.kategoriaID
+Ref: TermekTulajdonsag.TermekTulajdonsagID > TermekFlex.TermekTulajdonsagID
+
+Ref: TermekFlex.termekID > Termek.termekID
+
+Ref: EgysegFlex.termekNyugta_KapcsID > TermekNyugta_Kapcs.termekNyugta_KapcsID
+
+Ref: EgysegFlex.jotallasID > Jotallas.jotallasID
+
+Ref: KategoriaTulajdonsag.KategoriaTulajdonsagID > KategoriaFlex.KategoriaTulajdonsagID
