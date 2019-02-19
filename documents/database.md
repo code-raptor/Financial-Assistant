@@ -1,113 +1,83 @@
-Table Termek {
-  termekID int PK
-  termekNev varchar(100)
-  termekJotallas bit
-  termekKaros bit
-  TermekTulajdonsagID int
-}
-
-Table EgysegTulajdonsag{
-  EgysegTulajdonsagID int PK
-  egysegTulajdonsagNev varchar(50)
-}
-
-Table KategoriaTulajdonsag {
-  KategoriaTulajdonsagID int PK
-  KategoriaNev varchar(100)
-}
-
-Table Jotallas {
-  jotallasID int PK
-  termekID int 
-  egysegID int 
-  jotallasLejarat date
-}
-
-Table RendszeresKiad {
-  rendszeresKiadID int PK
-  kategoriaID int 
-  RendszeresKiadNev varchar
-}
-
-Table Bevetel {
-  bevetelID int PK
-  kategoriaID int
-  bevetelNev varchar
-}
-
-Table RendszeresKiad_Kapcs {
-  rendszeresKiad_KapcsID int PK
-  rendszeresKiadID int 
-  rendszeresKiadDatum date
-}
-
-Table Bevetel_Kapcs {
-  bevetel_KapcsID int PK
-  bevetelID int 
-  bevetelDatum date
-}
-
-Table Nyugta{
-  nyugtaID int PK
-  termekNyugta_KapcsID int
-  nyugtaDatum date
-}
-
-Table TermekNyugta_Kapcs {
-  termekNyugta_KapcsID int
-  termekID int 
-  mennyiseg int
-  egysegID int 
-  ar int
-}
-
-Table TermekTulajdonsag {
-  TermekTulajdonsagID int PK
+Table termek_tulajdonsag {
+  termek_tulajdonsag_id int PK
   name varchar(100)
+  type varchar(20)
 }
 
-Table TermekFlex {
-  termekID int
-  TermekTulajdonsagID int PK
-  value varchar(100)
+Table termek { 
+ termek_id int PK 
+ name varchar(100)
+ termek_tulajdonsag_id int
+ termek_tulajdonsag_value varchar(100)
 }
 
-Table EgysegFlex {
-  termekNyugta_KapcsID int
-  egysegTulajdonsagID int
-  jotallasID int
-  value int
+Table egyseg_tulajdonsag{
+  egyseg_tulajdonsag_id int PK
+  name varchar(50)
+  type varchar(20)
 }
 
-Table KategoriaFlex {
-  KategoriaTulajdonsagID int
-  bevetelID int
-  rendszeresKiadID int
-  value int
+// ?
+Table jotallas {
+  jotallas_id int PK
+  termek_id int 
+  expires_date date
 }
 
-Ref: Jotallas.termekID > Termek.termekID
+Table nyugta {
+  nyugta_id int PK
+  termek_id int 
+  quantity int
+  price int
+  nyugta_date date
+  egyseg_tulajdonsag_id int
+  egyseg_tulajdonsag_value int
+}
 
-Ref: EgysegTulajdonsag.EgysegTulajdonsagID > EgysegFlex.egysegTulajdonsagID
+Table bevetel_tulajdonsag {
+  bevetel_tulajdonsag_id int PK
+  name varchar(50)
+  type varchar(20)
+}
 
-Ref: RendszeresKiad_Kapcs.rendszeresKiadID > RendszeresKiad.rendszeresKiadID
+Table bevetel {
+  bevetel_id int PK
+  amount varchar
+  bevetel_date date
+  bevetel_tulajdonsag_id int
+  bevetel_tulajdonsag_value varchar(100)
+}
 
-Ref: Bevetel_Kapcs.bevetelID > Bevetel.bevetelID
+//kiadas neve (víz,gaz, spotify,teljesítmény ado, hitel)
+table kiadas_tulajdonsag { 
+  kiadas_tulajdonsag_id int PK
+  name varchar(50)
+  type varchar(20)
+}
 
-Ref: Nyugta.termekNyugta_KapcsID > TermekNyugta_Kapcs.termekNyugta_KapcsID
+// rendszeres kiadas 
+Table kiadas {
+  kiadas_id int PK
+  consumption double //fogyaztás vagy mennyiség pl.: 958.5 köbméter gáz
+  //? köbméter, liter, mj
+  egyseg_tulajdonsag_id int
+  amount int
+  kiadas_date date
+  kiadas_frequency int
+  kiadas_tulajdonsag_id int
+  kiadas_tulajdonsag_value varchar(100)
+}
 
-Ref: TermekNyugta_Kapcs.termekID > Termek.termekID
 
-Ref: Bevetel.bevetelID > KategoriaFlex.bevetelID
 
-Ref: RendszeresKiad.rendszeresKiadID > KategoriaFlex.rendszeresKiadID
+Ref: termek_tulajdonsag.termek_tulajdonsag_id >  termek.termek_tulajdonsag_id 
 
-Ref: TermekTulajdonsag.TermekTulajdonsagID > TermekFlex.TermekTulajdonsagID
+Ref: termek.termek_id > nyugta.termek_id
 
-Ref: TermekFlex.termekID > Termek.termekID
+Ref: egyseg_tulajdonsag.egyseg_tulajdonsag_id > nyugta.egyseg_tulajdonsag_id
 
-Ref: EgysegFlex.termekNyugta_KapcsID > TermekNyugta_Kapcs.termekNyugta_KapcsID
+Ref: jotallas.termek_id > nyugta.termek_id
 
-Ref: EgysegFlex.jotallasID > Jotallas.jotallasID
+Ref: bevetel_tulajdonsag.bevetel_tulajdonsag_id > bevetel.bevetel_tulajdonsag_id
 
-Ref: KategoriaTulajdonsag.KategoriaTulajdonsagID > KategoriaFlex.KategoriaTulajdonsagID
+Ref: kiadas_tulajdonsag.kiadas_tulajdonsag_id > kiadas.kiadas_tulajdonsag_id
