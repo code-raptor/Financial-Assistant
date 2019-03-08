@@ -1,10 +1,11 @@
-package com.coderaptor.financial.assistant.financial.assistant.app
+package com.coderaptor.financial.assistant.app
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.coderaptor.financial.assistant.financial.assistant.app.R
 
 import kotlinx.android.synthetic.main.activity_main.*
 
