@@ -15,6 +15,8 @@ import com.baoyz.swipemenulistview.SwipeMenuListView
 import com.github.clans.fab.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         val firstFab: FloatingActionButton = findViewById(R.id.addNewButton)
         firstFab.setOnClickListener {
-            Log.i("fab", "addnew clicked")
+            Log.i("click", "addnew clicked")
+            val intent = Intent(this, IncomeActivity::class.java)
+            startActivity(intent)
         }
 
         val settings: ImageButton = findViewById(R.id.settings)
@@ -35,24 +39,27 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val extras = intent.extras
+        val tmp = extras?.getString("income")
+
 
         val listView : SwipeMenuListView = findViewById(R.id.listView)
-
         val list : MutableList<String> = ArrayList()
-
         list.add("asd")
         list.add("fasd")
         list.add("asdsd")
         list.add("asddf")
         list.add("asdwqe")
 
+        if (tmp != null) {
+            list.add(tmp)
+        }
+
+
         val adapter: ArrayAdapter<Any> = ArrayAdapter(this, android.R.layout.simple_list_item_1, list as List<Any>)
         listView.adapter = adapter
-
         val creator = SwipeMenuCreator { menu ->
-            val openItem = SwipeMenuItem(
-                applicationContext
-            )
+            val openItem = SwipeMenuItem(applicationContext)
             openItem.background = ColorDrawable(
                 Color.rgb(
                     0xC9,
