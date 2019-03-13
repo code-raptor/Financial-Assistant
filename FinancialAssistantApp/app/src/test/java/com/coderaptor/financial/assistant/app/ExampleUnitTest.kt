@@ -1,4 +1,4 @@
-package com.coderaptor.financial.assistant.financial.assistant.app
+package com.coderaptor.financial.assistant.app
 
 import org.junit.Test
 
