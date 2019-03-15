@@ -49,10 +49,21 @@
             android:layout_height="0dp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0">
 
+        <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:id="@+id/recyclerView"
+                tools:context=".MainActivity">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <!-- FAB MENU -->
         <com.github.clans.fab.FloatingActionMenu
                 android:id="@+id/fabMenu"
+                android:accessibilityTraversalBefore="@+id/recyclerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -134,7 +145,7 @@
 
 
         </com.github.clans.fab.FloatingActionMenu>
-
+<!--
         <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:layout_height="389dp"
                 android:id="@+id/listView"
@@ -142,7 +153,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
         </com.baoyz.swipemenulistview.SwipeMenuListView>
-
+-->
         <!--Egyenleg-->
         <TextView
                 android:layout_width="wrap_content"
