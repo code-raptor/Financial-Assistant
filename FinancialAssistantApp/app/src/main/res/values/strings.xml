@@ -20,6 +20,9 @@
     <string name="hint_amount">342000</string>
     <string name="amount">Összeg:</string>
     <string name="income_button">Rögzit</string>
+    <string name="income_list_name">Telefon Számla</string>
+    <string name="income_list_date">2019.01.01</string>
+    <string name="income_list_amount">+5000 ft</string>
 
     <string-array name="income_category">
         <item>Fizetés</item>
