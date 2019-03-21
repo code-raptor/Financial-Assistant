@@ -1,37 +1,33 @@
-Table termek_tulajdonsag {
-  termek_tulajdonsag_id int PK
+Table product_property {
+  product_property_id int PK
   name varchar(100)
   type varchar(20)
 }
 
-Table termek_kategoria {
-  termek_kategoria_id int PK
+Table product_category {
+  product_category_id int PK
   name varchar(100)
-  termek_tulajdonsag_id int
-  termek_tulajdonsag_value varchar(100)
+  product_property_id int
+  product_property_value varchar(100)
 }
 
-Table termek { 
- termek_id int PK 
+Table product { 
+ product_id int PK 
  name varchar(100)
- termek_kategoria_id int
+ product_category_id int
  
 }
 
-Table nyugta {
-  nyugta_id int 
-  termek_id int 
-  //nyugta_id + termek_id PK
+Table receipt {
+  receipt_id int 
+  product_id int 
   price int
   quantity int
-  egyseg varchar(25)
-  
-  nyugta_date date
-  egyseg_tulajdonsag_id int
-  egyseg_tulajdonsag_value int
+  unit varchar(25)
+  receipt_date date
 }
 
-Table transaction {
+Table transactions {
   id int PK
   amount int 
   date date
@@ -41,15 +37,14 @@ Table transaction {
 
 Table shopping_list { 
  id int PK 
- termek_id int
+ product_id int
  quantity int
- 
 }
 
-Ref: termek_tulajdonsag.termek_tulajdonsag_id >  termek_kategoria.termek_tulajdonsag_id 
+Ref: product_property.product_property_id >  product_category.product_property_id 
 
-Ref:termek_kategoria.termek_kategoria_id > termek.termek_kategoria_id
+Ref:product_category.product_category_id > product.product_category_id
 
-Ref: termek.termek_id > nyugta.termek_id
+Ref: product.product_id > receipt.product_id
 
-Ref: shopping_list.termek_id > termek.termek_id
+Ref: shopping_list.product_id > product.product_id
