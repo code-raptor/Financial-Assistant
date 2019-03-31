@@ -38,7 +38,7 @@ class TransactionListAdapter(private val transactionList: ArrayList<Transaction>
         LayoutInflater.from(parent.context).inflate(R.layout.list_income, parent, false)) {
 
         fun bind(transaction: Transaction) = with(itemView) {
-            income_nameField.text = transaction.category
+            income_nameField.text = transaction.name
             income_dateField.text = transaction.date
             if (transaction.amount > 0) {
                 income_amountField.setTextColor(getColor(context, R.color.amount_plus))
@@ -50,7 +50,7 @@ class TransactionListAdapter(private val transactionList: ArrayList<Transaction>
             setOnClickListener { view ->
                 Toast.makeText(
                     view.context,
-                    "click on item: " + transaction.category,
+                    "click on item: " + transaction.name,
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
+import com.coderaptor.financial.assistant.app.core.ProductProperty
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
@@ -24,9 +25,8 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupDatabase()
         setSupportActionBar(toolbar)
-
+        setupDatabase()
 
         val firstFab: FloatingActionButton = findViewById(R.id.addNewButton)
         firstFab.setOnClickListener {
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(){
         }
         val secondFab: FloatingActionButton = findViewById(R.id.repeatButton)
         secondFab.setOnClickListener {
-            //dbHandler.deleteAll("mtrans")
+
         }
 
         val settings: ImageButton = findViewById(R.id.settings)
@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(){
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
-
 
         val swipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -75,7 +74,15 @@ class MainActivity : AppCompatActivity(){
             Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
             Transaction(1000, "2019.01.01", "Zsebpénz", "Hetente"),
             Transaction(1000, "2019.01.01", "Zsebpénz", "Hetente"))
-        dbHandler.insertTransactions(transactionList)
+        //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
+        dbHandler.inserts(transactionList)
+
+        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY)
+        val property = ProductProperty("jotallas", "TEXT")
+        dbHandler.insert(property)
+        dbHandler.findAllProductProperty().forEach {
+            Log.i("db", it.toString())
+        }
 
         setUpRecyclerView(dbHandler.findAllTransaction())
     }

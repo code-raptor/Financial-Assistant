@@ -48,7 +48,7 @@ class IncomeActivity : AppCompatActivity() {
 
             val income = Transaction(1, amount, date, category, frequency)
 
-            dbHandler.insertTransaction(income)
+            dbHandler.insert(income)
             Toast.makeText(this, "Sikerek hozzáadás", Toast.LENGTH_LONG).show()
 
             val intent = Intent(this, MainActivity::class.java)
