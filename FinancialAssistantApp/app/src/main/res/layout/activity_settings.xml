@@ -5,39 +5,45 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SettingsActivity"
->
+        tools:context=".SettingsActivity">
 
+    <!-- TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/toolbar"
             android:theme="@style/AppTheme"
             android:minHeight="?attr/actionBarSize"
-            android:id="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/frameLayout">
 
-        <ImageView
-                android:id="@+id/history"
+        <ImageButton
+                android:id="@+id/back"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
-                android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="@android:string/unknownName"/>
+                android:src="@drawable/back"
+                android:contentDescription="@android:string/unknownName"
+                android:background="@android:color/transparent"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="16dp"/>
 
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#F0D2C3"
+            android:background="@color/background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" android:id="@+id/frameLayout">
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:id="@+id/frameLayout">
 
         <Switch
                 android:text="@string/setting_bev_figyel"
@@ -47,10 +53,8 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="50dp"
                 android:layout_marginTop="150dp"
-                android:thumbTint="#52B0A8"
-                android:trackTint="#95E2E3"
                 android:textSize="24sp"
-                android:id="@+id/switch1"/>
+                android:id="@+id/bevasarlas"/>
         <Switch
                 android:text="@string/setting_sporolas"
                 android:textColor="#000000"
@@ -59,10 +63,8 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="50dp"
                 android:layout_marginTop="200dp"
-                android:thumbTint="#52B0A8"
-                android:trackTint="#95E2E3"
                 android:textSize="24sp"
-                android:id="@+id/switch2"/>
+                android:id="@+id/sporolas"/>
 
         <TextView
                 android:text="@string/setting_limit"
@@ -87,19 +89,21 @@
                 android:id="@+id/editText"
                 android:textSize="24sp"
                 android:hint="@string/setting_hint"
-                android:singleLine="true" android:autofillHints="@string/setting_hint" tools:targetApi="o"/>
+                android:singleLine="true"
+                android:autofillHints="@string/setting_hint"
+                tools:targetApi="o"/>
 
         <Button
                 android:text="@string/setting_button_about"
                 android:layout_width="203dp"
-                android:background="#52B0A8"
+                android:background="@color/closed_fab"
                 android:layout_height="60dp"
                 android:id="@+id/aboutButton"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:contentDescription="@android:string/unknownName"
                 android:layout_gravity="bottom|center"
                 android:layout_marginBottom="50dp"
-                android:textSize="23sp"/>
+                android:textSize="23sp" android:textColor="@android:color/white"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

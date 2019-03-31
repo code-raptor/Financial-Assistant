@@ -3,9 +3,7 @@ package com.coderaptor.financial.assistant.app
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.core.Transaction
@@ -34,22 +32,21 @@ class IncomeActivity : AppCompatActivity() {
 
             val amountField : EditText = findViewById(R.id.amountField)
             val dateField: EditText = findViewById(R.id.dateField)
-            val categoryField: Spinner = this.findViewById(R.id.categoryField)
-            val frequencyField: Spinner = findViewById(R.id.frequencyField)
 
-            val amount: Int = amountField.text.toString().toInt()
+
+            var amount: Int = amountField.text.toString().toInt()
+            if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
             val date: String = dateField.text.toString()
             val category: String = categoryField.selectedItem.toString()
-            val frequency: String = frequencyField.selectedItem.toString()
+
             Log.i("transaction", "$amount")
             Log.i("transaction", date)
             Log.i("transaction", category)
-            Log.i("transaction", frequency)
 
-            val income = Transaction(1, amount, date, category, frequency)
+            val transaction = Transaction(amount, date, category)
 
-            dbHandler.insert(income)
-            Toast.makeText(this, "Sikerek hozzáadás", Toast.LENGTH_LONG).show()
+            dbHandler.insert(transaction)
+            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
