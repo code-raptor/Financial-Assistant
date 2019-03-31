@@ -6,49 +6,51 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.R
-import com.coderaptor.financial.assistant.app.core.Income
+import com.coderaptor.financial.assistant.app.core.Transaction
+import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import kotlinx.android.synthetic.main.list_income.view.*
 
 
-class IncomeListAdapter(private val incomeList: ArrayList<Income>) : RecyclerView.Adapter<IncomeListAdapter.ViewHolder>() {
+class TransactionListAdapter(private val transactionList: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(incomeList[position])
+        holder.bind(transactionList[position])
     }
 
-    fun addIncome(income: Income) {
-        incomeList.add(income)
-        notifyItemInserted(incomeList.size)
+    fun addTransaction(transaction: Transaction) {
+        transactionList.add(transaction)
+        notifyItemInserted(transactionList.size)
     }
 
-    fun removeIncome(position: Int) {
-        incomeList.removeAt(position)
+    fun removeTransaction(position: Int, dbHandler: DatabaseHandler) {
+        dbHandler.deleteByPosition(transactionList[position].id, "trans")
         notifyItemRemoved(position)
+        transactionList.removeAt(position)
     }
 
-    override fun getItemCount(): Int = incomeList.size
+    override fun getItemCount(): Int = transactionList.size
 
     class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.list_income, parent, false)) {
 
-        fun bind(income: Income) = with(itemView) {
-            income_nameField.text = income.category
-            income_dateField.text = income.date
-            if (income.amount > 0) {
+        fun bind(transaction: Transaction) = with(itemView) {
+            income_nameField.text = transaction.name
+            income_dateField.text = transaction.date
+            if (transaction.amount > 0) {
                 income_amountField.setTextColor(getColor(context, R.color.amount_plus))
             }else {
                 income_amountField.setTextColor(getColor(context, R.color.amount_minus))
             }
-            income_amountField.text = income.amount.toString()
+            income_amountField.text = transaction.amount.toString()
 
             setOnClickListener { view ->
                 Toast.makeText(
                     view.context,
-                    "click on item: " + income.category,
+                    "click on item: " + transaction.name,
                     Toast.LENGTH_SHORT
                 ).show()
             }

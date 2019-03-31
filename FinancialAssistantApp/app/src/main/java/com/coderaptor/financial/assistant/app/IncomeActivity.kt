@@ -5,14 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import com.coderaptor.financial.assistant.app.core.Income
+import com.coderaptor.financial.assistant.app.core.Transaction
+import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 
 import kotlinx.android.synthetic.main.activity_income.*
 import kotlinx.android.synthetic.main.content_income.*
 
 class IncomeActivity : AppCompatActivity() {
+
+    val dbHandler = DatabaseHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,14 +41,17 @@ class IncomeActivity : AppCompatActivity() {
             val date: String = dateField.text.toString()
             val category: String = categoryField.selectedItem.toString()
             val frequency: String = frequencyField.selectedItem.toString()
-            Log.i("income", "$amount")
-            Log.i("income", date)
-            Log.i("income", category)
-            Log.i("income", frequency)
+            Log.i("transaction", "$amount")
+            Log.i("transaction", date)
+            Log.i("transaction", category)
+            Log.i("transaction", frequency)
 
-            val income = Income(1, amount, date, category, frequency)
+            val income = Transaction(1, amount, date, category, frequency)
+
+            dbHandler.insert(income)
+            Toast.makeText(this, "Sikerek hozzáadás", Toast.LENGTH_LONG).show()
+
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("income", "+ ${income.amount} ft        ${income.date}")
             startActivity(intent)
         }
     }
