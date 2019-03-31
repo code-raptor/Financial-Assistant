@@ -41,6 +41,11 @@ class MainActivity : AppCompatActivity(){
             startActivity(intent)
         }
 
+        findViewById<FloatingActionButton>(R.id.dreamButton).setOnClickListener {
+            val intent = Intent(this, AddNewDreamActivity::class.java)
+            startActivity(intent)
+        }
+
         val settings: ImageButton = findViewById(R.id.settings)
         Log.i("click", "gomb")
         settings.setOnClickListener {
@@ -81,7 +86,6 @@ class MainActivity : AppCompatActivity(){
 
         dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY)
         val property = ProductProperty("jotallas", "TEXT")
-
         dbHandler.insert(property)
         dbHandler.findAllProductProperty().forEach {
             Log.i("db", it.toString())
