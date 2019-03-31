@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_income"
-        tools:context="com.coderaptor.financial.assistant.app.IncomeActivity"
+        tools:context=".IncomeActivity"
         android:background="@android:color/transparent">
     <!--Cím-->
     <TextView
