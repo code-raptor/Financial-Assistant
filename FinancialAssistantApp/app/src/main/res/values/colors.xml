@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#8D5858</color>
+    <!-- Emi -->
+    <color name="toolbar">#1B5E20</color>
+    <color name="background">#C8E6C9</color>
+    <color name="closed_fab">#EF6C00</color>
+    <color name="open_fab">#FFCC80</color>
+    <color name="ripple_fab">#FFF3E0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="colorPrimary">#EF6C00</color>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorAccent">#FFF3E0</color>
 
     <color name="amount_plus">#198330</color>
     <color name="amount_minus">#A00810</color>
