@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeightLarge"
+        android:background="@drawable/border"
+        android:id="@+id/list_layout">
+
+
+    <TextView
+            android:text="@string/repeat_name"
+            android:layout_width="250dp"
+            android:layout_height="27dp"
+            android:id="@+id/repeatName"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            android:textSize="21sp"
+            android:textAllCaps="true"
+            android:textAlignment="viewStart"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"/>
+    <TextView
+            android:text="@string/repeat_freq"
+            android:layout_width="150dp"
+            android:layout_height="27dp"
+            android:id="@+id/repeatFreq"
+            android:layout_marginStart="8dp"
+            android:textSize="21sp"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="7dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"/>
+    <TextView
+            android:text="@string/repeat_price"
+            android:layout_width="150dp"
+            android:layout_height="41dp"
+            android:id="@+id/repeatPrice"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="19dp"
+            android:textStyle="italic"
+            android:layout_marginStart="8dp"
+            android:textAlignment="viewEnd"
+            android:textSize="24sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"/>
+</RelativeLayout>

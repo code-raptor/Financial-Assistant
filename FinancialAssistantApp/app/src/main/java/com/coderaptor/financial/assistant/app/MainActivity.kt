@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity(){
         }
         val secondFab: FloatingActionButton = findViewById(R.id.repeatButton)
         secondFab.setOnClickListener {
-
+            val intent = Intent(this, AddNewRepeatActivity::class.java)
+            startActivity(intent)
         }
 
         val settings: ImageButton = findViewById(R.id.settings)

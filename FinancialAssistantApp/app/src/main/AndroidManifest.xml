@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".IncomeActivity"/>
+        <activity android:name=".AddNewRepeatActivity"/>
     </application>
 
 </manifest>
