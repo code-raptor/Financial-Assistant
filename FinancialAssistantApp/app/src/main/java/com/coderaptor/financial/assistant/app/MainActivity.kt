@@ -73,13 +73,14 @@ class MainActivity : AppCompatActivity(){
     private fun setupDatabase() {
         val transactionList = arrayListOf(
             Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
-            Transaction(1000, "2019.01.01", "Zsebpénz", "Hetente"),
-            Transaction(1000, "2019.01.01", "Zsebpénz", "Hetente"))
+            Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
+            Transaction(1000, "2019.01.01", "Bor", "Hetente"))
         //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
         dbHandler.inserts(transactionList)
 
         dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY)
         val property = ProductProperty("jotallas", "TEXT")
+
         dbHandler.insert(property)
         dbHandler.findAllProductProperty().forEach {
             Log.i("db", it.toString())

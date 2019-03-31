@@ -10,10 +10,7 @@ data class Transaction(val amount: Int, val date: String, val name: String, val 
         this.id = id
     }
 
-    constructor(id: Long = -1, amount: Int, date: String, name: String) :
-            this(amount, date, name) {
-        this.id = id
-    }
+    fun hasFrequency() = (frequency.isNotEmpty() && frequency != "Egyszeri")
 
     companion object {
         val CREATE_TABLE_TRANSACTION = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_TRANSACTION} " +
