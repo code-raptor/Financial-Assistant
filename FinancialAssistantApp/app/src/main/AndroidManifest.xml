@@ -15,7 +15,7 @@
         <activity android:name=".SettingsActivity"/>
         <activity
                 android:name=".MainActivity"
-                android:label=""
+                android:label="Financial Assistant"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".IncomeActivity"/>
+        <activity android:name=".AddNewRepeatActivity"/>
+        <activity android:name=".AddNewDreamActivity"/>
     </application>
 
 </manifest>

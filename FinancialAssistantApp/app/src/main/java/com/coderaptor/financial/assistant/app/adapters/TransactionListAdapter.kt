@@ -1,5 +1,6 @@
 package com.coderaptor.financial.assistant.app.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -37,9 +38,15 @@ class TransactionListAdapter(private val transactionList: ArrayList<Transaction>
     class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.list_income, parent, false)) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(transaction: Transaction) = with(itemView) {
             income_nameField.text = transaction.name
-            income_dateField.text = transaction.date
+            if (transaction.hasFrequency()) {
+                income_dateField.text = "${transaction.date} gyakoriság: ${transaction.frequency}"
+            }else {
+                income_dateField.text = transaction.date
+            }
+
             if (transaction.amount > 0) {
                 income_amountField.setTextColor(getColor(context, R.color.amount_plus))
             }else {

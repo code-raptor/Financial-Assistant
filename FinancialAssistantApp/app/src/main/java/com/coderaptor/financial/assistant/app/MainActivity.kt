@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         setupDatabase()
 
         val firstFab: FloatingActionButton = findViewById(R.id.addNewButton)
@@ -36,7 +37,13 @@ class MainActivity : AppCompatActivity(){
         }
         val secondFab: FloatingActionButton = findViewById(R.id.repeatButton)
         secondFab.setOnClickListener {
+            val intent = Intent(this, AddNewRepeatActivity::class.java)
+            startActivity(intent)
+        }
 
+        findViewById<FloatingActionButton>(R.id.dreamButton).setOnClickListener {
+            val intent = Intent(this, AddNewDreamActivity::class.java)
+            startActivity(intent)
         }
 
         val settings: ImageButton = findViewById(R.id.settings)
@@ -72,8 +79,8 @@ class MainActivity : AppCompatActivity(){
     private fun setupDatabase() {
         val transactionList = arrayListOf(
             Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
-            Transaction(1000, "2019.01.01", "Zsebpénz", "Hetente"),
-            Transaction(1000, "2019.01.01", "Zsebpénz", "Hetente"))
+            Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
+            Transaction(1000, "2019.01.01", "Bor", "Hetente"))
         //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
         dbHandler.inserts(transactionList)
 
