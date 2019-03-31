@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,10 +8,11 @@
         android:layout_height="match_parent"
         tools:context="com.coderaptor.financial.assistant.app.MainActivity">
 
+    <!-- TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/toolbar"
             android:theme="@style/AppTheme"
             android:minHeight="?attr/actionBarSize"
             android:id="@+id/toolbar"
@@ -22,32 +24,35 @@
         <ImageButton
                 android:layout_width="40dip"
                 android:layout_height="40dip"
-                app:srcCompat="@android:drawable/ic_menu_recent_history"
+                app:srcCompat="@drawable/history"
                 android:contentDescription="@string/history"
                 android:id="@+id/history"
                 android:background="@android:color/transparent"/>
 
 
         <ImageButton
-                app:srcCompat="@android:drawable/ic_menu_manage"
-                android:clickable="true"
                 android:id="@+id/settings"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
                 android:layout_gravity="end"
                 android:layout_marginEnd="18dp"
-                android:contentDescription="@string/settings"
-                android:background="@android:color/transparent" android:focusable="true"
+                app:srcCompat="@drawable/settings"
+                android:background="@android:color/transparent"
+                android:focusable="true"
                 android:visibility="visible"/>
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
-            android:background="#F0D2C3" android:id="@+id/frameLayout"
+            android:background="@color/background"
+            android:id="@+id/frameLayout"
             android:layout_width="411dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintVertical_bias="0.0"
-            android:layout_height="0dp" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,7 +60,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView"
+
                 tools:context=".MainActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -74,9 +84,9 @@
                 app:menu_shadowRadius="4dp"
                 app:menu_shadowXOffset="1dp"
                 app:menu_shadowYOffset="3dp"
-                app:menu_colorNormal="#52B0A8"
-                app:menu_colorPressed="#95E2E3"
-                app:menu_colorRipple="#93565151"
+                app:menu_colorNormal="@color/closed_fab"
+                app:menu_colorPressed="@color/open_fab"
+                app:menu_colorRipple="@color/ripple_fab"
                 app:menu_animationDelayPerItem="50"
                 app:menu_icon="@drawable/fab_add"
                 app:menu_buttonSpacing="0dp"
@@ -101,59 +111,57 @@
                 app:menu_backgroundColor="@android:color/transparent"
                 app:menu_fab_show_animation="@anim/fab_scale_up"
                 app:menu_fab_hide_animation="@anim/fab_scale_down"
-                android:layout_gravity="bottom|end" android:clipChildren="true" android:visibility="visible">
+                android:layout_gravity="bottom|end"
+                android:clipChildren="true"
+                android:visibility="visible">
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/receiptButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_lock_idle_lock"
+                    android:src="@drawable/addreceipt"
                     app:fab_size="mini"
-                    app:fab_colorNormal="#52B0A8"
-                    app:menu_colorPressed="#95E2E3"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
                     android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/dreamButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/btn_star"
+                    android:src="@drawable/heart"
                     app:fab_size="mini"
-                    app:fab_colorNormal="#52B0A8"
-                    app:menu_colorPressed="#95E2E3"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
                     android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/repeatButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_dialog_alert"
+                    android:src="@drawable/repeat"
                     app:fab_size="mini"
-                    app:fab_colorNormal="#52B0A8"
-                    app:menu_colorPressed="#95E2E3"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
                     android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/addNewButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/star_off"
+                    android:src="@drawable/addnew"
                     app:fab_size="mini"
-                    app:fab_colorNormal="#52B0A8"
-                    app:menu_colorPressed="#95E2E3"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
                     android:layout_gravity="bottom|end"/>
 
 
         </com.github.clans.fab.FloatingActionMenu>
-<!--
-        <com.baoyz.swipemenulistview.SwipeMenuListView
-                android:layout_height="389dp"
-                android:id="@+id/listView"
-                android:visibility="visible" android:layout_width="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-        </com.baoyz.swipemenulistview.SwipeMenuListView>
--->
+
         <!--Egyenleg-->
         <TextView
                 android:layout_width="wrap_content"
@@ -173,13 +181,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:id="@+id/editText2" android:text="@string/egyenleg" tools:text="@string/egyenleg"
-                android:contentDescription="@string/egyenleg" android:textSize="24sp"
-                android:layout_gravity="bottom|center_horizontal" android:width="150dp"
-                android:layout_marginBottom="28dp" android:textAlignment="center"
-                android:autofillHints="" tools:ignore="LabelFor" tools:targetApi="o"
+                android:id="@+id/editText2"
+                android:text="@string/egyenleg"
+                tools:text="@string/egyenleg"
+                android:contentDescription="@string/egyenleg"
+                android:textSize="24sp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:width="150dp"
+                android:layout_marginBottom="28dp"
+                android:textAlignment="center"
+                android:autofillHints=""
+                tools:ignore="LabelFor"
+                tools:targetApi="o"
                 android:inputType=""/>
-
 
     </FrameLayout>
 

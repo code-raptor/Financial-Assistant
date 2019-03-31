@@ -16,6 +16,7 @@
     <string name="income_category">Kategoria:</string>
     <string name="date">Dátum:</string>
     <string name="income_income">Bevétel</string>
+    <string name="cost">Kiadás</string>
     <string name="hint_date">2019.01.01</string>
     <string name="hint_amount">342000</string>
     <string name="amount">Összeg:</string>
@@ -23,6 +24,26 @@
     <string name="income_list_name">Telefon Számla</string>
     <string name="income_list_date">2019.01.01</string>
     <string name="income_list_amount">+5000 ft</string>
+
+    <string name="newTransaction">Új tranzakció felvétele</string>
+    <string name="newRepeatTransaction">Új rendszeres felvétele</string>
+
+    <!--Beruházási terv-->
+    <string name="newDream">Új beruházási terv</string>
+    <string name="product">Termék:</string>
+    <string name="price">Ár:</string>
+    <string name="where">Hol:</string>
+    <string name="hint_string">Media Markt, Veszprém</string>
+    <string name="dream_name">24\' HD Monitor</string>
+    <string name="dream_where">Bestbyte</string>
+    <string name="dream_price">56000 ft</string>
+    <string name="dream_date">2021.04.05</string>
+
+    <!--Rendszeres tranzakciók-->
+    <string name="repeat_price">-2580 ft</string>
+    <string name="repeat_name">Telefon számla</string>
+    <string name="repeat_freq">Havonta</string>
+
 
     <string-array name="income_category">
         <item>Fizetés</item>
