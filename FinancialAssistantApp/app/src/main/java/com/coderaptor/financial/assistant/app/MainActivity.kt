@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         setupDatabase()
 
         val firstFab: FloatingActionButton = findViewById(R.id.addNewButton)
