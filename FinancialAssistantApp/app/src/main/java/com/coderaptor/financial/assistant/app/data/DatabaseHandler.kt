@@ -60,16 +60,30 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     fun <T> inserts(myList: ArrayList<T>) {
         val db = this.writableDatabase
+        val values = ContentValues()
         myList.forEach {
-            val values = ContentValues().apply {
-                if (it is Transaction) {
-                    put(BASE_AMOUNT, it.amount)
-                    put(DATE_TRANSACTION, it.date)
-                    put(BASE_NAME, it.name)
-                    put(FREQUENCY_TRANSACTION, it.frequency)
+            values.apply {
+                when (it) {
+                    is Transaction -> {
+                        put(BASE_AMOUNT, it.amount)
+                        put(DATE_TRANSACTION, it.date)
+                        put(BASE_NAME, it.name)
+                        put(FREQUENCY_TRANSACTION, it.frequency)
+                        db.insert(TABLE_NAME_TRANSACTION, null, values)
+                    }
+                    is ProductProperty -> {
+                        put(BASE_NAME, it.name)
+                        put(TYPE_PRODUCT_PROPERTY, it.type)
+                        db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, values)
+                    }
+                    is Dream -> {
+                        put(BASE_NAME, it.name)
+                        put(BASE_AMOUNT, it.amount)
+                        put(WHERE_DREAM, it.where)
+                        db.insert(TABLE_NAME_DREAM, null, values)
+                    }
                 }
             }
-            db.insert(TABLE_NAME_TRANSACTION, null, values)
         }
         db.close()
     }
