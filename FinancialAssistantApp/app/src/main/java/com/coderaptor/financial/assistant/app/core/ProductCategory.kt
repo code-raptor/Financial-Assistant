@@ -8,6 +8,6 @@ data class ProductCategory(val name: String, val productPropertyId: Long, val pr
     }
 
     companion object {
-        val CREATE_TABLE_PRODUCT_CATEGORY = ""
+        const val CREATE_TABLE_PRODUCT_CATEGORY = ""
     }
 }

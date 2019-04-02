@@ -10,7 +10,7 @@ data class Dream(val name: String, val amount: Int, val where: String) {
     }
 
     companion object {
-        val CREATE_TABLE_DREAM = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_DREAM} " +
+        const val CREATE_TABLE_DREAM = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_DREAM} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
                 "${DatabaseHandler.BASE_NAME} TEXT, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +

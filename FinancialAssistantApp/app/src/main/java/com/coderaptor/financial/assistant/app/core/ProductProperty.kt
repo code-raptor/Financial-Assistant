@@ -11,7 +11,7 @@ data class ProductProperty(val name: String, val type: String) {
     }
 
     companion object {
-        val CREATE_TABLE_PRODUCT_PROPERTY = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY} " +
+        const val CREATE_TABLE_PRODUCT_PROPERTY = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, ${DatabaseHandler.BASE_NAME} TEXT, ${DatabaseHandler.TYPE_PRODUCT_PROPERTY} TEXT)"
     }
 }

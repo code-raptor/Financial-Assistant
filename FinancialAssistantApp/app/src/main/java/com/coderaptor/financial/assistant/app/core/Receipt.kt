@@ -14,6 +14,6 @@ data class Receipt(val date: String, val amount: Int, val product: Product) {
     }
 
     companion object {
-        val CREATE_TABLE_RECEIPT = ""
+        const val CREATE_TABLE_RECEIPT = ""
     }
 }

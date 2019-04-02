@@ -13,7 +13,7 @@ data class Transaction(val amount: Int, val date: String, val name: String, val 
     fun hasFrequency() = (frequency.isNotEmpty() && frequency != "Egyszeri")
 
     companion object {
-        val CREATE_TABLE_TRANSACTION = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_TRANSACTION} " +
+        const val CREATE_TABLE_TRANSACTION = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_TRANSACTION} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
                 "${DatabaseHandler.DATE_TRANSACTION} TEXT, " +

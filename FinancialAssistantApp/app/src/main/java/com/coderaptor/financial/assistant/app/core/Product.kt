@@ -8,6 +8,6 @@ data class Product(val name: String, val unit: String, val quantity: Int, val un
     }
 
     companion object {
-        val CREATE_TABLE_PRODUCT = ""
+        const val CREATE_TABLE_PRODUCT = ""
     }
 }
