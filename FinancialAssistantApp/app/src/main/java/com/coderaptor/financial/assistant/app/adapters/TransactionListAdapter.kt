@@ -28,7 +28,7 @@ class TransactionListAdapter(private val transactionList: ArrayList<Transaction>
     }
 
     fun removeTransaction(position: Int, dbHandler: DatabaseHandler) {
-        dbHandler.deleteByPosition(transactionList[position].id, "trans")
+        dbHandler.deleteByPosition(transactionList[position].id, DatabaseHandler.TABLE_NAME_TRANSACTION)
         notifyItemRemoved(position)
         transactionList.removeAt(position)
     }
