@@ -67,6 +67,27 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.close()
     }
 
+    fun findAllDream(): MutableList<Dream> {
+        val list = mutableListOf<Dream>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_DREAM"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val place = cursor.getString(cursor.getColumnIndex(WHERE_DREAM))
+
+                val dream = Dream(id, name, amount, place)
+                list.add(dream)
+            }
+        }
+        cursor.close()
+        db.close()
+        return list
+    }
+
     fun findAllTransaction(): MutableList<Transaction> {
         val transactionList = mutableListOf<Transaction>()
         val db = readableDatabase
