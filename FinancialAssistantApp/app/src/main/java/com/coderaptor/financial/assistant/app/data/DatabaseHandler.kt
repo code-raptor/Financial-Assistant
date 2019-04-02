@@ -28,6 +28,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         deleteAll(TABLE_NAME_TRANSACTION)
         deleteAll(TABLE_NAME_PRODUCT_PROPERTY)
+        deleteAll(TABLE_NAME_DREAM)
         onCreate(db)
     }
 
