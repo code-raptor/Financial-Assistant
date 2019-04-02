@@ -76,7 +76,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             while (moveToNext()) {
                 val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
-                val date = cursor.getString(cursor.getColumnIndex(DATE_TRANSACTION))
+                val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
                 val frequency = cursor.getString(cursor.getColumnIndex(FREQUENCY_TRANSACTION))
 
@@ -141,10 +141,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     private fun insertValuesTransaction(it: Transaction): ContentValues {
         val values = ContentValues()
         values.put(BASE_AMOUNT, it.amount)
-        values.put(DATE_TRANSACTION, it.date)
+        values.put(BASE_DATE, it.date)
         values.put(BASE_NAME, it.name)
         values.put(FREQUENCY_TRANSACTION, it.frequency)
         return values
+    }
+
+    fun insertTestdata() {
+
     }
 
     companion object {
@@ -157,7 +161,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
-        const val DATE_TRANSACTION = "date"
+        const val BASE_DATE = "date"
         const val FREQUENCY_TRANSACTION = "frequency"
 
         //product_property
