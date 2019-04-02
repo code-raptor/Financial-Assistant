@@ -14,6 +14,6 @@ data class ShoppingList(val name: String, val quantity: Int) {
     }
 
     companion object {
-        val CREATE_TABLE_SHOPPING_LIST = ""
+        const val CREATE_TABLE_SHOPPING_LIST = ""
     }
 }

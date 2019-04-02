@@ -28,7 +28,7 @@ class TransactionListAdapter(private val transactionList: ArrayList<Transaction>
     }
 
     fun removeTransaction(position: Int, dbHandler: DatabaseHandler) {
-        dbHandler.deleteByPosition(transactionList[position].id, "trans")
+        dbHandler.deleteByPosition(transactionList[position].id, DatabaseHandler.TABLE_NAME_TRANSACTION)
         notifyItemRemoved(position)
         transactionList.removeAt(position)
     }
@@ -42,18 +42,18 @@ class TransactionListAdapter(private val transactionList: ArrayList<Transaction>
         fun bind(transaction: Transaction) = with(itemView) {
             income_nameField.text = transaction.name
             if (transaction.hasFrequency()) {
-                income_dateField.text = "${transaction.date} gyakoriság: ${transaction.frequency}"
+                income_dateField.text = "${transaction.date}\t${transaction.frequency}"
             }else {
                 income_dateField.text = transaction.date
             }
 
             if (transaction.amount > 0) {
                 income_amountField.setTextColor(getColor(context, R.color.amount_plus))
+                income_amountField.text = "+${transaction.amount}"
             }else {
                 income_amountField.setTextColor(getColor(context, R.color.amount_minus))
+                income_amountField.text = transaction.amount.toString()
             }
-            income_amountField.text = transaction.amount.toString()
-
             setOnClickListener { view ->
                 Toast.makeText(
                     view.context,

@@ -2,14 +2,14 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.gui.RepeatActivity
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_newrepeat.*
 import kotlinx.android.synthetic.main.content_newrepeat_transaction.*
 
 class AddNewRepeatActivity : AppCompatActivity() {
@@ -20,9 +20,13 @@ class AddNewRepeatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newrepeat)
 
-        val back: ImageButton = findViewById(R.id.back)
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        fab.setOnClickListener {
+            val intent = Intent(this, RepeatActivity::class.java)
             startActivity(intent)
         }
 
@@ -38,11 +42,6 @@ class AddNewRepeatActivity : AppCompatActivity() {
             val date: String = dateField.text.toString()
             val category: String = categoryField.selectedItem.toString()
             val frequency: String = frequencyField.selectedItem.toString()
-
-            Log.i("transaction", "$amount")
-            Log.i("transaction", date)
-            Log.i("transaction", category)
-            Log.i("transaction", frequency)
 
             val transaction = Transaction(amount, date, category, frequency)
 

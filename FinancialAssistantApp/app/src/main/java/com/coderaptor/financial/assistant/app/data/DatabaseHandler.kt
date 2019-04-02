@@ -25,34 +25,25 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.execSQL(CREATE_TABLE_DREAM)
         Log.i("db", "Create Dream table done!")
     }
+
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         deleteAll(TABLE_NAME_TRANSACTION)
         deleteAll(TABLE_NAME_PRODUCT_PROPERTY)
+        deleteAll(TABLE_NAME_DREAM)
         onCreate(db)
     }
 
     fun <T> insert(it: T) {
         val db = this.writableDatabase
-        val values = ContentValues()
         when (it) {
             is Transaction -> {
-                values.put(BASE_AMOUNT, it.amount)
-                values.put(DATE_TRANSACTION, it.date)
-                values.put(BASE_NAME, it.name)
-                values.put(FREQUENCY_TRANSACTION, it.frequency)
-                db.insert(TABLE_NAME_TRANSACTION, null, values)
+                db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
             }
             is ProductProperty -> {
-                values.put(BASE_NAME, it.name)
-                values.put(TYPE_PRODUCT_PROPERTY, it.type)
-                db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, values)
+                db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
             }
             is Dream -> {
-                values.put(BASE_NAME, it.name)
-                values.put(BASE_AMOUNT, it.amount)
-                values.put(WHERE_DREAM, it.where)
-                db.insert(TABLE_NAME_DREAM, null, values)
-                Log.i("db", values.toString())
+                db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
             }
         }
         db.close()
@@ -60,32 +51,41 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     fun <T> inserts(myList: ArrayList<T>) {
         val db = this.writableDatabase
-        val values = ContentValues()
         myList.forEach {
-            values.apply {
-                when (it) {
-                    is Transaction -> {
-                        put(BASE_AMOUNT, it.amount)
-                        put(DATE_TRANSACTION, it.date)
-                        put(BASE_NAME, it.name)
-                        put(FREQUENCY_TRANSACTION, it.frequency)
-                        db.insert(TABLE_NAME_TRANSACTION, null, values)
-                    }
-                    is ProductProperty -> {
-                        put(BASE_NAME, it.name)
-                        put(TYPE_PRODUCT_PROPERTY, it.type)
-                        db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, values)
-                    }
-                    is Dream -> {
-                        put(BASE_NAME, it.name)
-                        put(BASE_AMOUNT, it.amount)
-                        put(WHERE_DREAM, it.where)
-                        db.insert(TABLE_NAME_DREAM, null, values)
-                    }
+            when (it) {
+                is Transaction -> {
+                    db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
+                }
+                is ProductProperty -> {
+                    db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
+                }
+                is Dream -> {
+                    db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
                 }
             }
         }
         db.close()
+    }
+
+    fun findAllDream(): MutableList<Dream> {
+        val list = mutableListOf<Dream>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_DREAM"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val place = cursor.getString(cursor.getColumnIndex(WHERE_DREAM))
+
+                val dream = Dream(id, name, amount, place)
+                list.add(dream)
+            }
+        }
+        cursor.close()
+        db.close()
+        return list
     }
 
     fun findAllTransaction(): MutableList<Transaction> {
@@ -97,7 +97,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             while (moveToNext()) {
                 val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
-                val date = cursor.getString(cursor.getColumnIndex(DATE_TRANSACTION))
+                val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
                 val frequency = cursor.getString(cursor.getColumnIndex(FREQUENCY_TRANSACTION))
 
@@ -144,6 +144,34 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         onCreate(readableDatabase)
     }
 
+    private fun insertValuesDream(it: Dream): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(BASE_AMOUNT, it.amount)
+        values.put(WHERE_DREAM, it.where)
+        return values
+    }
+
+    private fun insertValuesProductProperty(it: ProductProperty): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(TYPE_PRODUCT_PROPERTY, it.type)
+        return values
+    }
+
+    private fun insertValuesTransaction(it: Transaction): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_AMOUNT, it.amount)
+        values.put(BASE_DATE, it.date)
+        values.put(BASE_NAME, it.name)
+        values.put(FREQUENCY_TRANSACTION, it.frequency)
+        return values
+    }
+
+    fun insertTestdata() {
+
+    }
+
     companion object {
         private const val DB_NAME = "assistant.db"
         private const val DB_VERSION = 1
@@ -154,7 +182,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
-        const val DATE_TRANSACTION = "date"
+        const val BASE_DATE = "date"
         const val FREQUENCY_TRANSACTION = "frequency"
 
         //product_property
