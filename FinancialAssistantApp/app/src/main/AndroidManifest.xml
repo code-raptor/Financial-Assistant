@@ -26,6 +26,7 @@
         <activity android:name=".IncomeActivity"/>
         <activity android:name=".AddNewRepeatActivity"/>
         <activity android:name=".AddNewDreamActivity"/>
+        <activity android:name=".gui.DreamActivity"/>
     </application>
 
 </manifest>
