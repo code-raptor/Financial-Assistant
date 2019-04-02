@@ -25,6 +25,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.execSQL(CREATE_TABLE_DREAM)
         Log.i("db", "Create Dream table done!")
     }
+
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         deleteAll(TABLE_NAME_TRANSACTION)
         deleteAll(TABLE_NAME_PRODUCT_PROPERTY)
@@ -34,26 +35,15 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     fun <T> insert(it: T) {
         val db = this.writableDatabase
-        val values = ContentValues()
         when (it) {
             is Transaction -> {
-                values.put(BASE_AMOUNT, it.amount)
-                values.put(DATE_TRANSACTION, it.date)
-                values.put(BASE_NAME, it.name)
-                values.put(FREQUENCY_TRANSACTION, it.frequency)
-                db.insert(TABLE_NAME_TRANSACTION, null, values)
+                db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
             }
             is ProductProperty -> {
-                values.put(BASE_NAME, it.name)
-                values.put(TYPE_PRODUCT_PROPERTY, it.type)
-                db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, values)
+                db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
             }
             is Dream -> {
-                values.put(BASE_NAME, it.name)
-                values.put(BASE_AMOUNT, it.amount)
-                values.put(WHERE_DREAM, it.where)
-                db.insert(TABLE_NAME_DREAM, null, values)
-                Log.i("db", values.toString())
+                db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
             }
         }
         db.close()
@@ -61,28 +51,16 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     fun <T> inserts(myList: ArrayList<T>) {
         val db = this.writableDatabase
-        val values = ContentValues()
         myList.forEach {
-            values.apply {
-                when (it) {
-                    is Transaction -> {
-                        put(BASE_AMOUNT, it.amount)
-                        put(DATE_TRANSACTION, it.date)
-                        put(BASE_NAME, it.name)
-                        put(FREQUENCY_TRANSACTION, it.frequency)
-                        db.insert(TABLE_NAME_TRANSACTION, null, values)
-                    }
-                    is ProductProperty -> {
-                        put(BASE_NAME, it.name)
-                        put(TYPE_PRODUCT_PROPERTY, it.type)
-                        db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, values)
-                    }
-                    is Dream -> {
-                        put(BASE_NAME, it.name)
-                        put(BASE_AMOUNT, it.amount)
-                        put(WHERE_DREAM, it.where)
-                        db.insert(TABLE_NAME_DREAM, null, values)
-                    }
+            when (it) {
+                is Transaction -> {
+                    db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
+                }
+                is ProductProperty -> {
+                    db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
+                }
+                is Dream -> {
+                    db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
                 }
             }
         }
@@ -143,6 +121,30 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     fun deleteAll(TABLE_NAME: String) {
         readableDatabase.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(readableDatabase)
+    }
+
+    private fun insertValuesDream(it: Dream): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(BASE_AMOUNT, it.amount)
+        values.put(WHERE_DREAM, it.where)
+        return values
+    }
+
+    private fun insertValuesProductProperty(it: ProductProperty): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(TYPE_PRODUCT_PROPERTY, it.type)
+        return values
+    }
+
+    private fun insertValuesTransaction(it: Transaction): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_AMOUNT, it.amount)
+        values.put(DATE_TRANSACTION, it.date)
+        values.put(BASE_NAME, it.name)
+        values.put(FREQUENCY_TRANSACTION, it.frequency)
+        return values
     }
 
     companion object {
