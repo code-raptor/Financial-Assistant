@@ -44,15 +44,11 @@ class AddNewDreamActivity : AppCompatActivity() {
             val name = nameField.text.toString()
             val where = whereField.text.toString()
 
-            Log.i("dream", "$amount")
-            Log.i("dream", name)
-            Log.i("dream", where)
-
             val dream = Dream(name, amount, where)
 
             dbHandler.insert(dream)
-            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
 
+            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
             val intent = Intent(this, DreamActivity::class.java)
             startActivity(intent)
 

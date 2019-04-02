@@ -2,19 +2,15 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
-import com.coderaptor.financial.assistant.app.core.ProductProperty
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
-import com.github.clans.fab.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -29,27 +25,22 @@ class MainActivity : AppCompatActivity(){
         supportActionBar?.setDisplayShowTitleEnabled(false)
         setupDatabase()
 
-        val firstFab: FloatingActionButton = findViewById(R.id.addNewButton)
-        firstFab.setOnClickListener {
-            Log.i("click", "add new clicked")
+        addNewButton.setOnClickListener {
             val intent = Intent(this, IncomeActivity::class.java)
             startActivity(intent)
         }
-        val secondFab: FloatingActionButton = findViewById(R.id.repeatButton)
-        secondFab.setOnClickListener {
+
+        repeatButton.setOnClickListener {
             val intent = Intent(this, AddNewRepeatActivity::class.java)
             startActivity(intent)
         }
 
-        findViewById<FloatingActionButton>(R.id.dreamButton).setOnClickListener {
+        dreamButton.setOnClickListener {
             val intent = Intent(this, AddNewDreamActivity::class.java)
             startActivity(intent)
         }
 
-        val settings: ImageButton = findViewById(R.id.settings)
-        Log.i("click", "gomb")
         settings.setOnClickListener {
-            Log.i("click", "setting")
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
@@ -78,18 +69,11 @@ class MainActivity : AppCompatActivity(){
 
     private fun setupDatabase() {
         val transactionList = arrayListOf(
-            Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
-            Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
-            Transaction(1000, "2019.01.01", "Bor", "Hetente"))
-        //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
+//            Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
+//            Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
+            Transaction(1000, "2019.01.01", "Bor"))
+//        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
         dbHandler.inserts(transactionList)
-
-        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY)
-        val property = ProductProperty("jotallas", "TEXT")
-        dbHandler.insert(property)
-        dbHandler.findAllProductProperty().forEach {
-            Log.i("db", it.toString())
-        }
 
         setUpRecyclerView(dbHandler.findAllTransaction())
     }

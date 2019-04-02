@@ -2,8 +2,6 @@ package com.coderaptor.financial.assistant.app.gui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,7 +13,6 @@ import com.coderaptor.financial.assistant.app.R
 import com.coderaptor.financial.assistant.app.adapters.DreamListAdapter
 import com.coderaptor.financial.assistant.app.core.Dream
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_dreams.*
 
 class DreamActivity : AppCompatActivity() {
@@ -28,14 +25,12 @@ class DreamActivity : AppCompatActivity() {
 
         setupDatabase()
 
-        val back: ImageButton = findViewById(R.id.back)
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-        val addNewDream : FloatingActionButton = findViewById(R.id.addnewDream)
-        addNewDream.setOnClickListener{
+        addnewDream.setOnClickListener{
             val intent = Intent(this, AddNewDreamActivity::class.java)
             startActivity(intent)
         }
