@@ -11,6 +11,7 @@ import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_
 import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 import com.coderaptor.financial.assistant.app.core.Product.Companion.CREATE_TABLE_PRODUCT
 import com.coderaptor.financial.assistant.app.core.ProductCategory.Companion.CREATE_TABLE_PRODUCT_CATEGORY
+import com.coderaptor.financial.assistant.app.core.Receipt.Companion.CREATE_TABLE_RECEIPT
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -26,10 +27,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         Log.i("db", "Create Dream table done!")
         //PRODUCT
         db.execSQL(CREATE_TABLE_PRODUCT)
-        Log.i("db", "Create Dream table done!")
+        Log.i("db", "Create Product table done!")
         //PRODUCT_CATEGORY
         db.execSQL(CREATE_TABLE_PRODUCT_CATEGORY)
-        Log.i("db", "Create Dream table done!")
+        Log.i("db", "Create ProductCategory table done!")
+        //RECEIPT
+        db.execSQL(CREATE_TABLE_RECEIPT)
+        Log.i("db", "Create Receipt table done!")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -38,6 +42,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         deleteAll(TABLE_NAME_DREAM)
         deleteAll(TABLE_NAME_PRODUCT)
         deleteAll(TABLE_NAME_PRODUCT_CATEGORY)
+        deleteAll(TABLE_NAME_RECEIPT)
+
         onCreate(db)
     }
 
@@ -58,6 +64,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             }
             is ProductCategory -> {
                 db.insert(TABLE_NAME_PRODUCT_CATEGORY, null, insertValuesProductCategory(it))
+            }
+            is Receipt -> {
+                db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
             }
         }
         db.close()
@@ -164,11 +173,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
                 val unit = cursor.getString(cursor.getColumnIndex(UNIT))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
-                val unit_price = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
-                val category_id = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
+                val unitPrice = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
+                val categoryId = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
 
 
-                val product = Product(id,name,unit,quantity,unit_price,category_id)
+                val product = Product(id,name,unit,quantity,unitPrice,categoryId)
                 productList.add(product)
             }
         }
@@ -252,6 +261,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(BASE_NAME, it.name)
         values.put(PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY, it.productPropertyId)
         values.put(PRODUCT_PROPERTY_VALUE, it.productPropertyValue)
+        return values
+    }
+
+    private fun insertValuesReceipt(it: Receipt): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_DATE, it.date)
+        values.put(BASE_AMOUNT, it.amount)
+       // values.put(PRODUCT_ID_RECEIPT, it.)
         return values
     }
 
