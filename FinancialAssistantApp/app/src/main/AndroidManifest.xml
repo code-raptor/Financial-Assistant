@@ -28,6 +28,8 @@
         <activity android:name=".AddNewDreamActivity"/>
         <activity android:name=".gui.DreamActivity"/>
         <activity android:name=".gui.RepeatActivity"/>
+        <activity android:name=".AddNewProductActivity"/>
+        <activity android:name=".ReceiptActivity"/>
     </application>
 
 </manifest>
