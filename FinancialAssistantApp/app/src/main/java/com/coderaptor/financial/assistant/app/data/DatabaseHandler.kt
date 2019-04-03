@@ -12,6 +12,7 @@ import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_
 import com.coderaptor.financial.assistant.app.core.Product.Companion.CREATE_TABLE_PRODUCT
 import com.coderaptor.financial.assistant.app.core.ProductCategory.Companion.CREATE_TABLE_PRODUCT_CATEGORY
 import com.coderaptor.financial.assistant.app.core.Receipt.Companion.CREATE_TABLE_RECEIPT
+import com.coderaptor.financial.assistant.app.core.ShoppingList.Companion.CREATE_TABLE_SHOPPING_LIST
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -25,15 +26,24 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //DREAM
         db.execSQL(CREATE_TABLE_DREAM)
         Log.i("db", "Create Dream table done!")
-        //PRODUCT
-        db.execSQL(CREATE_TABLE_PRODUCT)
-        Log.i("db", "Create Product table done!")
         //PRODUCT_CATEGORY
         db.execSQL(CREATE_TABLE_PRODUCT_CATEGORY)
         Log.i("db", "Create ProductCategory table done!")
+        //PRODUCT
+        db.execSQL(CREATE_TABLE_PRODUCT)
+        Log.i("db", "Create Product table done!")
         //RECEIPT
         db.execSQL(CREATE_TABLE_RECEIPT)
         Log.i("db", "Create Receipt table done!")
+        //SHOPPING
+        dropTable(db)
+        db.execSQL(CREATE_TABLE_SHOPPING_LIST)
+        Log.i("db", "Create Shopping table done!")
+    }
+
+    private fun dropTable(db: SQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS '" + CREATE_TABLE_SHOPPING_LIST + "'")
+        Log.i("db", "Drop Receipt table done!")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -72,9 +82,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.close()
     }
 
-
-
-
     fun <T> inserts(myList: ArrayList<T>) {
         val db = this.writableDatabase
         myList.forEach {
@@ -93,6 +100,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
                 is ProductCategory -> {
                     db.insert(TABLE_NAME_PRODUCT_CATEGORY, null, insertValuesProductCategory(it))
+                }
+                is Receipt -> {
+                    db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
                 }
             }
         }
@@ -207,6 +217,27 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return productCategoryList
     }
 
+    fun findAllReceipt(): MutableList<Receipt> {
+        val receiptList = mutableListOf<Receipt>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_DATE))
+                val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_RECEIPT))
+
+                val receipt = Receipt(id,name,amount, productId)
+                receiptList.add(receipt)
+            }
+        }
+        cursor.close()
+        db.close()
+        return receiptList
+    }
+
 
 
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
@@ -284,27 +315,24 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
-
         const val FREQUENCY_TRANSACTION = "frequency"
 
         //product_property
         const val TABLE_NAME_PRODUCT_PROPERTY = "product_property"
         const val TYPE_PRODUCT_PROPERTY = "type"
-        const val PRODUCT_PROPERTY_ID = "id"
+
 
         //dream
         const val TABLE_NAME_DREAM = "dream"
         const val WHERE_DREAM = "place"
 
         //product
-        const val PRODUCT_ID= "id"
         const val TABLE_NAME_PRODUCT = "product"
         const val UNIT_PRICE = "unit_price"
         const val UNIT = "unit"
         const val PRODUCT_CATEGORY_ID_PRODUCT="product_category_id"
 
         //product_category
-        const val PRODUCT_CATEGORY_ID = "id"
         const val TABLE_NAME_PRODUCT_CATEGORY = "product_category"
         const val PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY="product_property_id"
         const val PRODUCT_PROPERTY_VALUE= "product_property_value"
@@ -314,8 +342,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         const val PRODUCT_ID_RECEIPT = "product_id"
 
         //shopping_list
-        private const val TABLE_NAME_SHOPPING = "shopping_list"
-        private const val PRODUCT_ID_SHOPPING = "product_id"
-       // private const val QUANTITY_SHOPPING = "quantity"
+        const val TABLE_NAME_SHOPPING = "shopping_list"
+        const val PRODUCT_ID_SHOPPING = "product_id"
     }
 }

@@ -10,8 +10,14 @@ data class ProductProperty(val name: String, val type: String) {
         this.id = id
     }
 
+    override fun toString(): String {
+        return "ProductProperty(id=$id, name=$name, type=$type)"
+    }
+
     companion object {
         const val CREATE_TABLE_PRODUCT_PROPERTY = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY} " +
-                "(${DatabaseHandler.PRODUCT_PROPERTY_ID} INTEGER PRIMARY KEY, ${DatabaseHandler.BASE_NAME} TEXT, ${DatabaseHandler.TYPE_PRODUCT_PROPERTY} TEXT)"
+                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
+                "${DatabaseHandler.BASE_NAME} TEXT, " +
+                "${DatabaseHandler.TYPE_PRODUCT_PROPERTY} TEXT)"
     }
 }

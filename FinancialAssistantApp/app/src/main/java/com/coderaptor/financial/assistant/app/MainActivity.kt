@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
 import com.coderaptor.financial.assistant.app.core.ProductProperty
+import com.coderaptor.financial.assistant.app.core.Receipt
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
@@ -81,16 +82,25 @@ class MainActivity : AppCompatActivity(){
             Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
             Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
             Transaction(1000, "2019.01.01", "Bor", "Hetente"))
-        //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
+        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
         dbHandler.inserts(transactionList)
 
         dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_PRODUCT_PROPERTY)
-        val property = ProductProperty("jotallas", "TEXT")
+        var property = ProductProperty("jotallas", "Boolean")
+        dbHandler.insert(property)
+        property = ProductProperty("karos", "Boolean")
         dbHandler.insert(property)
         dbHandler.findAllProductProperty().forEach {
             Log.i("db", it.toString())
         }
-
+        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_RECEIPT)
+        var receipt = Receipt(1,"2019.01.01", 13000, 1)
+        dbHandler.insert(receipt)
+        receipt = Receipt(2,"2019.10.01", 5000, 2)
+        dbHandler.insert(receipt)
+        dbHandler.findAllReceipt().forEach {
+            Log.i("db", it.toString())
+        }
         setUpRecyclerView(dbHandler.findAllTransaction())
     }
 }
