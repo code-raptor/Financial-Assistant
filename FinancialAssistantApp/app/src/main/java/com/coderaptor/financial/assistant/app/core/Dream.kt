@@ -14,6 +14,6 @@ data class Dream(val name: String, val amount: Int, val where: String) {
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
                 "${DatabaseHandler.BASE_NAME} TEXT, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
-                "${DatabaseHandler.WHERE_DREAM} TEXT);"
+                "${DatabaseHandler.WHERE_DREAM} TEXT)"
     }
 }
