@@ -78,6 +78,12 @@
     <string name="receipt_amounthint">18500</string>
     <string name="receipt_amount">Összeg:</string>
     <string name="receipt_newproduct">Új termék:</string>
+    <!--Blokk termékek-->
+    <string name="receiptproduct_name">Kenyér</string>
+    <string name="receiptproduct_mennyiseg">3</string>
+    <string name="receiptproduct_egysegar">215 ft</string>
+    <string name="receiptproduct_egyseg">db</string>
+    <string name="receiptproduct_ar">645 ft</string>
 
     <string-array name="income_category">
         <item>Fizetés</item>

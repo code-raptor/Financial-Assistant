@@ -45,21 +45,20 @@
 
         <include layout="@layout/content_receipt"/>
 
-        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="bottom|end"-->
-                <!--android:layout_marginBottom="20dp"-->
-                <!--android:layout_marginEnd="20dp"-->
-                <!--app:srcCompat="@drawable/check"-->
-                <!--android:backgroundTint="@color/closed_fab"-->
-                <!--app:fab_colorNormal="@color/closed_fab"-->
-                <!--app:fab_colorPressed="@color/open_fab"-->
-                <!--app:fab_colorRipple="@color/ripple_fab"-->
-                <!--android:id="@+id/fab"-->
-                <!--android:focusable="true"/>-->
+        <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="364dp"
+                android:scrollbars="vertical"
+                android:layout_marginTop="300dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="110dp"
+                android:id="@+id/recyclerView"
+                tools:context=".ReceiptActivity">
 
-
+        </androidx.recyclerview.widget.RecyclerView>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
