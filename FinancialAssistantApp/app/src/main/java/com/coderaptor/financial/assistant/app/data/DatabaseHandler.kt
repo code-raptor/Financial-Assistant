@@ -5,10 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.coderaptor.financial.assistant.app.core.Dream
-import com.coderaptor.financial.assistant.app.core.ProductProperty
+import com.coderaptor.financial.assistant.app.core.*
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
-import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
 import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 
@@ -24,6 +22,18 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //DREAM
         db.execSQL(CREATE_TABLE_DREAM)
         Log.i("db", "Create Dream table done!")
+        //PRODUCT_CATEGORY
+        db.execSQL(ProductCategory.CREATE_TABLE_PRODUCT_CATEGORY)
+        Log.i("db", "Create ProductCategory table done!")
+        //PRODUCT
+        db.execSQL(Product.CREATE_TABLE_PRODUCT)
+        Log.i("db", "Create Product table done!")
+        //RECEIPT
+        //db.execSQL(Receipt.CREATE_TABLE_RECEIPT)
+        //Log.i("db", "Create Receipt table done!")
+        //SHOPPING
+        //db.execSQL(ShoppingList.CREATE_TABLE_SHOPPING_LIST)
+        //Log.i("db", "Create Shopping table done!")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -45,6 +55,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             is Dream -> {
                 db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
             }
+            is ProductCategory -> {
+                db.insert(TABLE_NAME_PRODUCT_CATEGORY, null, insertValuesProductCategory(it))
+            }
+            is Product -> {
+                db.insert(TABLE_NAME_PRODUCT, null, insertValuesProduct(it))
+            }
         }
         db.close()
     }
@@ -61,6 +77,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
                 is Dream -> {
                     db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
+                }
+                is ProductCategory -> {
+                    db.insert(TABLE_NAME_PRODUCT_CATEGORY, null, insertValuesProductCategory(it))
+                }
+                is Product -> {
+                    db.insert(TABLE_NAME_PRODUCT, null, insertValuesProduct(it))
                 }
             }
         }
@@ -130,6 +152,51 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return propertyList
     }
 
+    fun findAllProductCategory(): MutableList<ProductCategory> {
+        val productCategoryList = mutableListOf<ProductCategory>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT_CATEGORY"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val productPropertyId = cursor.getLong(cursor.getColumnIndex(PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY))
+                val productPropertyValue = cursor.getString(cursor.getColumnIndex(PRODUCT_PROPERTY_VALUE))
+
+                val productCategory = ProductCategory(id, name, productPropertyId, productPropertyValue)
+                productCategoryList.add(productCategory)
+            }
+        }
+        cursor.close()
+        db.close()
+        return productCategoryList
+    }
+
+    fun findAllProduct(): MutableList<Product> {
+        val productList = mutableListOf<Product>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val unit = cursor.getString(cursor.getColumnIndex(UNIT))
+                val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
+                val unitPrice = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
+                val categoryId = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
+
+
+                val product = Product(id, name, unit, quantity, unitPrice, categoryId)
+                productList.add(product)
+            }
+        }
+        cursor.close()
+        db.close()
+        return productList
+    }
+
 
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
         val db = readableDatabase
@@ -165,6 +232,24 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(BASE_DATE, it.date)
         values.put(BASE_NAME, it.name)
         values.put(FREQUENCY_TRANSACTION, it.frequency)
+        return values
+    }
+
+    private fun insertValuesProductCategory(it: ProductCategory): ContentValues? {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY, it.productPropertyId)
+        values.put(PRODUCT_PROPERTY_VALUE, it.productPropertyValue)
+        return values
+    }
+
+    private fun insertValuesProduct(it: Product): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(UNIT, it.unit)
+        values.put(BASE_QUANTITY, it.quantity)
+        values.put(UNIT_PRICE, it.unitPrice)
+        values.put(PRODUCT_CATEGORY_ID_PRODUCT, it.categoryId)
         return values
     }
 
