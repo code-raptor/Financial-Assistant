@@ -28,18 +28,20 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //PRODUCT
         db.execSQL(Product.CREATE_TABLE_PRODUCT)
         Log.i("db", "Create Product table done!")
+        //SHOPPING
+        db.execSQL(ShoppingList.CREATE_TABLE_SHOPPING_LIST)
+        Log.i("db", "Create Shopping table done!")
+
         //RECEIPT
         //db.execSQL(Receipt.CREATE_TABLE_RECEIPT)
         //Log.i("db", "Create Receipt table done!")
-        //SHOPPING
-        //db.execSQL(ShoppingList.CREATE_TABLE_SHOPPING_LIST)
-        //Log.i("db", "Create Shopping table done!")
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        deleteAll(TABLE_NAME_TRANSACTION)
-        deleteAll(TABLE_NAME_PRODUCT_PROPERTY)
-        deleteAll(TABLE_NAME_DREAM)
+        dropTable(TABLE_NAME_TRANSACTION)
+        dropTable(TABLE_NAME_PRODUCT_PROPERTY)
+        dropTable(TABLE_NAME_DREAM)
         onCreate(db)
     }
 
@@ -60,6 +62,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             }
             is Product -> {
                 db.insert(TABLE_NAME_PRODUCT, null, insertValuesProduct(it))
+            }
+            is ShoppingList -> {
+                db.insert(TABLE_NAME_SHOPPING, null, insertValuesShoppingList(it))
             }
         }
         db.close()
@@ -83,6 +88,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
                 is Product -> {
                     db.insert(TABLE_NAME_PRODUCT, null, insertValuesProduct(it))
+                }
+                is ShoppingList -> {
+                    db.insert(TABLE_NAME_SHOPPING, null, insertValuesShoppingList(it))
                 }
             }
         }
@@ -197,6 +205,31 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return productList
     }
 
+    fun findAllShopping(): MutableList<ShoppingList> {
+        val shoppingList = mutableListOf<ShoppingList>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
+                var productId = (-1).toLong()
+                if(!cursor.isNull(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))) {
+                    productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))
+                }
+
+
+                val shopping = ShoppingList(id, name, quantity, productId)
+                shoppingList.add(shopping)
+            }
+        }
+        cursor.close()
+        db.close()
+        return shoppingList
+    }
+
 
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
         val db = readableDatabase
@@ -206,7 +239,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.delete(TABLE_NAME, selection, selectionArgs)
     }
 
-    fun deleteAll(TABLE_NAME: String) {
+    fun dropTable(TABLE_NAME: String) {
         readableDatabase.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(readableDatabase)
     }
@@ -253,8 +286,34 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return values
     }
 
-    fun insertTestdata() {
+    private fun insertValuesShoppingList(it: ShoppingList): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_NAME, it.name)
+        values.put(BASE_QUANTITY, it.quantity)
+        if(it.productId != (-1).toLong()) {
+            values.put(PRODUCT_ID_SHOPPING, it.productId)
+        }
+        return values
+    }
 
+    fun insertTestdata() {
+        /*val category = ProductCategory("élelmiszer", 1, "false")
+        dbHandler.insert(category)
+        dbHandler.findAllProductCategory().forEach {
+            Log.i("db", it.toString())
+        }*/
+
+        /*val product = Product("alma", "db", 3, 120, 1)
+        dbHandler.insert(product)
+        dbHandler.findAllProduct().forEach {
+            Log.i("db", it.toString())
+        }*/
+
+        /*val shoppingList = ShoppingList("kenyér", 2, 2)
+        dbHandler.insert(shoppingList)
+        dbHandler.findAllShopping().forEach {
+            Log.i("db", it.toString())
+        }*/
     }
 
     companion object {

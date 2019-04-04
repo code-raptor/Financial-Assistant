@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
 import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.core.ProductCategory
+import com.coderaptor.financial.assistant.app.core.ShoppingList
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
@@ -75,20 +76,8 @@ class MainActivity : AppCompatActivity(){
 //            Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
 //            Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
             Transaction(1000, "2019.01.01", "Bor"))
-//        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
+//        dbHandler.dropTable(DatabaseHandler.TABLE_NAME_TRANSACTION)
         dbHandler.inserts(transactionList)
-
-        /*val category = ProductCategory("élelmiszer", 1, "false")
-        dbHandler.insert(category)
-        dbHandler.findAllProductCategory().forEach {
-            Log.i("db", it.toString())
-        }*/
-
-        /*val product = Product("alma", "db", 3, 120, 1)
-        dbHandler.insert(product)
-        dbHandler.findAllProduct().forEach {
-            Log.i("db", it.toString())
-        }*/
 
 
 
