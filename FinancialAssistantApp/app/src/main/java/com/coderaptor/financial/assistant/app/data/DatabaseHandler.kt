@@ -179,26 +179,39 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         const val BASE_ID = "id"
         const val BASE_NAME = "name"
         const val BASE_AMOUNT = "amount"
+        const val BASE_QUANTITY = "quantity"
+        const val BASE_DATE = "date"
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
-        const val BASE_DATE = "date"
         const val FREQUENCY_TRANSACTION = "frequency"
 
         //product_property
         const val TABLE_NAME_PRODUCT_PROPERTY = "product_property"
         const val TYPE_PRODUCT_PROPERTY = "type"
 
+
         //dream
         const val TABLE_NAME_DREAM = "dream"
         const val WHERE_DREAM = "place"
 
         //product
-        private const val TABLE_NAME_PRODUCT = "product"
+        const val TABLE_NAME_PRODUCT = "product"
+        const val UNIT_PRICE = "unit_price"
+        const val UNIT = "unit"
+        const val PRODUCT_CATEGORY_ID_PRODUCT="product_category_id"
+
+        //product_category
+        const val TABLE_NAME_PRODUCT_CATEGORY = "product_category"
+        const val PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY="product_property_id"
+        const val PRODUCT_PROPERTY_VALUE= "product_property_value"
+
+        //receipt
+        const val TABLE_NAME_RECEIPT = "receipt"
+        const val PRODUCT_ID_RECEIPT = "product_id"
 
         //shopping_list
-        private const val TABLE_NAME_SHOPPING = "shopping_list"
-        private const val PRODUCT_ID_SHOPPING = "product_id"
-        private const val QUANTITY_SHOPPING = "quantity"
+        const val TABLE_NAME_SHOPPING = "shopping_list"
+        const val PRODUCT_ID_SHOPPING = "product_id"
     }
 }
