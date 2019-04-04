@@ -36,6 +36,7 @@
                 android:layout_height="40dip"
                 android:layout_gravity="end"
                 android:layout_marginEnd="18dp"
+                android:contentDescription="TODO"
                 app:srcCompat="@drawable/settings"
                 android:background="@android:color/transparent"
                 android:focusable="true"

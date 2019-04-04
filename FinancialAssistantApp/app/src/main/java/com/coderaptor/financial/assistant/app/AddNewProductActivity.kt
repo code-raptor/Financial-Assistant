@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.core.Dream
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_newdream.*
+import kotlinx.android.synthetic.main.activity_newproduct.*
 import kotlinx.android.synthetic.main.content_newdream.*
 
 class AddNewProductActivity: AppCompatActivity() {
