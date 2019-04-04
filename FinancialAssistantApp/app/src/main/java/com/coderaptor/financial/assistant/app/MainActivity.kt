@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        setupDatabase()
+        setUpRecyclerView(dbHandler.findAllTransaction())
 
         addNewButton.setOnClickListener {
             val intent = Intent(this, IncomeActivity::class.java)
@@ -65,16 +65,5 @@ class MainActivity : AppCompatActivity(){
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = transactionListAdapter
-    }
-
-    private fun setupDatabase() {
-        val transactionList = arrayListOf(
-//            Transaction(-5000, "2019.01.01", "Telefon Számla", "Havonta"),
-//            Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri"),
-            Transaction(1000, "2019.01.01", "Bor"))
-//        dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
-        dbHandler.inserts(transactionList)
-
-        setUpRecyclerView(dbHandler.findAllTransaction())
     }
 }
