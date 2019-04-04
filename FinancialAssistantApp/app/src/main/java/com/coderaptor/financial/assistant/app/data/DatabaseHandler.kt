@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.coderaptor.financial.assistant.app.core.*
+import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
-import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -31,11 +31,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //SHOPPING
         db.execSQL(ShoppingList.CREATE_TABLE_SHOPPING_LIST)
         Log.i("db", "Create Shopping table done!")
-
         //RECEIPT
-        //db.execSQL(Receipt.CREATE_TABLE_RECEIPT)
-        //Log.i("db", "Create Receipt table done!")
-
+        db.execSQL(Receipt.CREATE_TABLE_RECEIPT)
+        Log.i("db", "Create Receipt table done!")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -66,6 +64,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             is ShoppingList -> {
                 db.insert(TABLE_NAME_SHOPPING, null, insertValuesShoppingList(it))
             }
+            is Receipt -> {
+                db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
+            }
         }
         db.close()
     }
@@ -91,6 +92,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
                 is ShoppingList -> {
                     db.insert(TABLE_NAME_SHOPPING, null, insertValuesShoppingList(it))
+                }
+                is Receipt -> {
+                    db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
                 }
             }
         }
@@ -230,6 +234,26 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return shoppingList
     }
 
+    fun findAllReceipt(): MutableList<Receipt> {
+        val receiptList = mutableListOf<Receipt>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val name = cursor.getString(cursor.getColumnIndex(BASE_DATE))
+                val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_RECEIPT))
+
+                val receipt = Receipt(id,name,amount, productId)
+                receiptList.add(receipt)
+            }
+        }
+        cursor.close()
+        db.close()
+        return receiptList
+    }
 
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
         val db = readableDatabase
@@ -296,24 +320,40 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return values
     }
 
+    private fun insertValuesReceipt(it: Receipt): ContentValues {
+        val values = ContentValues()
+        values.put(BASE_DATE, it.date)
+        values.put(BASE_AMOUNT, it.amount)
+        values.put(PRODUCT_ID_RECEIPT, it.productId)
+        return values
+    }
+
     fun insertTestdata() {
-        /*val category = ProductCategory("élelmiszer", 1, "false")
-        dbHandler.insert(category)
-        dbHandler.findAllProductCategory().forEach {
+        val category = ProductCategory("élelmiszer", 1, "false")
+        insert(category)
+        findAllProductCategory().forEach {
             Log.i("db", it.toString())
-        }*/
+        }
 
-        /*val product = Product("alma", "db", 3, 120, 1)
-        dbHandler.insert(product)
-        dbHandler.findAllProduct().forEach {
+        val product = Product("alma", "db", 3, 120, 1)
+        insert(product)
+        findAllProduct().forEach {
             Log.i("db", it.toString())
-        }*/
+        }
 
-        /*val shoppingList = ShoppingList("kenyér", 2, 2)
-        dbHandler.insert(shoppingList)
-        dbHandler.findAllShopping().forEach {
+        val shoppingList = ShoppingList("kenyér", 2, 2)
+        insert(shoppingList)
+        findAllShopping().forEach {
             Log.i("db", it.toString())
-        }*/
+        }
+        dropTable(DatabaseHandler.TABLE_NAME_RECEIPT)
+        var receipt = Receipt(1,"2019.01.01", 13000, 1)
+        insert(receipt)
+        receipt = Receipt(2,"2019.10.01", 5000, 2)
+        insert(receipt)
+        findAllReceipt().forEach {
+            Log.i("db", it.toString())
+        }
     }
 
     companion object {
