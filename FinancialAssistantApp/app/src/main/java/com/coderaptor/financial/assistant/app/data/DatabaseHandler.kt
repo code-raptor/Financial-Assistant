@@ -329,6 +329,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     }
 
     fun insertTestdata() {
+        var transaction = Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri")
+        insert(transaction)
+        transaction = Transaction(1000, "2019.01.01", "Bor")
+        insert(transaction)
+        findAllTransaction().forEach {
+            Log.i("db", it.toString())
+        }
+
         val category = ProductCategory("élelmiszer", 1, "false")
         insert(category)
         findAllProductCategory().forEach {
