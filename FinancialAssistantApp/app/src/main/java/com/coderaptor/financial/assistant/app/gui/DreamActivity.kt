@@ -62,7 +62,7 @@ class DreamActivity : AppCompatActivity() {
             Dream("Samsung HD Tv", 55000, "Media Markt"),
             Dream("Fűnyíró", 100000, "OBI")
         )
-        //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_DREAM)
+        //dbHandler.dropTable(DatabaseHandler.TABLE_NAME_DREAM)
         dbHandler.inserts(dreamsList)
 
         setUpRecyclerView(dbHandler.findAllDream())

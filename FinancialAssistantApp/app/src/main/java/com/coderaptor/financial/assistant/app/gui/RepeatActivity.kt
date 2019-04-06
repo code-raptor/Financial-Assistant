@@ -62,7 +62,7 @@ class RepeatActivity : AppCompatActivity() {
             Transaction(255000, "2019.01.01", "Fízetés", "Havonta"),
             Transaction(-15000, "2019.01.01", "Kutya oltás", "Évente")
         )
-        //dbHandler.deleteAll(DatabaseHandler.TABLE_NAME_TRANSACTION)
+        //dbHandler.dropTable(DatabaseHandler.TABLE_NAME_TRANSACTION)
         dbHandler.inserts(transactionList)
 
         setUpRecyclerView(dbHandler.findAllTransaction())
