@@ -1,5 +1,6 @@
 package com.coderaptor.financial.assistant.app
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.features.sms.askPermission
+import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,11 +21,14 @@ class MainActivity : AppCompatActivity(){
 
     val dbHandler = DatabaseHandler(this)
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        setupSms(dbHandler.findMaxSMS())
         setUpRecyclerView(dbHandler.findAllTransaction())
 
         addNewButton.setOnClickListener {
@@ -65,5 +71,17 @@ class MainActivity : AppCompatActivity(){
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = transactionListAdapter
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setupSms(findMaxSMS: Long) {
+        val permissionGranted = askPermission(this, this)
+        if(permissionGranted) {
+            val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
+            if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
+                editText2.setText("${idAndAmount.second} ft")
+                dbHandler.insertSms(idAndAmount.first)
+            }
+        }
     }
 }

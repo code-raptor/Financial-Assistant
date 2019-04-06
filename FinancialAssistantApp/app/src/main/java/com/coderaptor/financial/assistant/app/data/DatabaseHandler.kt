@@ -34,6 +34,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //RECEIPT
         db.execSQL(Receipt.CREATE_TABLE_RECEIPT)
         Log.i("db", "Create Receipt table done!")
+        //SMS
+        db.execSQL(CREATE_TABLE_SMS)
+        Log.i("db", "Create SMS table done!")
+        db.execSQL("INSERT INTO $TABLE_NAME_SMS(id) VALUES (0)")
+        Log.i("db", "insert to $TABLE_NAME_SMS complete")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -98,6 +103,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
             }
         }
+        db.close()
+    }
+
+    fun insertSms(id: Long) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(BASE_ID, id)
+        db.replace(TABLE_NAME_SMS, null, values)
         db.close()
     }
 
@@ -199,7 +212,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val unitPrice = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
                 val categoryId = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
 
-
                 val product = Product(id, name, unit, quantity, unitPrice, categoryId)
                 productList.add(product)
             }
@@ -254,6 +266,20 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.close()
         return receiptList
     }
+    fun findMaxSMS(): Long {
+        val db = readableDatabase
+        val selectMaxQuery = "SELECT MAX(id) FROM $TABLE_NAME_SMS"
+        val cursor = db.rawQuery(selectMaxQuery, null)
+        var id = 0.toLong()
+        with(cursor) {
+            while (moveToNext()) {
+                id = cursor.getLong(0)
+            }
+        }
+        cursor.close()
+        db.close()
+        return id
+    }
 
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
         val db = readableDatabase
@@ -261,6 +287,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val selectionArgs = arrayOf("$position")
         Log.i("db", "DELETE: $position")
         db.delete(TABLE_NAME, selection, selectionArgs)
+    }
+
+    fun deleteTableContent(TABLE_NAME: String) {
+        readableDatabase.execSQL("DELETE FROM $TABLE_NAME")
     }
 
     fun dropTable(TABLE_NAME: String) {
@@ -405,5 +435,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //shopping_list
         const val TABLE_NAME_SHOPPING = "shopping_list"
         const val PRODUCT_ID_SHOPPING = "product_id"
+
+        val TABLE_NAME_SMS = "sms"
+        val CREATE_TABLE_SMS= "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
+                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY)"
     }
 }

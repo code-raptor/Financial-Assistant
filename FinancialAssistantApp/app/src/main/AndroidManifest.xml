@@ -29,5 +29,5 @@
         <activity android:name=".gui.DreamActivity"/>
         <activity android:name=".gui.RepeatActivity"/>
     </application>
-
+    <uses-permission android:name="android.permission.READ_SMS"/>
 </manifest>
