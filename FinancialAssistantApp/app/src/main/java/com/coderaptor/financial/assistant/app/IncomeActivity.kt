@@ -46,6 +46,9 @@ class IncomeActivity : AppCompatActivity() {
             val transaction = Transaction(amount, date, category)
 
             dbHandler.insert(transaction)
+            if (dbHandler.getCurrentLimit() < 0) {
+                Toast.makeText(this, "Napi limit összeg meghaladva", Toast.LENGTH_LONG).show()
+            }
 
             Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
             val intent = Intent(this, MainActivity::class.java)
