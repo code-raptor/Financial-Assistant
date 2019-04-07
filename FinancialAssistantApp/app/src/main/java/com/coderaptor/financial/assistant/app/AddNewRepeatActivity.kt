@@ -46,7 +46,10 @@ class AddNewRepeatActivity : AppCompatActivity() {
             val transaction = Transaction(amount, date, category, frequency)
 
             dbHandler.insert(transaction)
-            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_SHORT).show()
+            if (dbHandler.getCurrentLimit() < 0) {
+                Toast.makeText(this, "Napi limit összeg meghaladva", Toast.LENGTH_LONG).show()
+            }
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

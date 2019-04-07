@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.features.limit.checkDayChanged
 import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(){
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setupSms(dbHandler.findMaxSMS())
+        checkDayChanged(dbHandler)
         setUpRecyclerView(dbHandler.findAllTransaction())
 
         addNewButton.setOnClickListener {

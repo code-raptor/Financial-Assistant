@@ -9,9 +9,9 @@ import com.coderaptor.financial.assistant.app.core.*
 import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
+import com.coderaptor.financial.assistant.app.features.limit.getCurrentDay
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
-
     override fun onCreate(db: SQLiteDatabase) {
         //TRANSACTION
         db.execSQL(CREATE_TABLE_TRANSACTION)
@@ -37,8 +37,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //SMS
         db.execSQL(CREATE_TABLE_SMS)
         Log.i("db", "Create SMS table done!")
-        db.execSQL("INSERT INTO $TABLE_NAME_SMS(id) VALUES (0)")
+        db.execSQL("INSERT INTO $TABLE_NAME_SMS($BASE_ID) VALUES (0)")
         Log.i("db", "insert to $TABLE_NAME_SMS complete")
+        //Limit
+        db.execSQL(CREATE_TABLE_LIMIT)
+        Log.i("db", "Create LIMIT table done!")
+        db.execSQL("INSERT INTO $TABLE_NAME_LIMIT($BASE_ID, $BASE_AMOUNT, $CURRENT_DAY_LIMIT) VALUES (1, 5000000, ${getCurrentDay()})")
+        Log.i("db", "insert to $TABLE_NAME_LIMIT complete")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -53,6 +58,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         when (it) {
             is Transaction -> {
                 db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
+                if (it.amount < 0) {
+                    limitReduction(it.amount)
+                }
             }
             is ProductProperty -> {
                 db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
@@ -71,6 +79,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             }
             is Receipt -> {
                 db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
+                limitReduction(it.amount)
             }
         }
         db.close()
@@ -281,6 +290,84 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return id
     }
 
+    fun insertLimit(amount: Int, day: Int) {
+        val db = this.writableDatabase
+        val selection = "$BASE_ID=1"
+        val values = ContentValues()
+        values.put(BASE_AMOUNT, amount)
+        values.put(CURRENT_DAY_LIMIT, day)
+        db.update(TABLE_NAME_LIMIT, values, selection, null)
+        db.close()
+    }
+
+    fun insertDayToLimit(day: Int) {
+        val db = this.writableDatabase
+        val selection = "$BASE_ID=1"
+        val values = ContentValues()
+        values.put(CURRENT_DAY_LIMIT, day)
+        db.update(TABLE_NAME_LIMIT, values, selection, null)
+        db.close()
+    }
+
+    fun dayIsNotEquals(currentDay: Int): Boolean {
+        val db = readableDatabase
+        val selectMaxQuery = "SELECT $CURRENT_DAY_LIMIT FROM $TABLE_NAME_LIMIT"
+        val cursor = db.rawQuery(selectMaxQuery, null)
+        var day = 0
+        with(cursor) {
+            while (moveToNext()) {
+                day = cursor.getInt(0)
+            }
+        }
+        cursor.close()
+        db.close()
+        return day != currentDay
+    }
+
+    fun limitsIsNotEquals(limit: Int): Boolean {
+        return getCurrentLimit() != limit
+    }
+
+    fun getCurrentLimit(): Int {
+        val db = readableDatabase
+        val selectAmountQuery = "SELECT $BASE_AMOUNT FROM $TABLE_NAME_LIMIT"
+        val cursor = db.rawQuery(selectAmountQuery, null)
+        var amount = 0
+        with(cursor) {
+            while (moveToNext()) {
+                amount = cursor.getInt(0)
+            }
+        }
+        cursor.close()
+        db.close()
+        return amount
+    }
+
+    private fun limitReduction(amount: Int) {
+        if (!dayIsNotEquals(getCurrentDay())) {
+            val dbLimit = getCurrentLimit()
+            val currentLimit = dbLimit + amount
+            insertLimit(currentLimit, getCurrentDay())
+            limitLogger()
+        }
+    }
+
+    fun limitLogger() {
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_LIMIT"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val day = cursor.getInt(cursor.getColumnIndex(CURRENT_DAY_LIMIT))
+                Log.i("limit", "find: \n id=$id, amount=$amount, day=$day")
+            }
+        }
+        cursor.close()
+        db.close()
+    }
+
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
         val db = readableDatabase
         val selection = "id LIKE ?"
@@ -439,5 +526,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val TABLE_NAME_SMS = "sms"
         val CREATE_TABLE_SMS= "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY)"
+
+        val TABLE_NAME_LIMIT = "day_limit"
+        val CURRENT_DAY_LIMIT = "day"
+        val CREATE_TABLE_LIMIT= "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_LIMIT} " +
+                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
+                "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
+                "${DatabaseHandler.CURRENT_DAY_LIMIT} INTEGER)"
     }
 }
