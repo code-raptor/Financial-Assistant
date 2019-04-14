@@ -1,4 +1,4 @@
-package com.coderaptor.financial.assistant.app.features
+package com.coderaptor.financial.assistant.app.features.harmful
 
 import android.util.Log
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler

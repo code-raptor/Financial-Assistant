@@ -9,7 +9,7 @@ import com.coderaptor.financial.assistant.app.core.*
 import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
-import com.coderaptor.financial.assistant.app.features.harmfulChecker
+import com.coderaptor.financial.assistant.app.features.harmful.harmfulChecker
 import com.coderaptor.financial.assistant.app.features.limit.getCurrentDay
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
