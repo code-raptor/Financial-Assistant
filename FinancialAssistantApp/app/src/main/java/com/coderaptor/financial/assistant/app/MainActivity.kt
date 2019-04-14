@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(){
         setupSms(dbHandler.findMaxSMS())
         checkDayChanged(dbHandler)
         setUpRecyclerView(dbHandler.findAllTransaction())
+        dbHandler.insertTestdata()
 
         addNewButton.setOnClickListener {
             val intent = Intent(this, IncomeActivity::class.java)

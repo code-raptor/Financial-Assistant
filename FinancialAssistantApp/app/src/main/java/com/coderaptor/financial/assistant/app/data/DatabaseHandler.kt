@@ -9,6 +9,7 @@ import com.coderaptor.financial.assistant.app.core.*
 import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
+import com.coderaptor.financial.assistant.app.features.harmfulChecker
 import com.coderaptor.financial.assistant.app.features.limit.getCurrentDay
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -45,7 +46,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.execSQL("INSERT INTO $TABLE_NAME_LIMIT($BASE_ID, $BASE_AMOUNT, $CURRENT_DAY_LIMIT) VALUES (1, 5000000, ${getCurrentDay()})")
         Log.i("db", "insert to $TABLE_NAME_LIMIT complete")
     }
-
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         dropTable(TABLE_NAME_TRANSACTION)
         dropTable(TABLE_NAME_PRODUCT_PROPERTY)
@@ -368,6 +368,25 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.close()
     }
 
+    fun isHarmfulCategory(productCategoryId: Long): Boolean {
+        var result = false
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT_CATEGORY WHERE $PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY = 1"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val productPropertyValue = cursor.getString(cursor.getColumnIndex(PRODUCT_PROPERTY_VALUE))
+                if(id == productCategoryId && productPropertyValue == "true") {
+                    result = true
+                }
+            }
+        }
+        cursor.close()
+        db.close()
+        return result
+    }
+
     fun deleteByPosition(position: Long, TABLE_NAME: String) {
         val db = readableDatabase
         val selection = "id LIKE ?"
@@ -446,39 +465,68 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     }
 
     fun insertTestdata() {
-        var transaction = Transaction(1000, "2019.01.01", "Zsebpénz", "Egyszeri")
+        deleteTableContent(TABLE_NAME_PRODUCT_PROPERTY)
+        deleteTableContent(TABLE_NAME_PRODUCT_CATEGORY)
+        deleteTableContent(TABLE_NAME_PRODUCT)
+        deleteTableContent(TABLE_NAME_SHOPPING)
+        deleteTableContent(TABLE_NAME_TRANSACTION)
+
+
+        ProductPropertyEnum.values().forEach {
+            val productProperty = ProductProperty(it.propertyName, it.type)
+            insert(productProperty)
+        }
+        Log.i("testData", "ProductProperty: ")
+        findAllProductProperty().forEach {
+            Log.i("testData", it.toString())
+        }
+
+        ProductCategoryEnum.values().forEach {
+            val category = ProductCategory(it.categoryName, it.propertyId.toLong(), it.propertyValue)
+            insert(category)
+        }
+        Log.i("testData", "ProductCategory: ")
+        findAllProductCategory().forEach {
+            Log.i("testData", it.toString())
+        }
+
+        var product = Product("alma", "db", 3, 120, 1)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, 1)
+        insert(product)
+        product = Product("Alkohol", "Liter", 2, 1200, 4)
+        insert(product)
+        Log.i("testData", "Product: ")
+        findAllProduct().forEach {
+            Log.i("testData", it.toString())
+        }
+
+        var transaction = Transaction(1000, "2019.01.01", "Zsebpénz")
         insert(transaction)
         transaction = Transaction(1000, "2019.01.01", "Bor")
         insert(transaction)
+        transaction = Transaction(100000, "2019.02.01", "Fizetés", "Havonta")
+        insert(transaction)
+        Log.i("testData", "Transaction: ")
         findAllTransaction().forEach {
-            Log.i("db", it.toString())
+            Log.i("testData", it.toString())
         }
 
-        val category = ProductCategory("élelmiszer", 1, "false")
-        insert(category)
-        findAllProductCategory().forEach {
-            Log.i("db", it.toString())
-        }
-
-        val product = Product("alma", "db", 3, 120, 1)
-        insert(product)
-        findAllProduct().forEach {
-            Log.i("db", it.toString())
-        }
-
-        val shoppingList = ShoppingList("kenyér", 2, 2)
-        insert(shoppingList)
-        findAllShopping().forEach {
-            Log.i("db", it.toString())
-        }
-        dropTable(DatabaseHandler.TABLE_NAME_RECEIPT)
         var receipt = Receipt(1,"2019.01.01", 13000, 1)
         insert(receipt)
         receipt = Receipt(2,"2019.10.01", 5000, 2)
         insert(receipt)
+        Log.i("testData", "Receipt: ")
         findAllReceipt().forEach {
-            Log.i("db", it.toString())
+            Log.i("testData", it.toString())
         }
+
+        val shoppingList = ShoppingList("kenyér", 2, 2)
+        insert(shoppingList)
+
+        harmfulChecker(1, this)
+        harmfulChecker(4, this)
+        harmfulChecker(3, this)
     }
 
     companion object {
