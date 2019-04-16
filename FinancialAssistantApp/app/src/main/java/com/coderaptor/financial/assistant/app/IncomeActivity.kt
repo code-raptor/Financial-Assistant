@@ -7,10 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_income.*
 import kotlinx.android.synthetic.main.content_income.*
-import kotlinx.android.synthetic.main.content_newdream.*
 
 class IncomeActivity : AppCompatActivity() {
 
@@ -26,15 +24,7 @@ class IncomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
-        button.setOnClickListener { view ->
-            Snackbar.make(view, "Replace rögzit", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-
+        fab.setOnClickListener {
             val amountField : EditText = findViewById(R.id.amountField)
             val dateField: EditText = findViewById(R.id.dateField)
 

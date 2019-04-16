@@ -130,21 +130,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
             android:entries="@array/income_category" android:backgroundTint="@color/colorPrimary"/>
-    <!-- Gyakoriság-->
-    <!--Rögzítés-->
-    <!--<Button-->
-            <!--android:text="@string/income_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/button"-->
-            <!--android:textColor="@color/white"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--app:layout_constraintHorizontal_bias="0.475"-->
-            <!--android:background="@color/closed_fab"-->
-            <!--android:layout_marginTop="76dp"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/categoryField"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
