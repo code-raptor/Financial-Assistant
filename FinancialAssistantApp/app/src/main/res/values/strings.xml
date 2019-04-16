@@ -44,6 +44,46 @@
     <string name="repeat_name">Telefon számla</string>
     <string name="repeat_freq">Havonta</string>
 
+    <!--Termék felvitel-->
+    <string name="product_string">Új termék</string>
+    <string name="product_name">Név:</string>
+    <string name="product_namehint">Kenyér</string>
+    <string name="product_egyseg">Egység:</string>
+    <string name="product_egysegar">Egységár:</string>
+    <string name="product_egyseghint">526 ft</string>
+    <string name="product_mennyiseg">Mennyiség:</string>
+    <string name="product_mennyiseghint">5</string>
+    <string name="product_category">Kategória:</string>
+    <string name="product_jotallas">Jótállás</string>
+    <string name="product_jotallasdate">Lejárat:</string>
+    <string name="product_jotallashint">2021.05.25</string>
+    <string-array name="egyseg_array">
+        <item>Darab</item>
+        <item>Liter</item>
+        <item>Csomag</item>
+        <item>Zsák</item>
+        <item>Kilógramm</item>
+    </string-array>
+    <string-array name="category_array">
+        <item>Bútor</item>
+        <item>Műszaki cikk</item>
+        <item>Élelmiszer</item>
+        <item>Ruha</item>
+        <item>Egyéb</item>
+    </string-array>
+    <!--Blokk-->
+    <string name="receipt_string">Blokk</string>
+    <string name="receipt_datehint">2019.03.25</string>
+    <string name="receipt_date">Dátum:</string>
+    <string name="receipt_amounthint">18500</string>
+    <string name="receipt_amount">Összeg:</string>
+    <string name="receipt_newproduct">Új termék:</string>
+    <!--Blokk termékek-->
+    <string name="receiptproduct_name">Kenyér</string>
+    <string name="receiptproduct_mennyiseg">3</string>
+    <string name="receiptproduct_egysegar">215 ft</string>
+    <string name="receiptproduct_egyseg">db</string>
+    <string name="receiptproduct_ar">645 ft</string>
 
     <string-array name="income_category">
         <item>Fizetés</item>
