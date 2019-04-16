@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity(){
             startActivity(intent)
         }
 
+        receiptButton.setOnClickListener {
+            val intent = Intent(this, ReceiptActivity::class.java)
+            startActivity(intent)
+        }
+
         val swipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = recyclerView.adapter as TransactionListAdapter
