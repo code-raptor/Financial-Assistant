@@ -2,15 +2,18 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.EditText
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.coderaptor.financial.assistant.app.core.Dream
+import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.google.android.material.snackbar.Snackbar
+import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
+import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
 import kotlinx.android.synthetic.main.activity_newproduct.*
-import kotlinx.android.synthetic.main.content_newdream.*
+import kotlinx.android.synthetic.main.content_product.*
+
 
 class AddNewProductActivity: AppCompatActivity() {
     val dbHandler = DatabaseHandler(this)
@@ -19,32 +22,41 @@ class AddNewProductActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newproduct)
 
+        val adapter = ArrayAdapter<StringWithId>(this, android.R.layout.simple_spinner_item, getCategoryStringWithIdList(dbHandler))
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        categoryField.adapter = adapter
+        var categoryId = 1.toLong()
+        categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val swt = parent.selectedItem as StringWithId
+                categoryId = swt.id
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
         back.setOnClickListener {
-            Log.i("click", "go receiptActivity")
             val intent = Intent(this, ReceiptActivity::class.java)
             startActivity(intent)
         }
 
-        button.setOnClickListener { view ->
-            Snackbar.make(view, "Replace rögzit", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fab.setOnClickListener { view ->
+            val name = productName.text.toString()
+            val quantity = quantityField.text.toString().toInt()
+            val unit = unitField.selectedItem.toString()
+            val price = priceField.text.toString().toInt()
+            val warranty = warranty.isChecked
+            if (warranty) {
+                val endDate = end_dateField.toString()
+            }
 
-            val amountField: EditText = findViewById(R.id.amountField)
-            val nameField: EditText = findViewById(R.id.nameField)
-            val whereField: EditText = findViewById(R.id.whereField)
+            val product = Product(name, unit, quantity, price, categoryId)
 
-            val amount = amountField.text.toString().toInt()
-            val name = nameField.text.toString()
-            val where = whereField.text.toString()
-
-            val dream = Dream(name, amount, where)
-
-            dbHandler.insert(dream)
+            dbHandler.insert(product)
 
             Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
             val intent = Intent(this, ReceiptActivity::class.java)
             startActivity(intent)
-
         }
     }
 }
