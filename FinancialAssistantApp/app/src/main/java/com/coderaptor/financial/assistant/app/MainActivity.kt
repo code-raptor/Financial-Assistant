@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity(){
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
+        history.setOnClickListener{
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
 
         val swipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

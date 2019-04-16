@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.coderaptor.financial.assistant.app.MainActivity">
+        tools:context="HistoryActivity">
 
     <!-- TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
@@ -22,25 +22,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+                android:id="@+id/back"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
-                app:srcCompat="@drawable/history"
-                android:contentDescription="@string/history"
-                android:id="@+id/history"
-                android:background="@android:color/transparent"/>
-
-
-        <ImageButton
-                android:id="@+id/settings"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_gravity="end"
+                android:layout_gravity = "end"
                 android:layout_marginEnd="18dp"
-                android:contentDescription="TODO"
-                app:srcCompat="@drawable/settings"
+                android:src="@drawable/back_right"
+                android:contentDescription="@android:string/unknownName"
                 android:background="@android:color/transparent"
-                android:focusable="true"
-                android:visibility="visible"/>
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="16dp"/>
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
@@ -67,7 +58,7 @@
                 android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView"
 
-                tools:context=".MainActivity">
+                tools:context=".HistoryActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -120,18 +111,7 @@
                     android:id="@+id/receiptButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/addreceipt"
-                    app:fab_size="mini"
-                    app:fab_colorNormal="@color/closed_fab"
-                    app:fab_colorPressed="@color/open_fab"
-                    app:fab_colorRipple="@color/ripple_fab"
-                    android:layout_gravity="bottom|end"/>
-
-            <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/dreamButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/heart"
+                    android:src="@drawable/receipt"
                     app:fab_size="mini"
                     app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
@@ -150,7 +130,7 @@
                     android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/addNewButton"
+                    android:id="@+id/onceButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/addnew"
@@ -162,40 +142,6 @@
 
 
         </com.github.clans.fab.FloatingActionMenu>
-
-        <!--Egyenleg-->
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/egyenlegSzoveg"
-                android:text="@string/egyenlegSzoveg"
-                tools:text="@string/egyenlegSzoveg"
-                android:contentDescription="@string/egyenlegSzoveg"
-                android:textSize="24sp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="38dp"
-                android:layout_marginStart="20dp"/>
-        <EditText
-                android:focusable="false"
-                android:cursorVisible="false"
-                android:focusableInTouchMode="false"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/editText2"
-                android:text="@string/egyenleg"
-                tools:text="@string/egyenleg"
-                android:contentDescription="@string/egyenleg"
-                android:textSize="24sp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:width="150dp"
-                android:layout_marginBottom="28dp"
-                android:textAlignment="center"
-                android:autofillHints=""
-                tools:ignore="LabelFor"
-                tools:targetApi="o"
-                android:inputType=""
-                android:backgroundTint="@color/colorPrimary"/>
 
     </FrameLayout>
 
