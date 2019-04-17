@@ -38,12 +38,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //SMS
         db.execSQL(CREATE_TABLE_SMS)
         Log.i("db", "Create SMS table done!")
-        db.execSQL("INSERT INTO $TABLE_NAME_SMS($BASE_ID) VALUES (0)")
+        db.execSQL("INSERT INTO $TABLE_NAME_SMS($BASE_ID, $BASE_AMOUNT) VALUES (0, 0)")
         Log.i("db", "insert to $TABLE_NAME_SMS complete")
         //Limit
         db.execSQL(CREATE_TABLE_LIMIT)
         Log.i("db", "Create LIMIT table done!")
-        db.execSQL("INSERT INTO $TABLE_NAME_LIMIT($BASE_ID, $BASE_AMOUNT, $CURRENT_DAY_LIMIT) VALUES (1, 5000000, ${getCurrentDay()})")
+        db.execSQL("INSERT INTO $TABLE_NAME_LIMIT($BASE_ID, $BASE_AMOUNT, $CURRENT_DAY_LIMIT) VALUES (1, $DEFAULT_LIMIT_AMOUNT, ${getCurrentDay()})")
         Log.i("db", "insert to $TABLE_NAME_LIMIT complete")
     }
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -79,7 +79,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             }
             is Receipt -> {
                 db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
-                limitReduction(it.amount)
+                //limitReduction(it.amount)
             }
         }
         db.close()
@@ -115,10 +115,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.close()
     }
 
-    fun insertSms(id: Long) {
+    fun insertSms(idAndAmount: Pair<Long, Int>) {
         val db = this.writableDatabase
         val values = ContentValues()
-        values.put(BASE_ID, id)
+        values.put(BASE_ID, idAndAmount.first)
+        values.put(BASE_AMOUNT, idAndAmount.second)
         db.replace(TABLE_NAME_SMS, null, values)
         db.close()
     }
@@ -144,10 +145,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return list
     }
 
-    fun findAllTransaction(): MutableList<Transaction> {
+    fun findAllTransaction(condition: String = ""): MutableList<Transaction> {
         val transactionList = mutableListOf<Transaction>()
         val db = readableDatabase
-        val selectALLQuery = "SELECT * FROM $TABLE_NAME_TRANSACTION"
+        var selectALLQuery = "SELECT * FROM $TABLE_NAME_TRANSACTION"
+        if (condition.isNotEmpty()) {
+           selectALLQuery = "SELECT * FROM $TABLE_NAME_TRANSACTION $condition"
+        }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {
@@ -288,6 +292,21 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         cursor.close()
         db.close()
         return id
+    }
+
+    fun getSmsAmount(): Int {
+        val db = readableDatabase
+        val selectMaxQuery = "SELECT $BASE_AMOUNT FROM $TABLE_NAME_SMS"
+        val cursor = db.rawQuery(selectMaxQuery, null)
+        var amount = 0
+        with(cursor) {
+            while (moveToNext()) {
+                amount = cursor.getInt(0)
+            }
+        }
+        cursor.close()
+        db.close()
+        return amount
     }
 
     fun insertLimit(amount: Int, day: Int) {
@@ -470,6 +489,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         deleteTableContent(TABLE_NAME_PRODUCT)
         deleteTableContent(TABLE_NAME_SHOPPING)
         deleteTableContent(TABLE_NAME_TRANSACTION)
+        deleteTableContent(TABLE_NAME_RECEIPT)
 
 
         ProductPropertyEnum.values().forEach {
@@ -524,8 +544,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val shoppingList = ShoppingList("kenyér", 2, 2)
         insert(shoppingList)
 
-        harmfulChecker(1, this)
-        harmfulChecker(4, this)
         harmfulChecker(3, this)
     }
 
@@ -573,13 +591,16 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         val TABLE_NAME_SMS = "sms"
         val CREATE_TABLE_SMS= "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
-                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY)"
+                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY," +
+                "${DatabaseHandler.BASE_AMOUNT} INTEGER)"
 
+        //limit
         val TABLE_NAME_LIMIT = "day_limit"
         val CURRENT_DAY_LIMIT = "day"
         val CREATE_TABLE_LIMIT= "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_LIMIT} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
                 "${DatabaseHandler.CURRENT_DAY_LIMIT} INTEGER)"
+        val DEFAULT_LIMIT_AMOUNT = 25000
     }
 }
