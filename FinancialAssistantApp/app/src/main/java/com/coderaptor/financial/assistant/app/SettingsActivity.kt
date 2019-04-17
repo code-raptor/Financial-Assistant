@@ -2,6 +2,7 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.features.limit.setupLimit
@@ -16,6 +17,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        editText.text = Editable.Factory.getInstance().newEditable(dbHandler.getCurrentLimit().toString())
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
