@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity(){
             startActivity(intent)
         }
 
+        receiptButton.setOnClickListener {
+            val intent = Intent(this, ReceiptActivity::class.java)
+            startActivity(intent)
+        }
+
         val swipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = recyclerView.adapter as TransactionListAdapter
@@ -86,8 +91,8 @@ class MainActivity : AppCompatActivity(){
         if(permissionGranted) {
             val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
             if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
-                editText2.setText("${idAndAmount.second} ft")
-                dbHandler.insertSms(idAndAmount.first)
+                dbHandler.insertSms(idAndAmount)
+                editText2.setText("${dbHandler.getSmsAmount()} ft")
             }
         }
     }

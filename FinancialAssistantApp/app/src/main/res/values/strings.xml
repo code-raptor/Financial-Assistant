@@ -11,6 +11,7 @@
     <string name="back">Back</string>
     <string name="egyenlegSzoveg">Egyenleg:</string>
     <string name="egyenleg">200000 ft</string>
+    <string name="main_No_Amount">No Amount</string>
 
     <string name="income_freq">Gyakoriság:</string>
     <string name="income_category">Kategoria:</string>

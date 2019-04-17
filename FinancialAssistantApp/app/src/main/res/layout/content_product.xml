@@ -89,7 +89,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/mennyisegField"
+            app:layout_constraintEnd_toStartOf="@+id/quantityField"
             android:layout_marginTop="25dp"
             app:layout_constraintTop_toBottomOf="@+id/product_name"
             android:layout_marginStart="8dp"
@@ -101,7 +101,7 @@
             android:inputType="number"
             android:ems="10"
             android:textAlignment="center"
-            android:id="@+id/mennyisegField"
+            android:id="@+id/quantityField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
             android:autofillHints=""
@@ -121,20 +121,20 @@
             android:layout_marginTop="25dp"
             app:layout_constraintTop_toBottomOf="@+id/mennyiseg"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/egysegField"
+            app:layout_constraintEnd_toStartOf="@+id/unitField"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.34"/>
     <Spinner
             android:layout_width="213dp"
             android:layout_height="35dp"
-            android:id="@+id/egysegField"
+            android:id="@+id/unitField"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
             android:entries="@array/egyseg_array"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/mennyisegField" android:backgroundTint="@color/colorPrimary"/>
+            app:layout_constraintTop_toBottomOf="@+id/quantityField" android:backgroundTint="@color/colorPrimary"/>
     <!--Egységár-->
     <TextView
             android:text="@string/product_egysegar"
@@ -148,7 +148,7 @@
             android:layout_marginTop="25dp"
             app:layout_constraintTop_toBottomOf="@+id/egyseg"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/ar"
+            app:layout_constraintEnd_toStartOf="@+id/priceField"
             app:layout_constraintHorizontal_bias="0.319"/>
     <EditText
             android:layout_width="wrap_content"
@@ -156,22 +156,19 @@
             android:inputType="number"
             android:ems="10"
             android:textAlignment="center"
-            android:id="@+id/ar"
+            android:id="@+id/priceField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"
-            android:autofillHints=""
-            android:hint="@string/product_egyseghint"
-            tools:targetApi="o"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/egysegField"
+            app:layout_constraintTop_toBottomOf="@+id/unitField"
             android:backgroundTint="@color/colorPrimary"/>
     <!--Jótállás-->
     <CheckBox
             android:text="@string/product_jotallas"
             android:layout_width="wrap_content"
             android:layout_height="33dp"
-            android:id="@+id/jotallas"
-            app:layout_constraintEnd_toStartOf="@+id/lejaratdate"
+            android:id="@+id/warranty"
+            app:layout_constraintEnd_toStartOf="@+id/end_dateField"
             android:layout_marginTop="28dp"
             app:layout_constraintTop_toBottomOf="@+id/egysegar"
             android:layout_marginEnd="8dp" android:textSize="16sp" android:textColorLink="@android:color/transparent"
@@ -186,9 +183,9 @@
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/lejaratdate"
+            app:layout_constraintEnd_toStartOf="@+id/end_dateField"
             android:layout_marginTop="30dp"
-            app:layout_constraintTop_toBottomOf="@+id/jotallas"
+            app:layout_constraintTop_toBottomOf="@+id/warranty"
             app:layout_constraintHorizontal_bias="0.386"/>
     <EditText
             android:layout_width="wrap_content"
@@ -196,14 +193,14 @@
             android:inputType="number"
             android:ems="10"
             android:textAlignment="center"
-            android:id="@+id/lejaratdate"
+            android:id="@+id/end_dateField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"
             android:autofillHints=""
             android:hint="@string/product_jotallashint"
             tools:targetApi="o"
             android:layout_marginTop="72dp"
-            app:layout_constraintTop_toBottomOf="@+id/ar"
+            app:layout_constraintTop_toBottomOf="@+id/priceField"
             android:backgroundTint="@color/colorPrimary"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
