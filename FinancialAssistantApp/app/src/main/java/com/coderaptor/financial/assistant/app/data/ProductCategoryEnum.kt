@@ -8,6 +8,7 @@ enum class ProductCategoryEnum(val categoryName: String, val propertyId: Int,  v
     RUHA("Ruha", 1, "false"),
     ELEKTRONIKA("Elektronika", 2, "true"),
     SZERSZAM("Szerszám", 2, "false"),
-    ESZKOZ("Eszköz", 2, "false")
-
+    ESZKOZ("Eszköz", 2, "false"),
+    BUTOR("Bútor",  2, "true"),
+    EGYEB("Egyéb", 2, "false")
 }
