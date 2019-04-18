@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
-import com.coderaptor.financial.assistant.app.core.Transaction
+import com.coderaptor.financial.assistant.app.adapters.TransactionAndReceiptAdapter
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.features.limit.checkDayChanged
+import com.coderaptor.financial.assistant.app.features.oneweek.getOneWeekData
 import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(){
 
         setupSms(dbHandler.findMaxSMS())
         checkDayChanged(dbHandler)
-        setUpRecyclerView(dbHandler.findAllTransaction())
+        setUpRecyclerView(getOneWeekData(dbHandler))
         dbHandler.insertTestdata()
 
         addNewButton.setOnClickListener {
@@ -65,8 +65,8 @@ class MainActivity : AppCompatActivity(){
 
         val swipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = recyclerView.adapter as TransactionListAdapter
-                adapter.removeTransaction(viewHolder.adapterPosition, dbHandler)
+                val adapter = recyclerView.adapter as TransactionAndReceiptAdapter
+                adapter.remove(viewHolder.adapterPosition, dbHandler)
             }
 
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
@@ -76,13 +76,12 @@ class MainActivity : AppCompatActivity(){
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun setUpRecyclerView(findAllTransaction: MutableList<Transaction>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val transactionListAdapter = TransactionListAdapter(findAllTransaction as ArrayList<Transaction>)
+    private fun setUpRecyclerView(oneWeekList: MutableList<Any>) {
+        val tAndRAdapter = TransactionAndReceiptAdapter(oneWeekList as ArrayList<Any>)
         recyclerView.hasFixedSize()
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = transactionListAdapter
+        recyclerView.adapter = tAndRAdapter
     }
 
     @SuppressLint("SetTextI18n")
