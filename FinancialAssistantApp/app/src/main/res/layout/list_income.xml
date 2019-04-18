@@ -17,7 +17,7 @@
             android:layout_above="@+id/income_dateField" android:layout_marginBottom="8dp"
             android:layout_alignParentTop="true" android:layout_alignParentStart="true"/>
     <TextView
-            android:text="@string/income_list_date"
+            android:text="@string/base_date_hint"
             android:layout_width="214dp"
             android:layout_height="27dp"
             android:id="@+id/income_dateField"

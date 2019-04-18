@@ -79,7 +79,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             }
             is Receipt -> {
                 db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
-                //limitReduction(it.amount)
+                limitReduction(-it.amount)
             }
         }
         db.close()
@@ -223,9 +223,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val unit = cursor.getString(cursor.getColumnIndex(UNIT))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
                 val unitPrice = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
+                val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val categoryId = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
 
-                val product = Product(id, name, unit, quantity, unitPrice, categoryId)
+                val product = Product(id, name, unit, quantity, unitPrice, date, categoryId)
                 productList.add(product)
             }
         }
@@ -461,6 +462,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(UNIT, it.unit)
         values.put(BASE_QUANTITY, it.quantity)
         values.put(UNIT_PRICE, it.unitPrice)
+        values.put(BASE_DATE, it.date)
         values.put(PRODUCT_CATEGORY_ID_PRODUCT, it.categoryId)
         return values
     }
@@ -510,11 +512,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var product = Product("alma", "db", 3, 120, 1)
+        var product = Product("alma", "db", 3, 120, categoryId = 1)
         insert(product)
-        product = Product("kenyer", "db", 3, 120, 1)
+        product = Product("kenyer", "db", 3, 120, "2020-01-01", 1)
         insert(product)
-        product = Product("Alkohol", "Liter", 2, 1200, 4)
+        product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
         insert(product)
         Log.i("testData", "Product: ")
         findAllProduct().forEach {
@@ -545,6 +547,25 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         insert(shoppingList)
 
         harmfulChecker(3, this)
+    }
+
+    fun categoriesWithWarrantyAndHarmful(): ArrayList<Long> {
+        val list = ArrayList<Long>()
+        val db = readableDatabase
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT_CATEGORY WHERE $PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY = 2 OR $PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY = 1"
+        val cursor = db.rawQuery(selectALLQuery, null)
+        with(cursor) {
+            while (moveToNext()) {
+                val productPropertyValue = cursor.getString(cursor.getColumnIndex(PRODUCT_PROPERTY_VALUE))
+                if(productPropertyValue == "true") {
+                    val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                    list.add(id)
+                }
+            }
+        }
+        cursor.close()
+        db.close()
+        return list
     }
 
     companion object {
