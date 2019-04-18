@@ -549,10 +549,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         harmfulChecker(3, this)
     }
 
-    fun categoriesWithWarranty(): ArrayList<Long> {
+    fun categoriesWithWarrantyAndHarmful(): ArrayList<Long> {
         val list = ArrayList<Long>()
         val db = readableDatabase
-        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT_CATEGORY WHERE $PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY = 2"
+        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT_CATEGORY WHERE $PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY = 2 OR $PRODUCT_PROPERTY_ID_PRODUCT_CATEGORY = 1"
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {

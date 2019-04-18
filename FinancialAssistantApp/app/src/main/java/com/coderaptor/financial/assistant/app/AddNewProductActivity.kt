@@ -12,6 +12,7 @@ import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_newproduct.*
 import kotlinx.android.synthetic.main.content_product.*
 
@@ -29,18 +30,21 @@ class AddNewProductActivity: AppCompatActivity() {
         categoryField.adapter = adapter
         var categoryId = 1.toLong()
 
-        val categoryIdWithWarranty = dbHandler.categoriesWithWarranty()
+        val categoryIdWithWarrantyAndHarmful = dbHandler.categoriesWithWarrantyAndHarmful()
         categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val swt = parent.selectedItem as StringWithId
                 categoryId = swt.id
-                if (categoryIdWithWarranty.contains(categoryId)) {
+                if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
                     end_dateField.visibility = View.VISIBLE
                     label.visibility = View.VISIBLE
                     warranty.isChecked = true
-                }else {
+                }else if (!categoryIdWithWarrantyAndHarmful.contains(categoryId)) {
                     end_dateField.visibility = View.INVISIBLE
                     label.visibility = View.INVISIBLE
+                }else if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && dbHandler.isHarmfulCategory(categoryId)) {
+                    Snackbar.make(view, "Káros Termék", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show()
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>) {}
