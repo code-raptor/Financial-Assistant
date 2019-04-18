@@ -27,12 +27,32 @@ class AddNewProductActivity: AppCompatActivity() {
 
         categoryField.adapter = adapter
         var categoryId = 1.toLong()
+
+        val categoryIdWithWarranty = dbHandler.categoriesWithWarranty()
         categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val swt = parent.selectedItem as StringWithId
                 categoryId = swt.id
+                if (categoryIdWithWarranty.contains(categoryId)) {
+                    end_dateField.visibility = View.VISIBLE
+                    label.visibility = View.VISIBLE
+                    warranty.isChecked = true
+                }else {
+                    end_dateField.visibility = View.INVISIBLE
+                    label.visibility = View.INVISIBLE
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        warranty.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                end_dateField.visibility = View.VISIBLE
+                label.visibility = View.VISIBLE
+            }else {
+                end_dateField.visibility = View.INVISIBLE
+                label.visibility = View.INVISIBLE
+            }
         }
 
         back.setOnClickListener {
@@ -40,9 +60,9 @@ class AddNewProductActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             val name = productName.text.toString()
-            val quantity = quantityField.text.toString().toInt()
+            val quantity = if (quantityField.text.isNotEmpty())quantityField.text.toString().toInt() else 1
             val unit = unitField.selectedItem.toString()
             val price = priceField.text.toString().toInt()
             val warranty = warranty.isChecked

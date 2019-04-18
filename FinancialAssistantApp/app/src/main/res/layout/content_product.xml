@@ -161,7 +161,7 @@
             android:layout_marginEnd="48dp"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/unitField"
-            android:backgroundTint="@color/colorPrimary"/>
+            android:backgroundTint="@color/colorPrimary" tools:ignore="Autofill,LabelFor"/>
     <!--Jótállás-->
     <CheckBox
             android:text="@string/product_jotallas"
@@ -186,11 +186,11 @@
             app:layout_constraintEnd_toStartOf="@+id/end_dateField"
             android:layout_marginTop="30dp"
             app:layout_constraintTop_toBottomOf="@+id/warranty"
-            app:layout_constraintHorizontal_bias="0.386"/>
+            app:layout_constraintHorizontal_bias="0.386" android:visibility="invisible"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="date"
             android:ems="10"
             android:textAlignment="center"
             android:id="@+id/end_dateField"
@@ -201,6 +201,6 @@
             tools:targetApi="o"
             android:layout_marginTop="72dp"
             app:layout_constraintTop_toBottomOf="@+id/priceField"
-            android:backgroundTint="@color/colorPrimary"/>
+            android:backgroundTint="@color/colorPrimary" android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
