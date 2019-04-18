@@ -150,7 +150,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val db = readableDatabase
         var selectALLQuery = "SELECT * FROM $TABLE_NAME_TRANSACTION"
         if (condition.isNotEmpty()) {
-           selectALLQuery = "SELECT * FROM $TABLE_NAME_TRANSACTION $condition"
+           selectALLQuery = "SELECT * FROM $TABLE_NAME_TRANSACTION WHERE $condition"
         }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
@@ -260,19 +260,22 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return shoppingList
     }
 
-    fun findAllReceipt(): MutableList<Receipt> {
+    fun findAllReceipt(condition: String = ""): MutableList<Receipt> {
         val receiptList = mutableListOf<Receipt>()
         val db = readableDatabase
-        val selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT"
+        var selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT"
+        if (condition.isNotEmpty()) {
+            selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT WHERE $condition"
+        }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {
                 val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
-                val name = cursor.getString(cursor.getColumnIndex(BASE_DATE))
+                val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
                 val productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_RECEIPT))
 
-                val receipt = Receipt(id,name,amount, productId)
+                val receipt = Receipt(id,date,amount, productId)
                 receiptList.add(receipt)
             }
         }
@@ -523,20 +526,20 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var transaction = Transaction(1000, "2019.01.01", "Zsebpénz")
+        var transaction = Transaction(1000, "2019-04-15", "Zsebpénz")
         insert(transaction)
-        transaction = Transaction(1000, "2019.01.01", "Bor")
+        transaction = Transaction(1000, "2019-04-16", "Bor")
         insert(transaction)
-        transaction = Transaction(100000, "2019.02.01", "Fizetés", "Havonta")
+        transaction = Transaction(100000, "2019-04-10", "Fizetés", "Havonta")
         insert(transaction)
         Log.i("testData", "Transaction: ")
         findAllTransaction().forEach {
             Log.i("testData", it.toString())
         }
 
-        var receipt = Receipt(1,"2019.01.01", 13000, 1)
+        var receipt = Receipt(1,"2019-04-18", 13000, 1)
         insert(receipt)
-        receipt = Receipt(2,"2019.10.01", 5000, 2)
+        receipt = Receipt(2,"2019-03-13", 5000, 2)
         insert(receipt)
         Log.i("testData", "Receipt: ")
         findAllReceipt().forEach {

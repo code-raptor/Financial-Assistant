@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.coderaptor.financial.assistant.app.R
 import com.coderaptor.financial.assistant.app.core.Receipt
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
@@ -18,11 +19,6 @@ class TransactionAndReceiptAdapter(private val list: ArrayList<Any>) : RecyclerV
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-    }
-
-    fun addTransaction(transaction: Transaction) {
-        list.add(transaction)
-        notifyItemInserted(list.size)
     }
 
     fun remove(position: Int, dbHandler: DatabaseHandler) {
@@ -39,8 +35,7 @@ class TransactionAndReceiptAdapter(private val list: ArrayList<Any>) : RecyclerV
 
     override fun getItemCount(): Int = list.size
 
-    class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(com.coderaptor.financial.assistant.app.R.layout.list_income, parent, false)) {
+    class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_income, parent, false)) {
 
         @SuppressLint("SetTextI18n")
         fun bind(item: Any) = with(itemView) {
@@ -80,7 +75,7 @@ class TransactionAndReceiptAdapter(private val list: ArrayList<Any>) : RecyclerV
                     ContextCompat.getColor(context, com.coderaptor.financial.assistant.app.R.color.amount_minus)
                 )
                 income_amountField. text = receipt.amount.toString()
-                income_nameField.text = ""
+                income_nameField.text = "NYUGTA"
             }
         }
     }
