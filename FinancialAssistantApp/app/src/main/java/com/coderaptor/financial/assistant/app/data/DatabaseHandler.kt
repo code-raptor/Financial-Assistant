@@ -27,7 +27,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.execSQL(ProductCategory.CREATE_TABLE_PRODUCT_CATEGORY)
         Log.i("db", "Create ProductCategory table done!")
         //PRODUCT
-        Log.i("productS", Product.CREATE_TABLE_PRODUCT)
         db.execSQL(Product.CREATE_TABLE_PRODUCT)
         Log.i("db", "Create Product table done!")
         //SHOPPING
