@@ -15,15 +15,12 @@
 
     <string name="income_freq">Gyakoriság:</string>
     <string name="income_category">Kategoria:</string>
-    <string name="date">Dátum:</string>
     <string name="income_income">Bevétel</string>
     <string name="cost">Kiadás</string>
-    <string name="hint_date">2019.01.01</string>
     <string name="hint_amount">342000</string>
     <string name="amount">Összeg:</string>
     <string name="income_button">Rögzit</string>
     <string name="income_list_name">Telefon Számla</string>
-    <string name="income_list_date">2019.01.01</string>
     <string name="income_list_amount">+5000 ft</string>
 
     <string name="newTransaction">Új tranzakció felvétele</string>
@@ -38,7 +35,6 @@
     <string name="dream_name">24\' HD Monitor</string>
     <string name="dream_where">Bestbyte</string>
     <string name="dream_price">56000 ft</string>
-    <string name="dream_date">2021.04.05</string>
 
     <!--Rendszeres tranzakciók-->
     <string name="repeat_price">-2580 ft</string>
@@ -57,7 +53,6 @@
     <string name="product_category">Kategória:</string>
     <string name="product_jotallas">Jótállás</string>
     <string name="product_jotallasdate">Lejárat:</string>
-    <string name="product_jotallashint">2021.05.25</string>
     <string-array name="egyseg_array">
         <item>Darab</item>
         <item>Liter</item>
@@ -65,17 +60,8 @@
         <item>Zsák</item>
         <item>Kilógramm</item>
     </string-array>
-    <string-array name="category_array">
-        <item>Bútor</item>
-        <item>Műszaki cikk</item>
-        <item>Élelmiszer</item>
-        <item>Ruha</item>
-        <item>Egyéb</item>
-    </string-array>
     <!--Blokk-->
     <string name="receipt_string">Blokk</string>
-    <string name="receipt_datehint">2019.03.25</string>
-    <string name="receipt_date">Dátum:</string>
     <string name="receipt_amounthint">18500</string>
     <string name="receipt_amount">Összeg:</string>
     <string name="receipt_newproduct">Új termék:</string>
@@ -91,6 +77,14 @@
         <item>Bonusz</item>
         <item>Ajándék</item>
         <item>Zsebpénz</item>
+        <item>Elektronika</item>
+        <item>Alkatrész</item>
+        <item>Kocsi</item>
+        <item>Lakbér</item>
+        <item>Gáz Számla</item>
+        <item>Víz Számla</item>
+        <item>Villany Számla</item>
+        <item>Szolgáltatás</item>
         <item>Egyéb</item>
     </string-array>
     <string-array name="income_frequency">
@@ -100,4 +94,7 @@
         <item>Félévente</item>
         <item>Évente</item>
     </string-array>
+
+    <string name="base_date_hint">2019–04–25</string>
+    <string name="base_date_string">Dátum:</string>
 </resources>

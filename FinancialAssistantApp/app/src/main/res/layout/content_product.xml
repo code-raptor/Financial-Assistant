@@ -47,7 +47,6 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
-            android:entries="@array/category_array"
             android:layout_marginTop="48dp"
             app:layout_constraintTop_toBottomOf="@+id/cim" android:backgroundTint="@color/colorPrimary"/>
     <!--Termék neve-->
@@ -197,7 +196,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"
             android:autofillHints=""
-            android:hint="@string/product_jotallashint"
+            android:hint="@string/base_date_hint"
             tools:targetApi="o"
             android:layout_marginTop="72dp"
             app:layout_constraintTop_toBottomOf="@+id/priceField"
