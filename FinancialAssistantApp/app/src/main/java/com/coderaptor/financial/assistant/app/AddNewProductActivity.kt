@@ -2,6 +2,7 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -66,11 +67,15 @@ class AddNewProductActivity: AppCompatActivity() {
             val unit = unitField.selectedItem.toString()
             val price = priceField.text.toString().toInt()
             val warranty = warranty.isChecked
+            var product = Product(name, unit, quantity, price, categoryId = categoryId)
             if (warranty) {
-                val endDate = end_dateField.toString()
+                if (end_dateField.text.isNotEmpty()) {
+                    val endDate = end_dateField.text.toString()
+                    product = Product(name, unit, quantity, price, endDate, categoryId)
+                }
             }
 
-            val product = Product(name, unit, quantity, price, categoryId)
+            Log.i("productS", "$product")
 
             dbHandler.insert(product)
 
