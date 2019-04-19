@@ -25,12 +25,7 @@ class AddNewRepeatActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener {
-            val intent = Intent(this, RepeatActivity::class.java)
-            startActivity(intent)
-        }
-
-        button.setOnClickListener { view ->
+        fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace rögzit", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
@@ -51,7 +46,7 @@ class AddNewRepeatActivity : AppCompatActivity() {
                 Toast.makeText(this, "Napi limit összeg meghaladva", Toast.LENGTH_LONG).show()
             }
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, RepeatActivity::class.java)
             startActivity(intent)
         }
     }

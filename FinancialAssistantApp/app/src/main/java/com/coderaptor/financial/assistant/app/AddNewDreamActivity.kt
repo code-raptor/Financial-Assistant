@@ -11,7 +11,6 @@ import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.DreamActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_newdream.*
-import kotlinx.android.synthetic.main.content_newdream.*
 
 class AddNewDreamActivity : AppCompatActivity() {
 
@@ -27,12 +26,7 @@ class AddNewDreamActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener {
-            val intent = Intent(this, DreamActivity::class.java)
-            startActivity(intent)
-        }
-
-        button.setOnClickListener { view ->
+        fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace rögzit", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
