@@ -67,17 +67,24 @@ class TransactionAndReceiptAdapter(private val list: ArrayList<Any>) : RecyclerV
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }else if (item is Receipt) {
+            } else if (item is Receipt) {
                 val receipt = item
 
                 income_dateField.text = receipt.date
                 income_amountField.setTextColor(
                     ContextCompat.getColor(context, com.coderaptor.financial.assistant.app.R.color.amount_minus)
                 )
-                income_amountField. text = receipt.amount.toString()
+                income_amountField.text = receipt.amount.toString()
                 income_nameField.text = "NYUGTA"
+
+                setOnClickListener { view ->
+                    Toast.makeText(
+                        view.context,
+                        "click on item: " + receipt.id,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
-
 }
