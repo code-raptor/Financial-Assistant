@@ -42,6 +42,7 @@ class AddNewProductActivity: AppCompatActivity() {
                 }else if (!categoryIdWithWarrantyAndHarmful.contains(categoryId)) {
                     end_dateField.visibility = View.INVISIBLE
                     label.visibility = View.INVISIBLE
+                    warranty.isChecked = false
                 }else if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && dbHandler.isHarmfulCategory(categoryId)) {
                     Snackbar.make(view, "Káros Termék", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show()
