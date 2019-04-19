@@ -16,7 +16,8 @@
             android:minHeight="?attr/actionBarSize"
             android:id="@+id/toolbar"
             android:visibility="visible"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
@@ -45,8 +46,6 @@
                  android:layout_width="match_parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="387dp"
                 android:layout_height="292dp"
                 android:scrollbars="vertical"
@@ -58,6 +57,22 @@
                 tools:context=".ReceiptActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="20dp"
+                app:srcCompat="@drawable/check"
+                android:backgroundTint="@color/closed_fab"
+                app:fab_colorNormal="@color/closed_fab"
+                app:fab_colorPressed="@color/open_fab"
+                app:fab_colorRipple="@color/ripple_fab"
+                android:id="@+id/fab"
+                android:focusable="true"/>
+
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
