@@ -30,7 +30,8 @@
         <activity android:name=".gui.RepeatActivity"/>
         <activity android:name=".AddNewProductActivity"/>
         <activity android:name=".ReceiptActivity"/>
-        <activity android:name="HistoryActivity"/>
+        <activity android:name=".HistoryActivity"/>
+        <activity android:name=".ShoppingListActivity"/>
     </application>
     <uses-permission android:name="android.permission.READ_SMS"/>
 </manifest>

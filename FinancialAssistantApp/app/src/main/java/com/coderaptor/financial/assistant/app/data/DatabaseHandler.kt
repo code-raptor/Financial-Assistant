@@ -9,7 +9,6 @@ import com.coderaptor.financial.assistant.app.core.*
 import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_DREAM
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
-import com.coderaptor.financial.assistant.app.features.harmful.harmfulChecker
 import com.coderaptor.financial.assistant.app.features.limit.getCurrentDay
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -246,13 +245,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
+                val unit = cursor.getString(cursor.getColumnIndex(UNIT))
                 var productId = (-1).toLong()
                 if (!cursor.isNull(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))) {
                     productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))
                 }
-
-
-                val shopping = ShoppingList(id, name, quantity, productId)
+                val shopping = ShoppingList(id, name, quantity, unit, productId)
                 shoppingList.add(shopping)
             }
         }
@@ -477,7 +475,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val values = ContentValues()
         values.put(BASE_NAME, it.name)
         values.put(BASE_QUANTITY, it.quantity)
-        if (it.productId != (-1).toLong()) {
+        values.put(UNIT, it.unit)
+        if(it.productId != (-1).toLong()) {
             values.put(PRODUCT_ID_SHOPPING, it.productId)
         }
         return values
@@ -518,9 +517,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var product = Product("alma", "db", 3, 120, categoryId = 1)
+        var product = Product("alma", "db", 3, 120, categoryId = 4)
         insert(product)
-        product = Product("kenyer", "db", 3, 120, "2020-01-01", 1)
+        product = Product("kenyer", "db", 3, 120, "2020-01-01", 2)
         insert(product)
         product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
         insert(product)
@@ -577,10 +576,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        val shoppingList = ShoppingList("kenyér", 2, 2)
+        var shoppingList = ShoppingList("kenyér", 2, "Db", 2)
         insert(shoppingList)
-
-        harmfulChecker(3, this)
+        shoppingList = ShoppingList("alma",5, "kg",1)
+        insert(shoppingList)
+        shoppingList = ShoppingList("bor", 10, "l",3)
+        insert(shoppingList)
     }
 
     fun categoriesWithWarrantyAndHarmful(): ArrayList<Long> {

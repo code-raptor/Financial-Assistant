@@ -2,20 +2,20 @@ package com.coderaptor.financial.assistant.app.core
 
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 
-data class ShoppingList(val name: String, val quantity: Int) {
+data class ShoppingList(val name: String, val quantity: Int, val unit: String) {
     var id: Long = -1
     var productId: Long = -1
 
-    constructor(id: Long, name: String, quantity: Int): this(name, quantity) {
+    constructor(id: Long, name: String, quantity: Int, unit:String): this(name, quantity, unit) {
         this.id = id
     }
 
-    constructor(id: Long, name: String, quantity: Int, productId: Long): this(name, quantity) {
+    constructor(id: Long, name: String, quantity: Int, unit: String, productId: Long): this(name, quantity, unit) {
         this.id = id
         this.productId = productId
     }
 
-    constructor(name: String, quantity: Int, productId: Long): this(name, quantity) {
+    constructor(name: String, quantity: Int, unit: String, productId: Long): this(name, quantity, unit) {
         this.productId = productId
     }
 
@@ -25,11 +25,12 @@ data class ShoppingList(val name: String, val quantity: Int) {
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
                 "${DatabaseHandler.BASE_NAME} TEXT, " +
                 "${DatabaseHandler.BASE_QUANTITY} INTEGER, " +
+                "${DatabaseHandler.UNIT} TEXT, " +
                 "${DatabaseHandler.PRODUCT_ID_SHOPPING} INTEGER," +
                 "FOREIGN KEY (${DatabaseHandler.PRODUCT_ID_SHOPPING}) REFERENCES ${DatabaseHandler.TABLE_NAME_PRODUCT}(${DatabaseHandler.BASE_ID}))"
     }
 
     override fun toString(): String {
-        return "ShoppingList(id=$id, name='$name', quantity=$quantity, productId=$productId)"
+        return "ShoppingList(id=$id, name='$name', quantity=$quantity, unit=$unit, productId=$productId)"
     }
 }
