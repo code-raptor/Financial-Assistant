@@ -11,7 +11,7 @@ import com.coderaptor.financial.assistant.app.adapters.ShoppingListAdapter
 import com.coderaptor.financial.assistant.app.core.ShoppingList
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
-import kotlinx.android.synthetic.main.activity_receipt.*
+import kotlinx.android.synthetic.main.activity_shoppinglist.*
 
 class ShoppingListActivity: AppCompatActivity() {
 
@@ -51,13 +51,6 @@ class ShoppingListActivity: AppCompatActivity() {
     }
 
     private fun setupDatabase(){
-        val shoppingList = arrayListOf(
-            ShoppingList("alma",5, "kg",1),
-            ShoppingList("kenyér", 3, "db",1),
-            ShoppingList("bor", 10, "l",1)
-        )
-        //dbHandler.inserts(shoppingList)
-
         setUpRecyclerView(dbHandler.findAllShopping())
     }
 }

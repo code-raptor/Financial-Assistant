@@ -10,12 +10,12 @@ data class ShoppingList(val name: String, val quantity: Int, val unit: String) {
         this.id = id
     }
 
-    constructor(id: Long, name: String, quantity: Int, unit:String, productId: Long): this(name, quantity,unit) {
+    constructor(id: Long, name: String, quantity: Int, unit: String, productId: Long): this(name, quantity, unit) {
         this.id = id
         this.productId = productId
     }
 
-    constructor(name: String, quantity: Int,unit:String, productId: Long): this(name, quantity,unit) {
+    constructor(name: String, quantity: Int, unit: String, productId: Long): this(name, quantity, unit) {
         this.productId = productId
     }
 

@@ -19,7 +19,7 @@ class ShoppingListAdapter (private val shoppingList: ArrayList<ShoppingList>) : 
     }
 
     fun removeShopElement(position: Int, dbHandler: DatabaseHandler){
-        dbHandler.deleteByPosition(shoppingList[position].id, DatabaseHandler.TABLE_NAME_DREAM)
+        dbHandler.deleteByPosition(shoppingList[position].id, DatabaseHandler.TABLE_NAME_SHOPPING)
         notifyItemRemoved(position)
         shoppingList.removeAt(position)
     }
