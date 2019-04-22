@@ -109,7 +109,9 @@
             android:hint="@string/base_date_hint"
             android:inputType="date"
             tools:targetApi="o"
-            android:backgroundTint="@color/colorPrimary"/>
+            android:backgroundTint="@color/colorPrimary"
+            android:focusable="false"
+            tools:ignore="KeyboardInaccessibleWidget"/>
     <!--Kategória-->
     <TextView
             android:text="@string/income_category"

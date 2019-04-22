@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/toolbar</item>
+
+        <!--CalanderView-->
+        <item name="md_color_title">@color/colorPrimaryDark</item>
+        <item name="md_color_content">@color/toolbar</item>
+        <item name="md_color_button_text">@color/colorPrimary</item>
+
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
