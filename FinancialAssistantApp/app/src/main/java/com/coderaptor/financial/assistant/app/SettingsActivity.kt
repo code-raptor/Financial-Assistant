@@ -6,19 +6,19 @@ import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.features.limit.setupLimit
+import com.coderaptor.financial.assistant.app.util.Globals.Companion.saving
 import kotlinx.android.synthetic.main.activity_settings.*
-
 
 
 class SettingsActivity : AppCompatActivity() {
 
     val dbHandler = DatabaseHandler(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
         editText.text = Editable.Factory.getInstance().newEditable(dbHandler.getCurrentLimit().toString())
+        sporolas.isChecked = saving
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -34,6 +34,7 @@ class SettingsActivity : AppCompatActivity() {
             val limitAmount = editText.text.toString().toInt()
             setupLimit(limitAmount, dbHandler)
         }
+        saving = sporolas.isChecked
     }
 }
 
