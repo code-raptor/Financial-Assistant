@@ -8,6 +8,7 @@ object SharedPreference {
     lateinit var sharedPref: SharedPreferences
     private val IS_FIRST_RUN_PREF = "is_first_run" to false
     private val SAVING = "saving" to false
+    private val SHOPPING_MONITOR = "monitor" to false
     private val CURRENT_DATE = "cdate" to ""
 
     fun init(context: Context) {
@@ -32,6 +33,11 @@ object SharedPreference {
             it.putBoolean(SAVING.first, value)
         }
 
+    var shoppingMonitor: Boolean
+        get() = sharedPref.getBoolean(SHOPPING_MONITOR.first, SHOPPING_MONITOR.second)
+        set(value) = sharedPref.edit {
+            it.putBoolean(SHOPPING_MONITOR.first, value)
+        }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     var currentDate: String

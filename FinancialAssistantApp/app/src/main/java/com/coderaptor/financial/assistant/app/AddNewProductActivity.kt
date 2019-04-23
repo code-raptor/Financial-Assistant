@@ -2,16 +2,16 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
+import com.coderaptor.financial.assistant.app.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_newproduct.*
 import kotlinx.android.synthetic.main.content_product.*
@@ -44,8 +44,10 @@ class AddNewProductActivity: AppCompatActivity() {
                     label.visibility = View.INVISIBLE
                     warranty.isChecked = false
                 }else if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && dbHandler.isHarmfulCategory(categoryId)) {
-                    Snackbar.make(view, "Káros Termék", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show()
+                    if (SharedPreference.shoppingMonitor) {
+                        Snackbar.make(view, "Káros Termék", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show()
+                    }
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -80,11 +82,9 @@ class AddNewProductActivity: AppCompatActivity() {
                 }
             }
 
-            Log.i("productS", "$product")
-
             dbHandler.insert(product)
+            toast("Sikeres hozzáadás")
 
-            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
             val intent = Intent(this, ReceiptActivity::class.java)
             startActivity(intent)
         }

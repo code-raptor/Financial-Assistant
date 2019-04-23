@@ -19,6 +19,7 @@ class SettingsActivity : AppCompatActivity() {
 
         editText.text = Editable.Factory.getInstance().newEditable(dbHandler.getCurrentLimit().toString())
         sporolas.isChecked = SharedPreference.saving
+        bevasarlas.isChecked = SharedPreference.shoppingMonitor
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -34,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
             setupLimit(limitAmount, dbHandler)
         }
         SharedPreference.saving = sporolas.isChecked
+        SharedPreference.shoppingMonitor = bevasarlas.isChecked
     }
 }
 
