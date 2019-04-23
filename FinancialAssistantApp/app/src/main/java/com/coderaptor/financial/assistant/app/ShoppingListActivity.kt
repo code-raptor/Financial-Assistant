@@ -2,6 +2,8 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,7 +20,7 @@ import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
-import com.coderaptor.financial.assistant.app.util.toast
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_shoppinglist.*
 import kotlinx.android.synthetic.main.dialog_add_shopping.view.*
 import java.util.*
@@ -45,14 +47,27 @@ class ShoppingListActivity : AppCompatActivity() {
                 title(R.string.product_string)
                 customView(R.layout.dialog_add_shopping, scrollable = true)
                 getCustomView().categoryField.adapter = categoryAdapter
+
+                getCustomView().categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                        val swt = parent.selectedItem as StringWithId
+                        val categoryId = swt.id
+                        if (SharedPreference.shoppingMonitor) {
+                            if (dbHandler.isHarmfulCategory(categoryId)) {
+                                Snackbar.make(getCustomView(), "Káros Termék", Snackbar.LENGTH_SHORT)
+                                    .setAction("Action", null).show()
+                            }
+                        }
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+
                 positiveButton(R.string.income_button) { dialog ->
                     val name = dialog.getCustomView().product_name.text.toString()
                     val quantity = dialog.getCustomView().product_quantity.text.toString().toInt()
                     val unit = dialog.getCustomView().unitField.selectedItem.toString()
-                    val category = dialog.getCustomView().categoryField.selectedItem.toString()
 
                     dbHandler.insert(ShoppingList(name, quantity, unit))
-                    toast("name: $name, quantity: $quantity, egység: $unit, category: $category")
                     setUpRecyclerView(dbHandler.findAllShopping())
                 }
                 negativeButton(android.R.string.cancel)
