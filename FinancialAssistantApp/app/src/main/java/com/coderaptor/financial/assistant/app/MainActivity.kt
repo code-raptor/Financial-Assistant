@@ -3,6 +3,7 @@ package com.coderaptor.financial.assistant.app
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,7 +16,10 @@ import com.coderaptor.financial.assistant.app.features.oneweek.getOneWeekData
 import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
+import com.coderaptor.financial.assistant.app.util.SharedPreference
+import com.coderaptor.financial.assistant.app.util.formatDate
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(){
@@ -28,6 +32,14 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        if (!SharedPreference.firstRun) {
+            SharedPreference.firstRun = true
+            SharedPreference.currentDate = Calendar.getInstance().formatDate()
+        }else {
+            Log.i("first", "Nem először value: ${SharedPreference.firstRun}")
+                SharedPreference.currentDate = Calendar.getInstance().formatDate()
+        }
 
         setupSms(dbHandler.findMaxSMS())
         checkDayChanged(dbHandler)
