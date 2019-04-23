@@ -4,6 +4,7 @@
           package="com.coderaptor.financial.assistant.app">
 
     <application
+            android:name=".util.Globals"
             android:allowBackup="true"
             android:fullBackupContent="true"
             android:icon="@mipmap/ic_launcher"
@@ -34,4 +35,10 @@
         <activity android:name=".ShoppingListActivity"/>
     </application>
     <uses-permission android:name="android.permission.READ_SMS"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-feature android:name="android.hardware.bluetooth_le"
+                  android:required="true" />
 </manifest>
