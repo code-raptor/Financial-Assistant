@@ -61,7 +61,7 @@
         <item>Zsák</item>
     </string-array>
     <!--Blokk-->
-    <string name="receipt_string">Blokk</string>
+    <string name="receipt_string">Nyugta</string>
     <string name="receipt_amounthint">18500</string>
     <string name="receipt_amount">Összeg:</string>
     <string name="receipt_newproduct">Új termék:</string>
@@ -100,4 +100,6 @@
 
     <string name="base_date_hint">2019–04–25</string>
     <string name="base_date_string">Dátum:</string>
+    <string name="edit">edit</string>
+    <string name="delete">delete</string>
 </resources>
