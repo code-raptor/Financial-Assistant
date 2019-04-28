@@ -56,9 +56,7 @@
                 android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView_h"
 
-                tools:context=".HistoryActivity">
-
-        </androidx.recyclerview.widget.RecyclerView>
+                tools:context=".HistoryActivity"/>
 
         <!-- FAB MENU -->
         <com.github.clans.fab.FloatingActionMenu
