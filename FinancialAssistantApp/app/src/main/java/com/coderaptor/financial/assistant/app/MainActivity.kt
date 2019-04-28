@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,6 +16,8 @@ import com.coderaptor.financial.assistant.app.features.limit.checkDayChanged
 import com.coderaptor.financial.assistant.app.features.oneweek.getOneWeekData
 import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
+import com.coderaptor.financial.assistant.app.gui.DreamActivity
+import com.coderaptor.financial.assistant.app.gui.RepeatActivity
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.formatDate
@@ -52,12 +55,12 @@ class MainActivity : AppCompatActivity(){
         }
 
         repeatButton.setOnClickListener {
-            val intent = Intent(this, AddNewRepeatActivity::class.java)
+            val intent = Intent(this, RepeatActivity::class.java)
             startActivity(intent)
         }
 
         dreamButton.setOnClickListener {
-            val intent = Intent(this, AddNewDreamActivity::class.java)
+            val intent = Intent(this, DreamActivity::class.java)
             startActivity(intent)
         }
 
@@ -99,6 +102,13 @@ class MainActivity : AppCompatActivity(){
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = tAndRAdapter
+        if(oneWeekList.size == 0){
+            nodata.visibility = View.VISIBLE
+        }
+        else{
+            nodata.visibility = View.INVISIBLE
+        }
+
     }
 
     @SuppressLint("SetTextI18n")

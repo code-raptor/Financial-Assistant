@@ -16,7 +16,6 @@ import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.formatDate
 import kotlinx.android.synthetic.main.activity_receipt.*
-import kotlinx.android.synthetic.main.content_newrepeat_transaction.*
 import kotlinx.android.synthetic.main.content_receipt.*
 
 class ReceiptActivity: AppCompatActivity() {

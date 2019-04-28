@@ -39,7 +39,8 @@
                 app:srcCompat="@drawable/settings"
                 android:background="@android:color/transparent"
                 android:focusable="true"
-                android:visibility="visible" tools:ignore="ContentDescription"/>
+                android:visibility="visible"
+                tools:ignore="ContentDescription"/>
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
@@ -54,6 +55,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0">
 
+        <TextView
+                android:id="@+id/nodata"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:text="@string/nodata_string"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:visibility="invisible" android:layout_marginEnd="7dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -63,9 +74,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView"
-
                 tools:context=".MainActivity">
-
         </androidx.recyclerview.widget.RecyclerView>
 
         <!-- FAB MENU -->
@@ -112,7 +121,7 @@
                 android:layout_gravity="bottom|end"
                 android:clipChildren="true"
                 android:visibility="visible"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="30dp">
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/shoppingListButton"

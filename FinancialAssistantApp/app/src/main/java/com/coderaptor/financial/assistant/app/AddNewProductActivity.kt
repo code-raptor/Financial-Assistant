@@ -2,13 +2,17 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.util.SharedPreference
+import com.coderaptor.financial.assistant.app.util.formatDate
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
 import com.coderaptor.financial.assistant.app.util.toast
@@ -36,11 +40,11 @@ class AddNewProductActivity: AppCompatActivity() {
                 val swt = parent.selectedItem as StringWithId
                 categoryId = swt.id
                 if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
-                    end_dateField.visibility = View.VISIBLE
+                    dateField.visibility = View.VISIBLE
                     label.visibility = View.VISIBLE
                     warranty.isChecked = true
                 }else if (!categoryIdWithWarrantyAndHarmful.contains(categoryId)) {
-                    end_dateField.visibility = View.INVISIBLE
+                    dateField.visibility = View.INVISIBLE
                     label.visibility = View.INVISIBLE
                     warranty.isChecked = false
                 }else if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && dbHandler.isHarmfulCategory(categoryId)) {
@@ -55,10 +59,10 @@ class AddNewProductActivity: AppCompatActivity() {
 
         warranty.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked) {
-                end_dateField.visibility = View.VISIBLE
+                dateField.visibility = View.VISIBLE
                 label.visibility = View.VISIBLE
             }else {
-                end_dateField.visibility = View.INVISIBLE
+                dateField.visibility = View.INVISIBLE
                 label.visibility = View.INVISIBLE
             }
         }
@@ -66,6 +70,12 @@ class AddNewProductActivity: AppCompatActivity() {
         back.setOnClickListener {
             val intent = Intent(this, ReceiptActivity::class.java)
             startActivity(intent)
+        }
+
+        dateField.isClickable = true
+        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+        dateField.setOnClickListener {
+            dateClick(this)
         }
 
         fab.setOnClickListener {
@@ -76,8 +86,8 @@ class AddNewProductActivity: AppCompatActivity() {
             val warranty = warranty.isChecked
             var product = Product(name, unit, quantity, price, categoryId = categoryId)
             if (warranty) {
-                if (end_dateField.text.isNotEmpty()) {
-                    val endDate = end_dateField.text.toString()
+                if (dateField.text.isNotEmpty()) {
+                    val endDate = dateField.text.toString()
                     product = Product(name, unit, quantity, price, endDate, categoryId)
                 }
             }
@@ -87,6 +97,15 @@ class AddNewProductActivity: AppCompatActivity() {
 
             val intent = Intent(this, ReceiptActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    fun dateClick(context: AddNewProductActivity) {
+        MaterialDialog(this).show {
+            setTheme(R.style.AppTheme)
+            datePicker { _, innerDate ->
+                context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
+            }
         }
     }
 }

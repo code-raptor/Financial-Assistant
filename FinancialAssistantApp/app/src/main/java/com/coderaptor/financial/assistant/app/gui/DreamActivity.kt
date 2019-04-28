@@ -2,6 +2,7 @@ package com.coderaptor.financial.assistant.app.gui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -55,6 +56,13 @@ class DreamActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = dreamListAdapter
+
+        if(findAllTransaction.size == 0){
+            nodata.visibility = View.VISIBLE
+        }
+        else{
+            nodata.visibility = View.INVISIBLE
+        }
     }
 
     private fun setupDatabase() {

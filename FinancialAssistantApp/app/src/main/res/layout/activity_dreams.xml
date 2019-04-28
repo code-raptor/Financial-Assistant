@@ -38,9 +38,18 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent">
 
+        <TextView
+                android:id="@+id/nodata"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:text="@string/nodata_string"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                android:layout_marginEnd="7dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
@@ -65,7 +74,7 @@
                 android:backgroundTint="@color/closed_fab"
                 app:fab_colorNormal="@color/closed_fab"
                 app:fab_colorPressed="@color/open_fab"
-                app:fab_colorRipple="@color/ripple_fab"
+                app:rippleColor="@color/ripple_fab"
                 android:id="@+id/addnewDream"
                 android:focusable="true"/>
 
