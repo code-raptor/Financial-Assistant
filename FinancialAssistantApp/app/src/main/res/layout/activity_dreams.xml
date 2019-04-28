@@ -43,10 +43,11 @@
                 android:layout_width="300dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
-                android:text="@string/nodata_string"
+                android:text="@string/nodata_dream"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:visibility="invisible"
+                android:layout_marginTop="100dp"
                 android:layout_marginEnd="7dp"/>
 
         <androidx.recyclerview.widget.RecyclerView

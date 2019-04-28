@@ -98,12 +98,14 @@
                 app:menu_labels_style="@style/AlertDialog.AppCompat"
                 app:menu_labels_position="left"
                 app:menu_openDirection="up"
+
                 app:menu_backgroundColor="@android:color/transparent"
                 app:menu_fab_show_animation="@anim/fab_scale_up"
                 app:menu_fab_hide_animation="@anim/fab_scale_down"
                 android:layout_gravity="bottom|end"
                 android:clipChildren="true"
-                android:visibility="visible" android:layout_marginEnd="30dp">
+                android:visibility="visible"
+                android:layout_marginEnd="30dp">
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/receiptButton"
@@ -114,6 +116,7 @@
                     app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
                     app:fab_colorRipple="@color/ripple_fab"
+                    app:fab_label="@string/fab_history_receipt"
                     android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
@@ -125,6 +128,7 @@
                     app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
                     app:fab_colorRipple="@color/ripple_fab"
+                    app:fab_label="@string/fab_history_repeats"
                     android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
@@ -136,6 +140,7 @@
                     app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
                     app:fab_colorRipple="@color/ripple_fab"
+                    app:fab_label="@string/fab_history_once"
                     android:layout_gravity="bottom|end"/>
 
 

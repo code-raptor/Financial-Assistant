@@ -59,11 +59,11 @@
                 android:id="@+id/nodata"
                 android:layout_width="300dp"
                 android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:text="@string/nodata_string"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/nodata_transaction"
                 android:textAlignment="center"
-                android:textSize="24sp"
-                android:visibility="invisible" android:layout_marginEnd="7dp"/>
+                android:textSize="22sp"
+                android:visibility="invisible" android:layout_marginEnd="7dp" android:layout_marginTop="100dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -125,7 +125,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/shoppingListButton"
-                    app:fab_label="@string/shoppinglist_string"
+                    app:fab_label="@string/fab_shoppinglist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/shopcart"
@@ -137,7 +137,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/receiptButton"
-                    app:fab_label="@string/receipt_string"
+                    app:fab_label="@string/fab_receipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/addreceipt"
@@ -149,7 +149,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/dreamButton"
-                    app:fab_label="@string/dream_string"
+                    app:fab_label="@string/fab_dream"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/heart"

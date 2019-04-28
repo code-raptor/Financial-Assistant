@@ -87,6 +87,13 @@ class MainActivity : AppCompatActivity(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = recyclerView.adapter as TransactionAndReceiptAdapter
                 adapter.remove(viewHolder.adapterPosition, dbHandler)
+
+                if(adapter.itemCount == 0){
+                    nodata.visibility = View.VISIBLE
+                }
+                else{
+                    nodata.visibility = View.INVISIBLE
+                }
             }
 
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
@@ -102,13 +109,13 @@ class MainActivity : AppCompatActivity(){
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = tAndRAdapter
+
         if(oneWeekList.size == 0){
             nodata.visibility = View.VISIBLE
         }
         else{
             nodata.visibility = View.INVISIBLE
         }
-
     }
 
     @SuppressLint("SetTextI18n")

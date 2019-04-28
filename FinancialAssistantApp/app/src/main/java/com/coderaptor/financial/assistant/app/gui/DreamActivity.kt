@@ -40,6 +40,13 @@ class DreamActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = recyclerView.adapter as DreamListAdapter
                 adapter.removeDream(viewHolder.adapterPosition, dbHandler)
+
+                if(adapter.itemCount == 0){
+                    nodata.visibility = View.VISIBLE
+                }
+                else{
+                    nodata.visibility = View.INVISIBLE
+                }
             }
 
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
