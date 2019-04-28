@@ -54,7 +54,10 @@
             tools:targetApi="o"
             android:layout_marginTop="40dp"
             app:layout_constraintTop_toBottomOf="@+id/cim"
-            android:backgroundTint="@color/colorPrimary"/>
+            android:backgroundTint="@color/colorPrimary"
+            android:textCursorDrawable="@color/closed_fab"
+            android:textColorHighlight="@color/closed_fab"
+            android:textColorLink="@color/closed_fab"/>
     <!--Összeg-->
     <TextView
             android:text="@string/receipt_amount"

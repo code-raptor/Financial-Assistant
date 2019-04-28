@@ -113,6 +113,9 @@
             android:inputType="date"
             tools:targetApi="o"
             android:backgroundTint="@color/colorPrimary"
+            android:textCursorDrawable="@color/closed_fab"
+            android:textColorHighlight="@color/closed_fab"
+            android:textColorLink="@color/closed_fab"
             android:focusable="false"
             tools:ignore="KeyboardInaccessibleWidget"/>
     <!--Kategória-->

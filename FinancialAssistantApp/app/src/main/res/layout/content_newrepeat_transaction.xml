@@ -106,7 +106,11 @@
             android:autofillHints=""
             android:hint="@string/base_date_hint"
             android:inputType="date"
-            tools:targetApi="o" android:backgroundTint="@color/colorPrimary"/>
+            tools:targetApi="o"
+            android:backgroundTint="@color/colorPrimary"
+            android:textCursorDrawable="@color/closed_fab"
+            android:textColorHighlight="@color/closed_fab"
+            android:textColorLink="@color/closed_fab"/>
     <!--Kategória-->
     <TextView
             android:text="@string/income_category"

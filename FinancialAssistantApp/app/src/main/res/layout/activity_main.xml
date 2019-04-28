@@ -111,10 +111,12 @@
                 app:menu_fab_hide_animation="@anim/fab_scale_down"
                 android:layout_gravity="bottom|end"
                 android:clipChildren="true"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:layout_marginEnd="10dp">
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/shoppingListButton"
+                    app:fab_label="@string/shoppinglist_string"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/shopcart"
@@ -126,6 +128,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/receiptButton"
+                    app:fab_label="@string/receipt_string"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/addreceipt"
@@ -137,6 +140,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/dreamButton"
+                    app:fab_label="@string/dream_string"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/heart"
@@ -148,6 +152,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/repeatButton"
+                    app:fab_label="@string/repeat_string"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/repeat"
@@ -159,6 +164,7 @@
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/addNewButton"
+                    app:fab_label="@string/newTransaction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/addnew"

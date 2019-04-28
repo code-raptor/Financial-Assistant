@@ -11,7 +11,7 @@
     <string name="back">Back</string>
     <string name="egyenlegSzoveg">Egyenleg:</string>
     <string name="egyenleg">200000 ft</string>
-    <string name="main_No_Amount">No Amount</string>
+    <string name="main_No_Amount">Ismeretlen</string>
 
     <string name="income_freq">Gyakoriság:</string>
     <string name="income_category">Kategoria:</string>
@@ -27,6 +27,7 @@
     <string name="newRepeatTransaction">Új rendszeres felvétele</string>
 
     <!--Beruházási terv-->
+    <string name="dream_string">Beruházási terv</string>
     <string name="newDream">Új beruházási terv</string>
     <string name="product">Termék:</string>
     <string name="price">Ár:</string>
@@ -40,6 +41,7 @@
     <string name="repeat_price">-2580 ft</string>
     <string name="repeat_name">Telefon számla</string>
     <string name="repeat_freq">Havonta</string>
+    <string name="repeat_string">Rendszeres tranzakció</string>
 
     <!--Termék felvitel-->
     <string name="product_string">Új termék</string>
@@ -73,6 +75,7 @@
     <string name="receiptproduct_ft">ft</string>
     <string name="receiptproduct_ar">645</string>
     <!--Bevásárlólista-->
+    <string name="shoppinglist_string">Bevásárló lista</string>
     <string name="shoppinglist_hint_unit">db</string>
     <string name="shoppinglist_hint_darab">5</string>
 
