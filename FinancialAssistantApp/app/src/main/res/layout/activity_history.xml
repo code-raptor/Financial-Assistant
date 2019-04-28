@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="HistoryActivity">
+
+    <!-- TOOLBAR -->
+    <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/toolbar"
+            android:theme="@style/AppTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/toolbar"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+                android:id="@+id/back"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_gravity = "end"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/back_right"
+                android:contentDescription="@android:string/unknownName"
+                android:background="@android:color/transparent"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="16dp"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+            android:background="@color/background"
+            android:id="@+id/frameLayout"
+            android:layout_width="411dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0">
+
+        <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="110dp"
+                android:id="@+id/recyclerView"
+
+                tools:context=".HistoryActivity">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <!-- FAB MENU -->
+        <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/fabMenu"
+                android:accessibilityTraversalBefore="@+id/recyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                app:menu_fab_size="normal"
+                app:menu_shadowRadius="4dp"
+                app:menu_shadowXOffset="1dp"
+                app:menu_shadowYOffset="3dp"
+                app:menu_colorNormal="@color/closed_fab"
+                app:menu_colorPressed="@color/open_fab"
+                app:menu_colorRipple="@color/ripple_fab"
+                app:menu_animationDelayPerItem="50"
+                app:menu_icon="@drawable/fab_add"
+                app:menu_buttonSpacing="0dp"
+                app:menu_labels_margin="0dp"
+                app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                app:menu_labels_paddingTop="4dp"
+                app:menu_labels_paddingRight="8dp"
+                app:menu_labels_paddingBottom="4dp"
+                app:menu_labels_paddingLeft="8dp"
+                app:menu_labels_padding="8dp"
+                app:menu_labels_textSize="14sp"
+                app:menu_labels_cornerRadius="3dp"
+                app:menu_labels_colorNormal="#333333"
+                app:menu_labels_showShadow="true"
+                app:menu_labels_singleLine="false"
+                app:menu_labels_ellipsize="none"
+                app:menu_labels_maxLines="-1"
+                app:menu_labels_style="@style/AlertDialog.AppCompat"
+                app:menu_labels_position="left"
+                app:menu_openDirection="up"
+                app:menu_backgroundColor="@android:color/transparent"
+                app:menu_fab_show_animation="@anim/fab_scale_up"
+                app:menu_fab_hide_animation="@anim/fab_scale_down"
+                android:layout_gravity="bottom|end"
+                android:clipChildren="true"
+                android:visibility="visible">
+
+            <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/receiptButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/receipt"
+                    app:fab_size="mini"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
+                    android:layout_gravity="bottom|end"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/repeatButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/repeat"
+                    app:fab_size="mini"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
+                    android:layout_gravity="bottom|end"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/onceButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/addnew"
+                    app:fab_size="mini"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
+                    android:layout_gravity="bottom|end"/>
+
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

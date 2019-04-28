@@ -39,7 +39,7 @@
                 app:srcCompat="@drawable/settings"
                 android:background="@android:color/transparent"
                 android:focusable="true"
-                android:visibility="visible"/>
+                android:visibility="visible" tools:ignore="ContentDescription"/>
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
@@ -55,8 +55,6 @@
             app:layout_constraintHorizontal_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
@@ -114,6 +112,17 @@
                 android:layout_gravity="bottom|end"
                 android:clipChildren="true"
                 android:visibility="visible">
+
+            <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/shoppingListButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/shopcart"
+                    app:fab_size="mini"
+                    app:fab_colorNormal="@color/closed_fab"
+                    app:fab_colorPressed="@color/open_fab"
+                    app:fab_colorRipple="@color/ripple_fab"
+                    android:layout_gravity="bottom|end"/>
 
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/receiptButton"
@@ -182,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:id="@+id/editText2"
-                android:text="@string/egyenleg"
+                android:text="@string/main_No_Amount"
                 tools:text="@string/egyenleg"
                 android:contentDescription="@string/egyenleg"
                 android:textSize="24sp"
@@ -193,7 +202,8 @@
                 android:autofillHints=""
                 tools:ignore="LabelFor"
                 tools:targetApi="o"
-                android:inputType=""/>
+                android:inputType=""
+                android:backgroundTint="@color/colorPrimary"/>
 
     </FrameLayout>
 

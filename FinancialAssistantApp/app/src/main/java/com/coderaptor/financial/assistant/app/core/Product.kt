@@ -2,10 +2,10 @@ package com.coderaptor.financial.assistant.app.core
 
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 
-data class Product(val name: String, val unit: String, val quantity: Int, val unitPrice: Int, val categoryId: Long) {
+data class Product(val name: String, val unit: String, val quantity: Int, val unitPrice: Int, val date: String = "", val categoryId: Long) {
     var id: Long = -1
 
-    constructor(id: Long, name: String, unit: String, quantity: Int, unitPrice: Int, categoryId: Long): this(name, unit, quantity, unitPrice, categoryId) {
+    constructor(id: Long, name: String, unit: String, quantity: Int, unitPrice: Int, date: String, categoryId: Long): this(name, unit, quantity, unitPrice, date, categoryId) {
         this.id = id
     }
 
@@ -17,8 +17,11 @@ data class Product(val name: String, val unit: String, val quantity: Int, val un
                 "${DatabaseHandler.BASE_QUANTITY} INTEGER, " +
                 "${DatabaseHandler.UNIT_PRICE} INTEGER, " +
                 "${DatabaseHandler.PRODUCT_CATEGORY_ID_PRODUCT} INTEGER, " +
+                "${DatabaseHandler.BASE_DATE} TEXT, " +
                 "FOREIGN KEY(${DatabaseHandler.PRODUCT_CATEGORY_ID_PRODUCT}) REFERENCES ${DatabaseHandler.TABLE_NAME_PRODUCT_CATEGORY}(${DatabaseHandler.BASE_ID}))"
+    }
 
-
+    override fun toString(): String {
+        return "Product(id=$id, name='$name', unit='$unit', quantity=$quantity, unitPrice=$unitPrice, date=$date, categoryId=$categoryId)"
     }
 }

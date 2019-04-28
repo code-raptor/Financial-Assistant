@@ -80,10 +80,11 @@
             android:hint="@string/hint_amount"
             tools:targetApi="o"
             android:layout_marginTop="60dp"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup"/>
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            android:backgroundTint="@color/colorPrimary"/>
     <!--Dátum-->
     <TextView
-            android:text="@string/date"
+            android:text="@string/base_date_string"
             android:textColor="@color/black"
             android:layout_width="87dp"
             android:layout_height="31dp"
@@ -105,9 +106,12 @@
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/amountField"
             android:autofillHints=""
-            android:hint="@string/hint_date"
+            android:hint="@string/base_date_hint"
             android:inputType="date"
-            tools:targetApi="o"/>
+            tools:targetApi="o"
+            android:backgroundTint="@color/colorPrimary"
+            android:focusable="false"
+            tools:ignore="KeyboardInaccessibleWidget"/>
     <!--Kategória-->
     <TextView
             android:text="@string/income_category"
@@ -127,22 +131,6 @@
             app:layout_constraintTop_toBottomOf="@+id/dateField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
-            android:entries="@array/income_category"/>
-    <!-- Gyakoriság-->
-    <!--Rögzítés-->
-    <Button
-            android:text="@string/income_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.475"
-            android:background="@color/closed_fab"
-            android:layout_marginTop="76dp"
-            app:layout_constraintTop_toBottomOf="@+id/categoryField"/>
+            android:entries="@array/income_category" android:backgroundTint="@color/colorPrimary"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

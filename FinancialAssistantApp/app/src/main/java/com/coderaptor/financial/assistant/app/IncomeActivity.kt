@@ -2,13 +2,14 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.*
-import com.google.android.material.snackbar.Snackbar
+import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-
+import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_income.*
 import kotlinx.android.synthetic.main.content_income.*
 
@@ -26,36 +27,37 @@ class IncomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        dateField.isClickable = true
+        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+        dateField.setOnClickListener {
+            dateClick(this)
         }
 
-        button.setOnClickListener { view ->
-            Snackbar.make(view, "Replace rögzit", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-
-            val amountField : EditText = findViewById(R.id.amountField)
-            val dateField: EditText = findViewById(R.id.dateField)
-
-
+        fab.setOnClickListener {
             var amount: Int = amountField.text.toString().toInt()
             if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
-            val date: String = dateField.text.toString()
+            val date = dateField.text.toString()
             val category: String = categoryField.selectedItem.toString()
-
-            Log.i("transaction", "$amount")
-            Log.i("transaction", date)
-            Log.i("transaction", category)
 
             val transaction = Transaction(amount, date, category)
 
             dbHandler.insert(transaction)
-            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
+            if (dbHandler.getCurrentLimit() < 0) {
+                toast("Napi limit összeg meghaladva")
+            }
 
+            toast("sikeres hozzáadás")
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
 
+    fun dateClick(context: IncomeActivity) {
+        MaterialDialog(this).show {
+            setTheme(R.style.AppTheme)
+            datePicker { _, innerDate ->
+                context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
+            }
+        }
+    }
 }

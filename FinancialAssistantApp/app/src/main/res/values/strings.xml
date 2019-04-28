@@ -11,18 +11,16 @@
     <string name="back">Back</string>
     <string name="egyenlegSzoveg">Egyenleg:</string>
     <string name="egyenleg">200000 ft</string>
+    <string name="main_No_Amount">No Amount</string>
 
     <string name="income_freq">Gyakoriság:</string>
     <string name="income_category">Kategoria:</string>
-    <string name="date">Dátum:</string>
     <string name="income_income">Bevétel</string>
     <string name="cost">Kiadás</string>
-    <string name="hint_date">2019.01.01</string>
     <string name="hint_amount">342000</string>
     <string name="amount">Összeg:</string>
     <string name="income_button">Rögzit</string>
     <string name="income_list_name">Telefon Számla</string>
-    <string name="income_list_date">2019.01.01</string>
     <string name="income_list_amount">+5000 ft</string>
 
     <string name="newTransaction">Új tranzakció felvétele</string>
@@ -37,26 +35,69 @@
     <string name="dream_name">24\' HD Monitor</string>
     <string name="dream_where">Bestbyte</string>
     <string name="dream_price">56000 ft</string>
-    <string name="dream_date">2021.04.05</string>
 
     <!--Rendszeres tranzakciók-->
     <string name="repeat_price">-2580 ft</string>
     <string name="repeat_name">Telefon számla</string>
     <string name="repeat_freq">Havonta</string>
 
+    <!--Termék felvitel-->
+    <string name="product_string">Új termék</string>
+    <string name="product_name">Név:</string>
+    <string name="product_namehint">Kenyér</string>
+    <string name="product_egyseg">Egység:</string>
+    <string name="product_egysegar">Egységár:</string>
+    <string name="product_egyseghint">526 ft</string>
+    <string name="product_mennyiseg">Mennyiség:</string>
+    <string name="product_mennyiseghint">5</string>
+    <string name="product_category">Kategória:</string>
+    <string name="product_jotallas">Jótállás</string>
+    <string name="product_jotallasdate">Lejárat:</string>
+    <string-array name="egyseg_array">
+        <item>Db</item>
+        <item>L</item>
+        <item>Kg</item>
+        <item>Csomag</item>
+        <item>Zsák</item>
+    </string-array>
+    <!--Blokk-->
+    <string name="receipt_string">Blokk</string>
+    <string name="receipt_amounthint">18500</string>
+    <string name="receipt_amount">Összeg:</string>
+    <string name="receipt_newproduct">Új termék:</string>
+    <!--Blokk termékek-->
+    <string name="receiptproduct_name">Kenyér</string>
+    <string name="receiptproduct_mennyiseg">3</string>
+    <string name="receiptproduct_egysegar">215</string>
+    <string name="receiptproduct_egyseg">csomag</string>
+    <string name="receiptproduct_ft">ft</string>
+    <string name="receiptproduct_ar">645</string>
+    <!--Bevásárlólista-->
+    <string name="shoppinglist_hint_unit">db</string>
+    <string name="shoppinglist_hint_darab">5</string>
 
     <string-array name="income_category">
         <item>Fizetés</item>
         <item>Bonusz</item>
         <item>Ajándék</item>
         <item>Zsebpénz</item>
+        <item>Elektronika</item>
+        <item>Alkatrész</item>
+        <item>Kocsi</item>
+        <item>Lakbér</item>
+        <item>Gáz Számla</item>
+        <item>Víz Számla</item>
+        <item>Villany Számla</item>
+        <item>Szolgáltatás</item>
         <item>Egyéb</item>
     </string-array>
     <string-array name="income_frequency">
-        <item>Egyszeri</item>
         <item>Hetente</item>
         <item>Havonta</item>
         <item>Félévente</item>
         <item>Évente</item>
     </string-array>
+
+    <string name="base_date_hint">2019–04–25</string>
+    <string name="base_date_string">Dátum:</string>
 </resources>

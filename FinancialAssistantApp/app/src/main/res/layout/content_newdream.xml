@@ -36,8 +36,10 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="40dp"
             android:textSize="18sp"
-            android:layout_marginTop="52dp" app:layout_constraintTop_toBottomOf="@+id/label2"
-            android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/amountField"
+            android:layout_marginTop="52dp"
+            app:layout_constraintTop_toBottomOf="@+id/label2"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/amountField"
             app:layout_constraintHorizontal_bias="0.0"/>
     <EditText
             android:layout_width="wrap_content"
@@ -51,7 +53,9 @@
             android:autofillHints=""
             android:hint="@string/hint_amount"
             tools:targetApi="o"
-            android:layout_marginTop="44dp" app:layout_constraintTop_toBottomOf="@+id/nameField"/>
+            android:layout_marginTop="44dp"
+            app:layout_constraintTop_toBottomOf="@+id/nameField"
+            android:backgroundTint="@color/colorPrimary"/>
     <!--Termék-->
 
     <TextView
@@ -62,8 +66,10 @@
             android:id="@+id/label2"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
-            android:textSize="18sp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/nameField"
-            app:layout_constraintHorizontal_bias="0.627" android:layout_marginTop="80dp"
+            android:textSize="18sp" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/nameField"
+            app:layout_constraintHorizontal_bias="0.627"
+            android:layout_marginTop="80dp"
             app:layout_constraintTop_toBottomOf="@+id/cim"/>
     <EditText
             android:layout_width="wrap_content"
@@ -74,9 +80,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
             android:autofillHints=""
-            android:hint="@string/hint_date"
+            android:hint="@string/dream_name"
             android:inputType="text"
-            tools:targetApi="o" android:layout_marginTop="68dp" app:layout_constraintTop_toBottomOf="@+id/cim"/>
+            tools:targetApi="o" android:layout_marginTop="68dp"
+            app:layout_constraintTop_toBottomOf="@+id/cim"
+            android:backgroundTint="@color/colorPrimary"/>
     <!--Hol-->
     <TextView
             android:text="@string/where"
@@ -105,24 +113,9 @@
             android:hint="@string/hint_string"
             tools:targetApi="o"
             android:layout_marginTop="44dp"
-            app:layout_constraintTop_toBottomOf="@+id/amountField"/>
+            app:layout_constraintTop_toBottomOf="@+id/amountField"
+            android:backgroundTint="@color/colorPrimary"/>
 
     <!--Rögzítés-->
-    <Button
-            android:text="@string/income_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.498"
-            android:background="@color/closed_fab"
-
-            android:layout_marginTop="80dp"
-            app:layout_constraintTop_toBottomOf="@+id/whereField"
-    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

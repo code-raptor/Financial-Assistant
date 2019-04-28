@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.core.Dream
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.gui.DreamActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_newdream.*
-import kotlinx.android.synthetic.main.content_newdream.*
 
 class AddNewDreamActivity : AppCompatActivity() {
 
@@ -26,12 +26,7 @@ class AddNewDreamActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener {
-            /*val intent = Intent(this, DreamsActivity::class.java)
-            startActivity(intent)*/
-        }
-
-        button.setOnClickListener { view ->
+        fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace rögzit", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
@@ -43,16 +38,12 @@ class AddNewDreamActivity : AppCompatActivity() {
             val name = nameField.text.toString()
             val where = whereField.text.toString()
 
-            Log.i("dream", "$amount")
-            Log.i("dream", name)
-            Log.i("dream", where)
-
             val dream = Dream(name, amount, where)
 
             dbHandler.insert(dream)
-            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
 
-            val intent = Intent(this, MainActivity::class.java)
+            Toast.makeText(this, "Sikeres hozzáadás", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, DreamActivity::class.java)
             startActivity(intent)
 
         }
