@@ -88,6 +88,11 @@ class ShoppingListActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
+    private fun shoppingElementClicked(element : ShoppingList) {
+        element.isBought = !element.isBought
+        dbHandler.changeShoppingBought(element)
+    }
+
     private fun setupDialogCategorySpinner(dbHandler: DatabaseHandler): ArrayAdapter<StringWithId> {
         val adapter = ArrayAdapter<StringWithId>(this, android.R.layout.simple_spinner_item, getCategoryStringWithIdList(dbHandler, SharedPreference.saving))
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -95,12 +100,17 @@ class ShoppingListActivity : AppCompatActivity() {
         return adapter
     }
 
-    private fun setUpRecyclerView(findAllTransaction: MutableList<ShoppingList>) {
+    private fun setUpRecyclerView(findAllShopping: MutableList<ShoppingList>) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val shoppingListAdapter = ShoppingListAdapter(findAllTransaction as ArrayList<ShoppingList>)
+        val shoppingListAdapter = ShoppingListAdapter(findAllShopping as ArrayList<ShoppingList>) { element: ShoppingList ->shoppingElementClicked(element)}
         recyclerView.hasFixedSize()
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = shoppingListAdapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHandler.close()
     }
 }

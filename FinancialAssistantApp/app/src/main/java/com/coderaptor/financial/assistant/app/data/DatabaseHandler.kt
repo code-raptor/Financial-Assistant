@@ -235,10 +235,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return productList
     }
 
-    fun findAllShopping(): MutableList<ShoppingList> {
+    fun findAllShopping(condition: String = ""): MutableList<ShoppingList> {
         val shoppingList = mutableListOf<ShoppingList>()
         val db = readableDatabase
-        val selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING"
+        var selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING"
+        if (condition.isNotEmpty()) {
+            selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING WHERE $condition"
+        }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {
@@ -246,11 +249,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
                 val unit = cursor.getString(cursor.getColumnIndex(UNIT))
+                val bought = cursor.getString(cursor.getColumnIndex(BOUGHT))!!.toBoolean()
                 var productId = (-1).toLong()
                 if (!cursor.isNull(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))) {
                     productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))
                 }
-                val shopping = ShoppingList(id, name, quantity, unit, productId)
+                val shopping = ShoppingList(id, name, quantity, unit, bought, productId)
                 shoppingList.add(shopping)
             }
         }
@@ -281,6 +285,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         cursor.close()
         db.close()
         return receiptList
+    }
+
+    fun changeShoppingBought(element: ShoppingList) {
+        val db = writableDatabase
+        db.execSQL("UPDATE $TABLE_NAME_SHOPPING SET $BOUGHT='${element.isBought}' WHERE id=${element.id}")
     }
 
     fun findMaxSMS(): Long {
@@ -476,6 +485,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(BASE_NAME, it.name)
         values.put(BASE_QUANTITY, it.quantity)
         values.put(UNIT, it.unit)
+        values.put(BOUGHT, it.isBought)
         if(it.productId != (-1).toLong()) {
             values.put(PRODUCT_ID_SHOPPING, it.productId)
         }
@@ -550,7 +560,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var transaction = Transaction(1000, "2019-04-15", "Zsebpénz")
+        var transaction = Transaction(1000, "2019-04-25", "Zsebpénz")
         insert(transaction)
         transaction = Transaction(1000, "2019-04-16", "Bor")
         insert(transaction)
@@ -567,7 +577,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var receipt = Receipt(1, "2019-04-18", 13000, 1)
+        var receipt = Receipt(1, "2019-04-28", 13000, 1)
         insert(receipt)
         receipt = Receipt(2, "2019-03-13", 5000, 2)
         insert(receipt)
@@ -576,11 +586,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var shoppingList = ShoppingList("kenyér", 2, "Db", 2)
+        var shoppingList = ShoppingList("kenyér", 2, "Db", true, 2)
         insert(shoppingList)
-        shoppingList = ShoppingList("alma",5, "kg",1)
+        shoppingList = ShoppingList("alma",5, "kg", productId = 1)
         insert(shoppingList)
-        shoppingList = ShoppingList("bor", 10, "l",3)
+        shoppingList = ShoppingList("bor", 10, "l", true,3)
         insert(shoppingList)
     }
 
@@ -645,6 +655,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //shopping_list
         const val TABLE_NAME_SHOPPING = "shopping_list"
         const val PRODUCT_ID_SHOPPING = "product_id"
+        const val BOUGHT = "bought"
 
         val TABLE_NAME_SMS = "sms"
         val CREATE_TABLE_SMS = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
