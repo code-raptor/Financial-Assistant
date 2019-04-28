@@ -3,16 +3,19 @@ package com.coderaptor.financial.assistant.app.gui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.recyclical.datasource.DataSource
+import com.afollestad.recyclical.datasource.dataSourceOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.swipe.SwipeLocation
+import com.afollestad.recyclical.swipe.withSwipeAction
+import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.AddNewRepeatActivity
 import com.coderaptor.financial.assistant.app.MainActivity
 import com.coderaptor.financial.assistant.app.R
-import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
+import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_repeats.*
 
 class RepeatActivity : AppCompatActivity() {
@@ -22,8 +25,6 @@ class RepeatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repeats)
-
-        setupDatabase()
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -35,36 +36,60 @@ class RepeatActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val swipeHandler = object : SwipeToDeleteCallback(this) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = recyclerView.adapter as TransactionListAdapter
-                adapter.removeTransaction(viewHolder.adapterPosition, dbHandler)
+        val dataSource: DataSource<Any> = dataSourceOf(dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} != 'Egyszeri'"))
+
+        recyclerView.setup {
+
+            withSwipeAction(SwipeLocation.LEFT) {
+                icon(R.drawable.ic_delete_white_24dp)
+                text(R.string.delete)
+                color(R.color.delete)
+                callback { index, item ->
+                    toast("delete $index: ${item}")
+                    if (item is Transaction) {
+                        dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
+                    }
+                    true
+                }
             }
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                                target: RecyclerView.ViewHolder): Boolean = false
+            withSwipeAction(SwipeLocation.RIGHT) {
+                icon(R.drawable.ic_edit_white_24dp)
+                text(R.string.edit)
+                color(R.color.edit)
+                callback { index, item ->
+                    toast("edit $index: ${item}")
+                    if (item is Transaction) {
+                        //edit layout
+                    }
+                    false
+                }
+            }
+
+            withDataSource(dataSource)
+            withItem<Transaction>(R.layout.list_income) {
+                onBind(::TransactionViewHolder) { _, item ->
+                    name.text = item.name
+
+                    if (item.hasFrequency()) {
+                        date.text = item.date + getString(R.string.tab) + item.frequency
+                    }else {
+                        date.text = item.date
+                    }
+
+                    if (item.amount > 0) {
+                        amount.setTextColor(resources.getColor(R.color.amount_plus, null))
+                        amount.text = "+${item.amount}"
+                    }else {
+                        amount.setTextColor(resources.getColor(R.color.amount_minus, null))
+                        amount.text = item.amount.toString()
+                    }
+                }
+                onClick { index ->
+                    toast("Clicked $index: ${item.name}")
+                }
+            }
         }
-        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
-
-    private fun setUpRecyclerView(findAllTransaction: MutableList<Transaction>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val transactionListAdapter = TransactionListAdapter(findAllTransaction as ArrayList<Transaction>)
-        recyclerView.hasFixedSize()
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = transactionListAdapter
-    }
-
-    private fun setupDatabase() {
-        val transactionList = arrayListOf(
-            Transaction(255000, "2019.01.01", "Fízetés", "Havonta"),
-            Transaction(-15000, "2019.01.01", "Kutya oltás", "Évente")
-        )
-        //dbHandler.dropTable(DatabaseHandler.TABLE_NAME_TRANSACTION)
-        dbHandler.inserts(transactionList)
-
-        setUpRecyclerView(dbHandler.findAllTransaction())
     }
 }
+
