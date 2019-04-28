@@ -91,26 +91,35 @@ class HistoryActivity : AppCompatActivity() {
 
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->
-                    // PersonViewHolder is `this` here
                     name.text = item.name
-                    date.text = item.date
-                    amount.text = "${item.amount}"
+
+                    if (item.hasFrequency()) {
+                        date.text = item.date + getString(R.string.tab) + item.frequency
+                    }else {
+                        date.text = item.date
+                    }
+
+                    if (item.amount > 0) {
+                        amount.setTextColor(resources.getColor(R.color.amount_plus, null))
+                        amount.text = "+${item.amount}"
+                    }else {
+                        amount.setTextColor(resources.getColor(R.color.amount_minus, null))
+                        amount.text = item.amount.toString()
+                    }
                 }
                 onClick { index ->
-                    // item is a `val` in `this` here
                     toast("Clicked $index: ${item.name}")
                 }
             }
 
             withItem<Receipt>(R.layout.list_receipt) {
                 onBind(::ReceiptViewHolder) { _, item ->
-                    // PersonViewHolder is `this` here
                     name.text = getString(R.string.receipt_string)
                     date.text = item.date
-                    amount.text = "${item.amount}"
+                    amount.setTextColor(resources.getColor(R.color.amount_minus, null))
+                    amount.text = "-${item.amount}"
                 }
                 onClick { index ->
-                    // item is a `val` in `this` here
                     toast("Clicked $index: ${item}")
                 }
             }
