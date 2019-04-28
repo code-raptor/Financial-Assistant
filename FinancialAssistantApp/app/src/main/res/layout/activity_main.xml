@@ -64,9 +64,16 @@
                 android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView"
 
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"/>
 
-        </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+                android:id="@+id/emptyView"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/empty_text"
+                android:textSize="28sp"
+                android:layout_marginTop="100dp" android:visibility="invisible"/>
 
         <!-- FAB MENU -->
         <com.github.clans.fab.FloatingActionMenu

@@ -103,4 +103,5 @@
     <string name="edit">edit</string>
     <string name="delete">delete</string>
     <string name="tab">\u0009\u0009\u0009\u0009</string>
+    <string name="empty_text">Nincs megjelenithető eheti adat!</string>
 </resources>

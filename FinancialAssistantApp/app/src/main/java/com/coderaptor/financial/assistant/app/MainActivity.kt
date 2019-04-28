@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(){
                     false
                 }
             }
-
+            withEmptyView(emptyView)
             withDataSource(dataSource)
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->
