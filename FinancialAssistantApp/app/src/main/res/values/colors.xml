@@ -15,4 +15,7 @@
 
     <color name="amount_plus">#198330</color>
     <color name="amount_minus">#A00810</color>
+
+    <color name="edit">#107dac</color>
+    <color name="delete">#9F0000</color>
 </resources>
