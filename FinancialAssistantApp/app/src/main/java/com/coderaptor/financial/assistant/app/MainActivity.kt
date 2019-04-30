@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(){
             val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
             if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
                 dbHandler.insertSms(idAndAmount)
-                editText2.setText("${dbHandler.getSmsAmount()} ft")
+                egyenleg.setText("${dbHandler.getSmsAmount()} ft")
             }
         }
     }

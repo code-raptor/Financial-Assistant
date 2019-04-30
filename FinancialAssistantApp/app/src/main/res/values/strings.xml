@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Financial Assistant App</string>
+    <string name="app_name">AssistoRaptor</string>
     <string name="settings">Settings</string>
     <string name="setting_bev_figyel">Bevásárlás figyelő</string>
     <string name="setting_sporolas">Spórolás</string>
