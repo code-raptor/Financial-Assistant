@@ -39,18 +39,12 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         receiptButton.setOnClickListener {
-            val intent = Intent(this, IncomeActivity::class.java)
-            startActivity(intent)
         }
 
         repeatButton.setOnClickListener {
-            val intent = Intent(this, AddNewRepeatActivity::class.java)
-            startActivity(intent)
         }
 
         onceButton.setOnClickListener {
-            val intent = Intent(this, AddNewDreamActivity::class.java)
-            startActivity(intent)
         }
 
         val dataSource: DataSource<Any> = dataSourceOf(list)
