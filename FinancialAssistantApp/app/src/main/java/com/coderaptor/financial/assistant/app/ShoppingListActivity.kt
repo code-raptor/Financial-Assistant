@@ -2,6 +2,7 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -20,8 +21,10 @@ import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
+import com.coderaptor.financial.assistant.app.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_shoppinglist.*
+import kotlinx.android.synthetic.main.dialog_add_shopping.*
 import kotlinx.android.synthetic.main.dialog_add_shopping.view.*
 import java.util.*
 
@@ -62,13 +65,21 @@ class ShoppingListActivity : AppCompatActivity() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
 
-                positiveButton(R.string.income_button) { dialog ->
-                    val name = dialog.getCustomView().product_name.text.toString()
-                    val quantity = dialog.getCustomView().product_quantity.text.toString().toInt()
-                    val unit = dialog.getCustomView().unitField.selectedItem.toString()
+                val result = fieldsEmpty(product_name.text, product_quantity.text)
 
-                    dbHandler.insert(ShoppingList(name, quantity, unit))
-                    setUpRecyclerView(dbHandler.findAllShopping())
+                    positiveButton(R.string.income_button) { dialog ->
+                        if(result) {
+                            val name = dialog.getCustomView().product_name.text.toString()
+                            val quantity = dialog.getCustomView().product_quantity.text.toString().toInt()
+                            val unit = dialog.getCustomView().unitField.selectedItem.toString()
+
+                            dbHandler.insert(ShoppingList(name, quantity, unit))
+                            setUpRecyclerView(dbHandler.findAllShopping())
+
+                        }else{
+                                toast("Hiányzó adat!")
+                        }
+
                 }
                 negativeButton(android.R.string.cancel)
             }
@@ -112,5 +123,14 @@ class ShoppingListActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dbHandler.close()
+    }
+
+    fun fieldsEmpty(vararg fields: Editable):Boolean{
+        for (data in fields){
+            if(data.isEmpty()){
+                return false
+            }
+        }
+        return true
     }
 }

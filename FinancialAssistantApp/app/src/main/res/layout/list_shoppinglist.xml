@@ -30,10 +30,10 @@
             android:layout_marginTop="4dp"
             android:hint="@string/shoppinglist_hint_darab"
             android:layout_alignStart="@+id/listElement"
-            android:textAlignment="center"/>
+            android:textAlignment="viewEnd"/>
 
     <TextView
-            android:layout_width="50dp"
+            android:layout_width="60dp"
             android:id="@+id/mennyiseg"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
