@@ -79,24 +79,30 @@ class AddNewProductActivity: AppCompatActivity() {
         }
 
         fab.setOnClickListener {
-            val name = productName.text.toString()
-            val quantity = if (quantityField.text.isNotEmpty())quantityField.text.toString().toInt() else 1
-            val unit = unitField.selectedItem.toString()
-            val price = priceField.text.toString().toInt()
-            val warranty = warranty.isChecked
-            var product = Product(name, unit, quantity, price, categoryId = categoryId)
-            if (warranty) {
-                if (dateField.text.isNotEmpty()) {
-                    val endDate = dateField.text.toString()
-                    product = Product(name, unit, quantity, price, endDate, categoryId)
+            val result = fieldsEmpty(productName.text, quantityField.text, priceField.text)
+            if(result) {
+                val name = productName.text.toString()
+                val quantity = if (quantityField.text.isNotEmpty()) quantityField.text.toString().toInt() else 1
+                val unit = unitField.selectedItem.toString()
+                val price = priceField.text.toString().toInt()
+                val warranty = warranty.isChecked
+                var product = Product(name, unit, quantity, price, categoryId = categoryId)
+                if (warranty) {
+                    if (dateField.text.isNotEmpty()) {
+                        val endDate = dateField.text.toString()
+                        product = Product(name, unit, quantity, price, endDate, categoryId)
+                    }
                 }
+
+                dbHandler.insert(product)
+                toast("Sikeres hozzáadás")
+
+                val intent = Intent(this, ReceiptActivity::class.java)
+                startActivity(intent)
             }
-
-            dbHandler.insert(product)
-            toast("Sikeres hozzáadás")
-
-            val intent = Intent(this, ReceiptActivity::class.java)
-            startActivity(intent)
+            else{
+                toast("Hiányzó adat!")
+            }
         }
     }
 
@@ -107,5 +113,14 @@ class AddNewProductActivity: AppCompatActivity() {
                 context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
             }
         }
+    }
+
+    fun fieldsEmpty(vararg fields: Editable):Boolean{
+        for (data in fields){
+            if(data.isEmpty()){
+                return false
+            }
+        }
+        return true
     }
 }

@@ -15,6 +15,7 @@ import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_receipt.*
 import kotlinx.android.synthetic.main.content_receipt.*
 
@@ -40,6 +41,22 @@ class ReceiptActivity: AppCompatActivity() {
         dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
         dateField.setOnClickListener {
             dateClick(this)
+        }
+
+        fab.setOnClickListener {
+            val result = fieldsEmpty(amountField.text)
+
+            if (result){
+
+                var amount: Int = amountField.text.toString().toInt()
+                    //TODO ez nem is tudom mit csinál -- NYUGTA
+                toast("sikeres hozzáadás")
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            else{
+                toast("Hiányzó adat!")
+            }
         }
 
         val swipeHandler = object : SwipeToDeleteCallback(this) {
@@ -73,4 +90,12 @@ class ReceiptActivity: AppCompatActivity() {
         }
     }
 
+    fun fieldsEmpty(vararg fields: Editable):Boolean{
+        for (data in fields){
+            if(data.isEmpty()){
+                return false
+            }
+        }
+        return true
+    }
 }

@@ -34,21 +34,29 @@ class IncomeActivity : AppCompatActivity() {
         }
 
         fab.setOnClickListener {
-            var amount: Int = amountField.text.toString().toInt()
-            if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
-            val date = dateField.text.toString()
-            val category: String = categoryField.selectedItem.toString()
+            val result = fieldsEmpty(amountField.text)
 
-            val transaction = Transaction(amount, date, category)
+            if (result){
 
-            dbHandler.insert(transaction)
-            if (dbHandler.getCurrentLimit() < 0) {
-                toast("Napi limit összeg meghaladva")
+                var amount: Int = amountField.text.toString().toInt()
+                if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
+                val date = dateField.text.toString()
+                val category: String = categoryField.selectedItem.toString()
+
+                val transaction = Transaction(amount, date, category)
+
+                dbHandler.insert(transaction)
+                if (dbHandler.getCurrentLimit() < 0) {
+                    toast("Napi limit összeg meghaladva")
+                }
+
+                toast("sikeres hozzáadás")
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
-
-            toast("sikeres hozzáadás")
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            else{
+                toast("Hiányzó adat!")
+            }
         }
     }
 
@@ -59,5 +67,14 @@ class IncomeActivity : AppCompatActivity() {
                 context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
             }
         }
+    }
+
+    fun fieldsEmpty(vararg fields: Editable):Boolean{
+        for (data in fields){
+            if(data.isEmpty()){
+                return false
+            }
+        }
+        return true
     }
 }

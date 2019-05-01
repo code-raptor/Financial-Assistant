@@ -99,7 +99,7 @@
                 fab:menu_labels_maxLines="-1"
                 fab:menu_labels_position="left"
                 fab:menu_openDirection="up"
-                fab:menu_backgroundColor="#80ffffff"
+                fab:menu_backgroundColor="#ccffffff"
                 fab:menu_fab_show_animation="@anim/fab_scale_down"
                 fab:menu_fab_hide_animation="@anim/fab_scale_up">
 
