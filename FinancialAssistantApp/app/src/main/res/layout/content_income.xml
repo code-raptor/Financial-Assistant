@@ -27,33 +27,33 @@
             app:layout_constraintHorizontal_bias="0.498"/>
     <!--Tranzakció-->
     <RadioGroup
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_horizontal"
             android:id="@+id/radioGroup"
             android:layout_marginTop="28dp"
             app:layout_constraintTop_toBottomOf="@+id/cim"
-            android:layout_marginStart="125dp"
-            android:layout_marginEnd="125dp">
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="80dp">
 
         <RadioButton
                 android:text="@string/cost"
-                android:layout_width="15dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/kiadas"
                 android:buttonTint="@color/closed_fab"
                 android:checked="true"
                 android:layout_weight="1"
-                />
+        />
         <RadioButton
                 android:text="@string/income_income"
-                android:layout_width="15dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/bevetel"
                 android:buttonTint="@color/closed_fab"
                 android:layout_weight="1"
-                />
+        />
     </RadioGroup>
     <!--Összeg-->
     <TextView
@@ -65,8 +65,11 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="72dp"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup" android:textSize="18sp" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/amountField" app:layout_constraintHorizontal_bias="0.553"/>
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            android:textSize="18sp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/amountField"
+            app:layout_constraintHorizontal_bias="0.553"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,12 +92,10 @@
             android:layout_width="87dp"
             android:layout_height="31dp"
             android:id="@+id/label2"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="36dp"
             app:layout_constraintTop_toBottomOf="@+id/label1"
             android:textSize="18sp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/dateField"
-            app:layout_constraintHorizontal_bias="0.549"/>
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,6 +111,9 @@
             android:inputType="date"
             tools:targetApi="o"
             android:backgroundTint="@color/colorPrimary"
+            android:textCursorDrawable="@color/closed_fab"
+            android:textColorHighlight="@color/closed_fab"
+            android:textColorLink="@color/closed_fab"
             android:focusable="false"
             tools:ignore="KeyboardInaccessibleWidget"/>
     <!--Kategória-->
@@ -121,7 +125,9 @@
             android:id="@+id/label3"
             android:textSize="18sp"
             android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/label2"
-            android:layout_marginEnd="32dp" app:layout_constraintEnd_toStartOf="@+id/categoryField"/>
+            android:layout_marginEnd="32dp" app:layout_constraintEnd_toStartOf="@+id/categoryField"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"/>
     <Spinner
             android:layout_width="213dp"
             android:layout_height="35dp"
@@ -131,6 +137,7 @@
             app:layout_constraintTop_toBottomOf="@+id/dateField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="44dp"
-            android:entries="@array/income_category" android:backgroundTint="@color/colorPrimary"/>
+            android:entries="@array/income_category"
+            android:backgroundTint="@color/colorPrimary"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
