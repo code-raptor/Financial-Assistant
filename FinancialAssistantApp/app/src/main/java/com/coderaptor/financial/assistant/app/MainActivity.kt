@@ -20,6 +20,8 @@ import com.coderaptor.financial.assistant.app.features.limit.checkDayChanged
 import com.coderaptor.financial.assistant.app.features.oneweek.getOneWeekData
 import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
+import com.coderaptor.financial.assistant.app.gui.DreamActivity
+import com.coderaptor.financial.assistant.app.gui.RepeatActivity
 import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.formatDate
 import com.coderaptor.financial.assistant.app.util.toast
@@ -59,12 +61,12 @@ class MainActivity : AppCompatActivity(){
         }
 
         repeatButton.setOnClickListener {
-            val intent = Intent(this, AddNewRepeatActivity::class.java)
+            val intent = Intent(this, RepeatActivity::class.java)
             startActivity(intent)
         }
 
         dreamButton.setOnClickListener {
-            val intent = Intent(this, AddNewDreamActivity::class.java)
+            val intent = Intent(this, DreamActivity::class.java)
             startActivity(intent)
         }
 
@@ -120,7 +122,7 @@ class MainActivity : AppCompatActivity(){
                     false
                 }
             }
-            withEmptyView(emptyView)
+            withEmptyView(nodata)
             withDataSource(dataSource)
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->
@@ -165,7 +167,7 @@ class MainActivity : AppCompatActivity(){
             val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
             if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
                 dbHandler.insertSms(idAndAmount)
-                editText2.setText("${dbHandler.getSmsAmount()} ft")
+                egyenleg.setText("${dbHandler.getSmsAmount()} ft")
             }
         }
     }
