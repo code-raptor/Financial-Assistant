@@ -105,6 +105,10 @@
 
     <string name="base_date_hint">2019–04–25</string>
     <string name="base_date_string">Dátum:</string>
+    <string name="edit">edit</string>
+    <string name="delete">delete</string>
+    <string name="tab">\u0009\u0009\u0009\u0009</string>
+    <string name="empty_text">Nincs megjelenithető eheti adat!</string>
 
     <!--FAB LABELS-->
     <string name="fab_shoppinglist">Bevásárló lista</string>

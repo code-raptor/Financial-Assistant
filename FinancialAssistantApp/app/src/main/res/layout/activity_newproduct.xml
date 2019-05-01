@@ -29,9 +29,7 @@
                 android:layout_height="40dip"
                 android:src="@drawable/back"
                 android:contentDescription="@android:string/unknownName"
-                android:background="@android:color/transparent"
-                tools:layout_editor_absoluteY="8dp"
-                tools:layout_editor_absoluteX="16dp"/>
+                android:background="@android:color/transparent"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -56,6 +54,7 @@
                 app:fab_colorNormal="@color/closed_fab"
                 app:fab_colorPressed="@color/open_fab"
                 app:fab_colorRipple="@color/ripple_fab"
+                app:rippleColor="@color/ripple_fab"
                 android:id="@+id/fab"
                 android:focusable="true"/>
 
