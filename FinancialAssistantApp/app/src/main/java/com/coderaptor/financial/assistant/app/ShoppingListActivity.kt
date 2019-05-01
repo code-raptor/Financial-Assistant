@@ -65,9 +65,11 @@ class ShoppingListActivity : AppCompatActivity() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
 
-                val result = fieldsEmpty(product_name.text, product_quantity.text)
+
 
                     positiveButton(R.string.save) { dialog ->
+                        val result = fieldsEmpty(product_name.text, product_quantity.text)
+                        
                         if(result) {
                             val name = dialog.getCustomView().product_name.text.toString()
                             val quantity = dialog.getCustomView().product_quantity.text.toString().toInt()

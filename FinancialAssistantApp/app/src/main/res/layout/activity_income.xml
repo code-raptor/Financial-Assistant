@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar" android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
-        <include layout="@layout/content_income"/>
+        <include layout="@layout/dialog_add_income"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                 app:fab_colorPressed="@color/open_fab"
                 app:fab_colorRipple="@color/ripple_fab"
                 app:rippleColor="@color/ripple_fab"
-                android:id="@+id/fab"
+                android:id="@+id/savefab"
                 android:focusable="true"/>
 
 

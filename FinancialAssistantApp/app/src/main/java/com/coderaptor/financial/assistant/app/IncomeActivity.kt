@@ -3,15 +3,29 @@ package com.coderaptor.financial.assistant.app
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.datetime.datePicker
+import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
+import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
 import com.coderaptor.financial.assistant.app.util.toast
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_income.*
-import kotlinx.android.synthetic.main.content_income.*
+import kotlinx.android.synthetic.main.content_receipt.*
+import kotlinx.android.synthetic.main.content_receipt.amountField
+import kotlinx.android.synthetic.main.dialog_add_income.*
+import kotlinx.android.synthetic.main.dialog_add_income.categoryField
+import kotlinx.android.synthetic.main.dialog_add_income.dateField
+import kotlinx.android.synthetic.main.dialog_add_product.*
 
 class IncomeActivity : AppCompatActivity() {
 

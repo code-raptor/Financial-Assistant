@@ -27,7 +27,6 @@
         <activity android:name=".IncomeActivity"/>
         <activity android:name=".gui.DreamActivity"/>
         <activity android:name=".gui.RepeatActivity"/>
-        <activity android:name=".AddNewProductActivity"/>
         <activity android:name=".ReceiptActivity"/>
         <activity android:name=".HistoryActivity"/>
         <activity android:name=".ShoppingListActivity"/>

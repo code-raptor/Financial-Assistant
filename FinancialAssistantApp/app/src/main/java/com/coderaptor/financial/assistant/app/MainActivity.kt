@@ -3,8 +3,12 @@ package com.coderaptor.financial.assistant.app
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -26,6 +30,7 @@ import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.formatDate
 import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_add_income.*
 import java.util.*
 
 
@@ -55,9 +60,43 @@ class MainActivity : AppCompatActivity(){
 
         dbHandler.insertTestdata()
 
+//        dateField.isClickable = true
+//        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+//        dateField.setOnClickListener {
+//            dateClick(this)
+//        }
+
         addNewButton.setOnClickListener {
-            val intent = Intent(this, IncomeActivity::class.java)
-            startActivity(intent)
+            MaterialDialog(this).show {
+                setTheme(R.style.AppTheme)
+                title(R.string.newDream)
+                customView(R.layout.dialog_add_income, scrollable = true)
+
+                positiveButton(R.string.save) { dialog ->
+                    val result = fieldsEmpty(amountField.text)
+
+                    if (result){
+
+                        var amount: Int = amountField.text.toString().toInt()
+                        if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
+                        val date = dateField.text.toString()
+                        val category: String = categoryField.selectedItem.toString()
+
+                        val transaction = Transaction(amount, date, category)
+
+                        dbHandler.insert(transaction)
+                        if (dbHandler.getCurrentLimit() < 0) {
+                            toast("Napi limit összeg meghaladva")
+                        }
+
+                        toast("sikeres hozzáadás")
+                        }
+                        else{
+                            toast("Hiányzó adat!")
+                        }
+                    }
+                negativeButton(R.string.cancel)
+            }
         }
 
         repeatButton.setOnClickListener {
@@ -170,5 +209,23 @@ class MainActivity : AppCompatActivity(){
                 egyenleg.setText("${dbHandler.getSmsAmount()} ft")
             }
         }
+    }
+
+    fun dateClick(context: MainActivity) {
+        MaterialDialog(this).show {
+            setTheme(R.style.AppTheme)
+            datePicker { _, innerDate ->
+                context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
+            }
+        }
+    }
+
+    fun fieldsEmpty(vararg fields: Editable):Boolean{
+        for (data in fields){
+            if(data.isEmpty()){
+                return false
+            }
+        }
+        return true
     }
 }
