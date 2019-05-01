@@ -55,7 +55,7 @@ class HistoryActivity : AppCompatActivity() {
 
         val dataSource: DataSource<Any> = dataSourceOf(list)
 
-        recyclerView_h.setup {
+        recyclerView.setup {
 
             withSwipeAction(SwipeLocation.LEFT) {
                 icon(R.drawable.ic_delete_white_24dp)

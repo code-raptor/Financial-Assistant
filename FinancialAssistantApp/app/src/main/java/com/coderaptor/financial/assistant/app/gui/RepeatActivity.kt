@@ -65,7 +65,7 @@ class RepeatActivity : AppCompatActivity() {
                     false
                 }
             }
-
+            withEmptyView(nodata)
             withDataSource(dataSource)
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->

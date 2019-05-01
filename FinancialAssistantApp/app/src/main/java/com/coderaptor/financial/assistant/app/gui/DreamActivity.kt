@@ -66,7 +66,7 @@ class DreamActivity : AppCompatActivity() {
                     false
                 }
             }
-
+            withEmptyView(nodata)
             withDataSource(dataSource)
 
             withItem<Dream>(R.layout.list_dreams) {

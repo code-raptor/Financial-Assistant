@@ -18,7 +18,7 @@
             android:gravity="center_horizontal"
             android:id="@+id/cim"
             android:textSize="24sp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,10 +35,10 @@
             android:textSize="18sp"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="28dp"
             app:layout_constraintTop_toBottomOf="@+id/cim"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/receiptDateField"
+            app:layout_constraintEnd_toStartOf="@+id/dateField"
             app:layout_constraintHorizontal_bias="0.303"/>
     <EditText
             android:layout_width="wrap_content"
@@ -46,15 +46,20 @@
             android:inputType="date"
             android:ems="10"
             android:textAlignment="center"
-            android:id="@+id/receiptDateField"
+            android:id="@+id/dateField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="36dp"
             android:autofillHints=""
             android:hint="@string/base_date_hint"
             tools:targetApi="o"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@+id/cim"
-            android:backgroundTint="@color/colorPrimary"/>
+            android:backgroundTint="@color/colorPrimary"
+            android:textCursorDrawable="@color/closed_fab"
+            android:textColorHighlight="@color/closed_fab"
+            android:textColorLink="@color/closed_fab"
+            android:focusable="false"
+            tools:ignore="KeyboardInaccessibleWidget"/>
     <!--Összeg-->
     <TextView
             android:text="@string/receipt_amount"
@@ -64,7 +69,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/receiptAmountField"
+            app:layout_constraintEnd_toStartOf="@+id/amountField"
             android:layout_marginTop="25dp"
             app:layout_constraintTop_toBottomOf="@+id/receiptDate"
             android:layout_marginStart="8dp"
@@ -76,14 +81,14 @@
             android:inputType="text"
             android:ems="10"
             android:textAlignment="center"
-            android:id="@+id/receiptAmountField"
+            android:id="@+id/amountField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="36dp"
             android:autofillHints=""
             android:hint="@string/receipt_amounthint"
             tools:targetApi="o"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/receiptDateField"
+            app:layout_constraintTop_toBottomOf="@+id/dateField"
             android:backgroundTint="@color/colorPrimary"/>
     <!--Új termék-->
     <TextView
@@ -105,14 +110,16 @@
             app:srcCompat="@drawable/add"
             android:id="@+id/addnewproduct"
             app:backgroundTint="@color/closed_fab"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/receiptAmountField"
+            android:layout_marginTop="17dp"
+            app:layout_constraintTop_toBottomOf="@+id/amountField"
             app:layout_constraintStart_toEndOf="@+id/mennyiseg"
             android:layout_marginStart="44dp"
             app:fabSize="mini"
             app:fab_colorNormal="@color/closed_fab"
             app:fab_colorRipple="@color/ripple_fab"
-            app:fab_colorPressed="@color/open_fab" android:focusable="true"/>
+            app:fab_colorPressed="@color/open_fab"
+            app:rippleColor="@color/ripple_fab"
+            android:focusable="true"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
