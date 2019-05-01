@@ -28,18 +28,17 @@
             android:id="@+id/cim"/>
     <!--Tranzakció-->
     <RadioGroup
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginStart="120dp"
-            android:layout_marginEnd="120dp"
+            android:layout_marginStart="80dp"
             android:gravity="center_horizontal"
             android:id="@+id/radioGroup"
             android:layout_marginTop="28dp"
-            app:layout_constraintTop_toBottomOf="@+id/cim">
+            app:layout_constraintTop_toBottomOf="@+id/cim" app:layout_constraintStart_toStartOf="parent">
         <RadioButton
                 android:text="@string/cost"
-                android:layout_width="15dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/kiadas"
                 android:buttonTint="@color/closed_fab"
@@ -47,7 +46,7 @@
                 android:layout_weight="1"/>
         <RadioButton
                 android:text="@string/income_income"
-                android:layout_width="15dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/bevetel"
                 android:buttonTint="@color/closed_fab"
@@ -60,11 +59,10 @@
             android:layout_height="31dp"
             android:id="@+id/label1"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="80dp"
             app:layout_constraintTop_toBottomOf="@+id/radioGroup" android:textSize="18sp" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/amountField" app:layout_constraintHorizontal_bias="0.589"/>
+            app:layout_constraintEnd_toStartOf="@+id/amountField" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.384"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,12 +85,11 @@
             android:layout_width="87dp"
             android:layout_height="31dp"
             android:id="@+id/label2"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintTop_toBottomOf="@+id/label1"
             android:textSize="18sp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/dateField"
-            app:layout_constraintHorizontal_bias="0.558"/>
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.348"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,12 +98,18 @@
             android:id="@+id/dateField"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="52dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@+id/amountField"
             android:autofillHints=""
             android:hint="@string/base_date_hint"
             android:inputType="date"
-            tools:targetApi="o" android:backgroundTint="@color/colorPrimary"/>
+            tools:targetApi="o"
+            android:backgroundTint="@color/colorPrimary"
+            android:textCursorDrawable="@color/closed_fab"
+            android:textColorHighlight="@color/closed_fab"
+            android:textColorLink="@color/closed_fab"
+            android:focusable="false"
+            tools:ignore="KeyboardInaccessibleWidget"/>
     <!--Kategória-->
     <TextView
             android:text="@string/income_category"
@@ -116,7 +119,8 @@
             android:id="@+id/label3"
             android:textSize="18sp"
             android:layout_marginEnd="24dp" app:layout_constraintEnd_toStartOf="@+id/categoryField"
-            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/label2"/>
+            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/label2"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"/>
     <Spinner
             android:layout_width="213dp"
             android:layout_height="35dp"
@@ -134,13 +138,12 @@
             android:layout_width="102dp"
             android:layout_height="31dp"
             android:id="@+id/label4"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
             android:textSize="18sp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/frequencyField"
-            app:layout_constraintHorizontal_bias="0.821"
-            android:layout_marginTop="28dp" app:layout_constraintTop_toBottomOf="@+id/label3"/>
+            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/label3"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.428"/>
     <Spinner
             android:layout_width="213dp"
             android:layout_height="35dp"
