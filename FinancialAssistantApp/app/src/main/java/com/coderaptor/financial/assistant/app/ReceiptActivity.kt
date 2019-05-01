@@ -2,7 +2,10 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -12,6 +15,7 @@ import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.adapters.ProductViewHolder
 import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.formatDate
 import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_receipt.*
 import kotlinx.android.synthetic.main.content_receipt.*
@@ -30,6 +34,28 @@ class ReceiptActivity: AppCompatActivity() {
         addnewproduct.setOnClickListener {
             val intent = Intent(this, AddNewProductActivity::class.java)
             startActivity(intent)
+        }
+
+        dateField.isClickable = true
+        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+        dateField.setOnClickListener {
+            dateClick(this)
+        }
+
+        fab.setOnClickListener {
+            val result = fieldsEmpty(amountField.text)
+            if (result) {
+                val amount: Int = amountField.text.toString().toInt()
+                val date = dateField.text.toString()
+
+                //ezzel még munka van
+                toast("sikeres hozzáadás")
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            else{
+                toast("Hiányzó adat!")
+            }
         }
 
         val dataSource: DataSource<Any> = dataSourceOf(dbHandler.findAllProduct())
@@ -60,7 +86,7 @@ class ReceiptActivity: AppCompatActivity() {
                     false
                 }
             }
-
+            withEmptyView(nodata)
             withDataSource(dataSource)
 
             withItem<Product>(R.layout.list_product) {
@@ -76,5 +102,23 @@ class ReceiptActivity: AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun dateClick(context: ReceiptActivity) {
+        MaterialDialog(this).show {
+            setTheme(R.style.AppTheme)
+            datePicker { _, innerDate ->
+                context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
+            }
+        }
+    }
+
+    fun fieldsEmpty(vararg fields: Editable):Boolean{
+        for (data in fields){
+            if(data.isEmpty()){
+                return false
+            }
+        }
+        return true
     }
 }

@@ -10,6 +10,7 @@
     <string name="nodata_transaction">Nincs megjeleníthető eheti adat!</string>
     <string name="nodata_dream">Még nincs beruházási terved! :(</string>
     <string name="nodata_repeat">Nincs ismétlődő tranzakciód!</string>
+    <string name="nodata_receipt">Még nincs termék rögzitve</string>
 
     <string name="history">History</string>
     <string name="back">Back</string>
