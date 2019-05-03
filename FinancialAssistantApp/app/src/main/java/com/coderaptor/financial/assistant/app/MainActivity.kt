@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(){
                     openCalendar(it.dateField)
                 }
 
-                positiveButton(R.string.save) { dialog ->
+                positiveButton(R.string.save) {
                     val result = fieldsEmpty(amountField.text)
 
                     if (result){
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(){
                         if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
                         val date = dateField.text.toString()
                         val category: String = categoryField.selectedItem.toString()
-                        val comment = descript.text.toString()
+                        val comment = descriptField.text.toString()
                         var transaction = Transaction(amount, date, category)
                         if (comment.isNotEmpty()) {
                             transaction = Transaction(amount, date, comment, category)
@@ -159,7 +159,9 @@ class MainActivity : AppCompatActivity(){
                     if (item is Transaction) {
                         //edit layout
                     } else if (item is Receipt) {
-                        //edit layout
+                        val intent = Intent(this@MainActivity, ReceiptActivity::class.java)
+                        intent.putExtra("id", item.baseID)
+                        startActivity(intent)
                     }
                     false
                 }
