@@ -6,12 +6,10 @@ import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -21,11 +19,9 @@ import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.adapters.ProductViewHolder
 import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.coderaptor.financial.assistant.app.util.SharedPreference
-import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.*
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
-import com.coderaptor.financial.assistant.app.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_receipt.*
 import kotlinx.android.synthetic.main.content_receipt.*
@@ -50,7 +46,7 @@ class ReceiptActivity: AppCompatActivity() {
         dateField.isClickable = true
         dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
         dateField.setOnClickListener {
-            dateClick(this)
+            openCalendar(it.dateField)
         }
 
         savefab.setOnClickListener {
@@ -80,13 +76,12 @@ class ReceiptActivity: AppCompatActivity() {
                 customView(R.layout.dialog_add_product, scrollable = true)
 
                 categoryField.adapter = adapter
-                var categoryId = 1.toLong()
 
                 val categoryIdWithWarrantyAndHarmful = dbHandler.categoriesWithWarrantyAndHarmful()
                 categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                         val swt = parent.selectedItem as StringWithId
-                        categoryId = swt.id
+                        var categoryId = swt.id
                         if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
                             dateField.visibility = View.VISIBLE
                             label.visibility = View.VISIBLE
@@ -109,7 +104,7 @@ class ReceiptActivity: AppCompatActivity() {
                 datefield.isClickable = true
                 datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
                 datefield.setOnClickListener {
-                    dateClick(datefield)
+                    openCalendar(datefield)
                 }
 
                 warranty.setOnCheckedChangeListener { _, isChecked ->
@@ -192,31 +187,5 @@ class ReceiptActivity: AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun dateClick(context: ReceiptActivity) {
-        MaterialDialog(this).show {
-            setTheme(R.style.AppTheme)
-            datePicker { _, innerDate ->
-                context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
-            }
-        }
-    }
-    private fun dateClick(field: EditText) {
-        MaterialDialog(this).show {
-            setTheme(R.style.AppTheme)
-            datePicker { _, innerDate ->
-                field.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
-            }
-        }
-    }
-
-    private fun fieldsEmpty(vararg fields: Editable):Boolean{
-        for (data in fields){
-            if(data.isEmpty()){
-                return false
-            }
-        }
-        return true
     }
 }
