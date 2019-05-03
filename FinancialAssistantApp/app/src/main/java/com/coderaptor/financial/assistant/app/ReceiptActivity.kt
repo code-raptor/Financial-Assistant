@@ -55,6 +55,7 @@ class ReceiptActivity: AppCompatActivity() {
             if (result) {
                 val amount: Int = amountField.text.toString().toInt()
                 val date = dateField.text.toString()
+                val comment = descript.text.toString()
 
                 //ezzel még munka van
                 toast("sikeres hozzáadás")
@@ -81,7 +82,7 @@ class ReceiptActivity: AppCompatActivity() {
                 categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                         val swt = parent.selectedItem as StringWithId
-                        var categoryId = swt.id
+                        val categoryId = swt.id
                         if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
                             dateField.visibility = View.VISIBLE
                             label.visibility = View.VISIBLE
