@@ -11,13 +11,14 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.recyclical.datasource.DataSource
-import com.afollestad.recyclical.datasource.dataSourceOf
+import com.afollestad.recyclical.datasource.emptyDataSourceTyped
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.swipe.SwipeLocation
 import com.afollestad.recyclical.swipe.withSwipeAction
 import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.adapters.ProductViewHolder
 import com.coderaptor.financial.assistant.app.core.Product
+import com.coderaptor.financial.assistant.app.core.Receipt
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.util.*
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
@@ -36,28 +37,72 @@ class ReceiptActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
 
-        val dataSource: DataSource<Any> = dataSourceOf(dbHandler.findAllProduct())
+        dateField.isClickable = true
+        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+
+        val dataSource: DataSource<Product> = emptyDataSourceTyped()
+        var bundleReceipt: Receipt? = null
+        val bundle = intent.extras
+        var productIds = "("
+        if (bundle != null) {
+            val baseId = bundle.getLong("id")
+
+            val receipts = dbHandler.findAllReceipt("WHERE ${DatabaseHandler.RECEIPT_ID} = $baseId")
+            receipts.forEach { productIds += "${it.productId}, " }
+
+            productIds = productIds.substring(0, productIds.length-2)
+            productIds += ")"
+            dbHandler.findAllProduct("${DatabaseHandler.BASE_ID} IN $productIds").forEach {
+                dataSource.add(it)
+            }
+
+            bundleReceipt = receipts.first()
+            dateField.text = Editable.Factory.getInstance().newEditable(bundleReceipt.date)
+            amountField.text =  Editable.Factory.getInstance().newEditable(bundleReceipt.amount.toString())
+            descriptField.text = Editable.Factory.getInstance().newEditable(bundleReceipt.comment)
+        }
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-        dateField.isClickable = true
-        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
         dateField.setOnClickListener {
             openCalendar(it.dateField)
         }
 
         savefab.setOnClickListener {
-
-            val result = fieldsEmpty(amountField.text)
+            val result = fieldsEmpty(amountField.text, dateField.text)
             if (result) {
                 val amount: Int = amountField.text.toString().toInt()
                 val date = dateField.text.toString()
-                val comment = descript.text.toString()
+                val comment = descriptField.text.toString()
+                val idTime = java.util.Calendar.getInstance().timeInMillis
+                val receiptID = amount + idTime
+                val NumberOldIDs = productIds.filter { ch -> ch == ',' }.count()+1
+                var counter = 1
+                dataSource.forEach {
+                    if (bundle == null) {
+                    val id = dbHandler.insert(it)
+                    var receipt = Receipt(receiptID, date, amount, productId = id)
+                    if (comment.isNotEmpty()) {
+                        receipt = Receipt(receiptID, date, amount, comment, id)
+                    }
+                        dbHandler.insert(receipt)
+                    }else {
+//                        var nextUpdatedId = bundleReceipt!!.id
+//                        var receipt = Receipt(nextUpdatedId,bundleReceipt.baseID, date, amount, productId = id)
+//                        if (comment.isNotEmpty()) {
+//                            receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, comment, id)
+//                        }
+//                        val result = dbHandler.updateReceipt(receipt)
+//                        nextUpdatedId += 1
+//                        Log.i("Receipt", result.toString())
+//                        Log.i("receipt", receipt.toString())
+                    }
 
-                //ezzel még munka van
+                    counter++
+                }
                 toast("sikeres hozzáadás")
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -78,11 +123,12 @@ class ReceiptActivity: AppCompatActivity() {
 
                 categoryField.adapter = adapter
 
+                var categoryId = (-1).toLong()
                 val categoryIdWithWarrantyAndHarmful = dbHandler.categoriesWithWarrantyAndHarmful()
                 categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                         val swt = parent.selectedItem as StringWithId
-                        val categoryId = swt.id
+                        categoryId = swt.id
                         if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
                             dateField.visibility = View.VISIBLE
                             label.visibility = View.VISIBLE
@@ -118,24 +164,22 @@ class ReceiptActivity: AppCompatActivity() {
                     }
                 }
 
-                positiveButton(R.string.save) { dialog ->
+                positiveButton(R.string.save) {
                     val result = fieldsEmpty(productName.text, quantityField.text, priceField.text)
-
                     if (result) {
                         val name = productName.text.toString()
                         val quantity = if (quantityField.text.isNotEmpty()) quantityField.text.toString().toInt() else 1
                         val unit = unitField.selectedItem.toString()
                         val price = priceField.text.toString().toInt()
                         val warranty = warranty.isChecked
-                        var product = Product(name, unit, quantity, price,categoryId = 45/*categoryId = categoryId*/)
+                        var product = Product(name, unit, quantity, price, categoryId = categoryId)
                         if (warranty) {
                             if (dateField.text.isNotEmpty()) {
                                 val endDate = dateField.text.toString()
-                                product = Product(name, unit, quantity, price, endDate, 45 /*categoryId*/)
+                                product = Product(name, unit, quantity, price, endDate, categoryId)
                             }
                         }
 
-                        dbHandler.insert(product)
                         dataSource.add(product)
                         toast("Sikeres hozzáadás")
                     } else {

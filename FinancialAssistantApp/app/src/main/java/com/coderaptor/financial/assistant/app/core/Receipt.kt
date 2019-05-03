@@ -2,22 +2,17 @@ package com.coderaptor.financial.assistant.app.core
 
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 
-data class Receipt(val date: String, val amount: Int, val comment: String = "", val productId: Long) {
+data class Receipt(val baseID: Long, val date: String, val amount: Int, val comment: String = "", val productId: Long) {
     var id: Long = -1
-    var productIds = ArrayList<Long>()
 
-    constructor(id: Long, date: String, amount: Int, comment: String = "", productId: Long): this(date, amount, comment, productId) {
+    constructor(id: Long, baseID: Long, date: String, amount: Int, comment: String = "", productId: Long): this(baseID, date, amount, comment, productId) {
         this.id = id
-    }
-
-    constructor(id: Long, date: String, amount: Int, comment: String = "", productIds: ArrayList<Long>): this(date, amount, comment, productIds[0]) {
-        this.id = id
-        this.productIds = productIds
     }
 
     companion object {
         val CREATE_TABLE_RECEIPT = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_RECEIPT} " +
-                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY," +
+                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
+                "${DatabaseHandler.RECEIPT_ID} INTEGER, " +
                 "${DatabaseHandler.BASE_DATE} TEXT, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
                 "${DatabaseHandler.BASE_COMMENT} TEXT, " +
@@ -28,6 +23,6 @@ data class Receipt(val date: String, val amount: Int, val comment: String = "", 
     }
 
     override fun toString(): String {
-        return "Receipt(id=$id, date='$date', amount=$amount, productId=$productId)"
+        return "Receipt(id=$id, receipt_id=$baseID, date='$date', amount=$amount, comment=$comment, productId=$productId)"
     }
 }
