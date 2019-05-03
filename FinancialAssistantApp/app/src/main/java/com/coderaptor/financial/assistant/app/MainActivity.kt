@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
@@ -31,6 +33,7 @@ import com.coderaptor.financial.assistant.app.util.formatDate
 import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_add_income.*
+import kotlinx.android.synthetic.main.dialog_add_income.view.*
 import java.util.*
 
 
@@ -60,17 +63,18 @@ class MainActivity : AppCompatActivity(){
 
         dbHandler.insertTestdata()
 
-//        dateField.isClickable = true
-//        dateField.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
-//        dateField.setOnClickListener {
-//            dateClick(this)
-//        }
-
         addNewButton.setOnClickListener {
             MaterialDialog(this).show {
                 setTheme(R.style.AppTheme)
                 title(R.string.newDream)
                 customView(R.layout.dialog_add_income, scrollable = true)
+
+                val datefield = getCustomView().dateField
+                datefield.isClickable = true
+                datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+                datefield.setOnClickListener {
+                    dateClick(datefield)
+                }
 
                 positiveButton(R.string.save) { dialog ->
                     val result = fieldsEmpty(amountField.text)
@@ -85,6 +89,7 @@ class MainActivity : AppCompatActivity(){
                         val transaction = Transaction(amount, date, category)
 
                         dbHandler.insert(transaction)
+                        list.add(transaction)
                         if (dbHandler.getCurrentLimit() < 0) {
                             toast("Napi limit összeg meghaladva")
                         }
@@ -211,11 +216,11 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    fun dateClick(context: MainActivity) {
+    fun dateClick(field: EditText) {
         MaterialDialog(this).show {
             setTheme(R.style.AppTheme)
             datePicker { _, innerDate ->
-                context.dateField.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
+                field.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
             }
         }
     }

@@ -6,9 +6,11 @@ import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
@@ -19,11 +21,16 @@ import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.adapters.ProductViewHolder
 import com.coderaptor.financial.assistant.app.core.Product
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
+import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
 import com.coderaptor.financial.assistant.app.util.toast
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_receipt.*
 import kotlinx.android.synthetic.main.content_receipt.*
 import kotlinx.android.synthetic.main.content_receipt.dateField
+import kotlinx.android.synthetic.main.dialog_add_income.view.*
 import kotlinx.android.synthetic.main.dialog_add_product.*
 
 class ReceiptActivity: AppCompatActivity() {
@@ -33,36 +40,7 @@ class ReceiptActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
 
-//        val adapter = ArrayAdapter<StringWithId>(this, android.R.layout.simple_spinner_item, getCategoryStringWithIdList(dbHandler))
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//
-//        categoryField.adapter = adapter
-//        var categoryId = 1.toLong()
-//
-//        val categoryIdWithWarrantyAndHarmful = dbHandler.categoriesWithWarrantyAndHarmful()
-//        categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-//                val swt = parent.selectedItem as StringWithId
-//                categoryId = swt.id
-//                if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
-//                    dateField.visibility = View.VISIBLE
-//                    label.visibility = View.VISIBLE
-//                    warranty.isChecked = true
-//                }else if (!categoryIdWithWarrantyAndHarmful.contains(categoryId)) {
-//                    dateField.visibility = View.INVISIBLE
-//                    label.visibility = View.INVISIBLE
-//                    warranty.isChecked = false
-//                }else if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && dbHandler.isHarmfulCategory(categoryId)) {
-//                    if (SharedPreference.shoppingMonitor) {
-//                        Snackbar.make(view, "Káros Termék", Snackbar.LENGTH_SHORT)
-//                            .setAction("Action", null).show()
-//                    }
-//                }
-//            }
-//            override fun onNothingSelected(parent: AdapterView<*>) {}
-//        }
-
-//
+        val dataSource: DataSource<Any> = dataSourceOf(dbHandler.findAllProduct())
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -92,22 +70,57 @@ class ReceiptActivity: AppCompatActivity() {
             }
         }
 
-//            warranty.setOnCheckedChangeListener { _, isChecked ->
-//                if(isChecked) {
-//                    dateField.visibility = View.VISIBLE
-//                    label.visibility = View.VISIBLE
-//                }else {
-//                    dateField.visibility = View.INVISIBLE
-//                    label.visibility = View.INVISIBLE
-//                }
-//            }
+        val adapter = ArrayAdapter<StringWithId>(this, android.R.layout.simple_spinner_item, getCategoryStringWithIdList(dbHandler))
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         fab.setOnClickListener {
-
-
             MaterialDialog(this).show {
                 setTheme(R.style.AppTheme)
                 title(R.string.newDream)
                 customView(R.layout.dialog_add_product, scrollable = true)
+
+                categoryField.adapter = adapter
+                var categoryId = 1.toLong()
+
+                val categoryIdWithWarrantyAndHarmful = dbHandler.categoriesWithWarrantyAndHarmful()
+                categoryField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                        val swt = parent.selectedItem as StringWithId
+                        categoryId = swt.id
+                        if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && !dbHandler.isHarmfulCategory(categoryId)) {
+                            dateField.visibility = View.VISIBLE
+                            label.visibility = View.VISIBLE
+                            warranty.isChecked = true
+                        }else if (!categoryIdWithWarrantyAndHarmful.contains(categoryId)) {
+                            dateField.visibility = View.INVISIBLE
+                            label.visibility = View.INVISIBLE
+                            warranty.isChecked = false
+                        }else if (categoryIdWithWarrantyAndHarmful.contains(categoryId) && dbHandler.isHarmfulCategory(categoryId)) {
+                            if (SharedPreference.shoppingMonitor) {
+                                Snackbar.make(view, "Káros Termék", Snackbar.LENGTH_SHORT)
+                                    .setAction("Action", null).show()
+                            }
+                        }
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                }
+
+                val datefield = getCustomView().dateField
+                datefield.isClickable = true
+                datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+                datefield.setOnClickListener {
+                    dateClick(datefield)
+                }
+
+                warranty.setOnCheckedChangeListener { _, isChecked ->
+                    if(isChecked) {
+                        dateField.visibility = View.VISIBLE
+                        label.visibility = View.VISIBLE
+                    }else {
+                        dateField.visibility = View.INVISIBLE
+                        label.visibility = View.INVISIBLE
+                    }
+                }
 
                 positiveButton(R.string.save) { dialog ->
                     val result = fieldsEmpty(productName.text, quantityField.text, priceField.text)
@@ -127,6 +140,7 @@ class ReceiptActivity: AppCompatActivity() {
                         }
 
                         dbHandler.insert(product)
+                        dataSource.add(product)
                         toast("Sikeres hozzáadás")
                     } else {
                         toast("Hiányzó adat!")
@@ -135,8 +149,6 @@ class ReceiptActivity: AppCompatActivity() {
                 negativeButton(R.string.cancel)
             }
         }
-
-        val dataSource: DataSource<Any> = dataSourceOf(dbHandler.findAllProduct())
 
         recyclerView.setup {
 
@@ -182,7 +194,7 @@ class ReceiptActivity: AppCompatActivity() {
         }
     }
 
-    fun dateClick(context: ReceiptActivity) {
+    private fun dateClick(context: ReceiptActivity) {
         MaterialDialog(this).show {
             setTheme(R.style.AppTheme)
             datePicker { _, innerDate ->
@@ -190,8 +202,16 @@ class ReceiptActivity: AppCompatActivity() {
             }
         }
     }
+    private fun dateClick(field: EditText) {
+        MaterialDialog(this).show {
+            setTheme(R.style.AppTheme)
+            datePicker { _, innerDate ->
+                field.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
+            }
+        }
+    }
 
-    fun fieldsEmpty(vararg fields: Editable):Boolean{
+    private fun fieldsEmpty(vararg fields: Editable):Boolean{
         for (data in fields){
             if(data.isEmpty()){
                 return false
