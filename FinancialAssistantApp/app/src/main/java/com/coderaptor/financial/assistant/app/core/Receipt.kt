@@ -2,15 +2,15 @@ package com.coderaptor.financial.assistant.app.core
 
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 
-data class Receipt(val date: String, val amount: Int, val productId: Long) {
+data class Receipt(val date: String, val amount: Int, val comment: String = "", val productId: Long) {
     var id: Long = -1
     var productIds = ArrayList<Long>()
 
-    constructor(id: Long, date: String, amount: Int, productId: Long): this(date, amount, productId) {
+    constructor(id: Long, date: String, amount: Int, comment: String = "", productId: Long): this(date, amount, comment, productId) {
         this.id = id
     }
 
-    constructor(id: Long, date: String, amount: Int, productIds: ArrayList<Long>): this(date, amount, productIds[0]) {
+    constructor(id: Long, date: String, amount: Int, comment: String = "", productIds: ArrayList<Long>): this(date, amount, comment, productIds[0]) {
         this.id = id
         this.productIds = productIds
     }
@@ -20,6 +20,7 @@ data class Receipt(val date: String, val amount: Int, val productId: Long) {
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY," +
                 "${DatabaseHandler.BASE_DATE} TEXT, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
+                "${DatabaseHandler.BASE_COMMENT} TEXT, " +
                 "${DatabaseHandler.PRODUCT_ID_RECEIPT} INTEGER, " +
                 "FOREIGN KEY(${DatabaseHandler.PRODUCT_ID_RECEIPT}) REFERENCES ${DatabaseHandler.TABLE_NAME_PRODUCT}(${DatabaseHandler.BASE_ID}), " +
                 "UNIQUE (${DatabaseHandler.BASE_ID}, ${DatabaseHandler.BASE_DATE}, ${DatabaseHandler.BASE_AMOUNT}))"

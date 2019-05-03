@@ -66,8 +66,11 @@ class RepeatActivity : AppCompatActivity() {
                         val date = dialog.getCustomView().dateField.text.toString()
                         val category = dialog.getCustomView().categoryField.selectedItem.toString()
                         val frequency = dialog.getCustomView().frequencyField.selectedItem.toString()
-
-                        val transaction = Transaction(amount, date, category, frequency)
+                        val comment = descript.text.toString()
+                        var transaction = Transaction(amount, date, category, frequency)
+                        if (comment.isNotEmpty()) {
+                            transaction = Transaction(amount, date, category, comment, frequency)
+                        }
 
                         dbHandler.insert(transaction)
                         dataSource.add(transaction)

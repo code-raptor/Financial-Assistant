@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(){
         if (!SharedPreference.firstRun) {
             SharedPreference.firstRun = true
             SharedPreference.currentDate = Calendar.getInstance().formatDate()
+            dbHandler.insertTestdata()
         }else {
             Log.i("first", "Nem először value: ${SharedPreference.firstRun}")
                 SharedPreference.currentDate = Calendar.getInstance().formatDate()
@@ -56,8 +57,6 @@ class MainActivity : AppCompatActivity(){
         checkDayChanged(dbHandler)
 
         val list = getOneWeekData(dbHandler)
-
-        dbHandler.insertTestdata()
 
         addNewButton.setOnClickListener {
             MaterialDialog(this).show {
@@ -81,8 +80,11 @@ class MainActivity : AppCompatActivity(){
                         if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
                         val date = dateField.text.toString()
                         val category: String = categoryField.selectedItem.toString()
-
-                        val transaction = Transaction(amount, date, category)
+                        val comment = descript.text.toString()
+                        var transaction = Transaction(amount, date, category)
+                        if (comment.isNotEmpty()) {
+                            transaction = Transaction(amount, date, comment, category)
+                        }
 
                         dbHandler.insert(transaction)
                         list.add(transaction)

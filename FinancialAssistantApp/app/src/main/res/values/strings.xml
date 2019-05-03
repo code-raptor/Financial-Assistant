@@ -12,7 +12,8 @@
     <string name="nodata_transaction">Nincs megjeleníthető eheti adat!</string>
     <string name="nodata_dream">Még nincs beruházási terved! :(</string>
     <string name="nodata_repeat">Nincs ismétlődő tranzakciód!</string>
-    <string name="nodata_receipt">Még nincs termék rögzitve</string>
+    <string name="nodata_receipt">Még nincs termék rögzitve!</string>
+    <string name="nodata_history">Nincs adat rögzítve vagy minden szűrőt bekapcsoltál!</string>
 
     <string name="history">History</string>
     <string name="back">Back</string>
@@ -72,6 +73,8 @@
     <string name="receipt_amounthint">18500</string>
     <string name="receipt_amount">Összeg:</string>
     <string name="receipt_newproduct">Új termék:</string>
+    <string name="receipt_descString">Megjegyzés:</string>
+    <string name="descString_hint">Megjegyzés</string>
     <!--Blokk termékek-->
     <string name="receiptproduct_name">Kenyér</string>
     <string name="receiptproduct_mennyiseg">3</string>
@@ -111,6 +114,8 @@
     <string name="delete">delete</string>
     <string name="tab">\u0009\u0009\u0009\u0009</string>
     <string name="empty_text">Nincs megjelenithető eheti adat!</string>
+
+    <string name="onceNewtransaction">Új tranzakció</string>
 
     <!--FAB LABELS-->
     <string name="fab_shoppinglist">Bevásárló lista</string>

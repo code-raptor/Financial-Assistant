@@ -2,11 +2,11 @@ package com.coderaptor.financial.assistant.app.core
 
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 
-data class Transaction(val amount: Int, val date: String, val name: String, val frequency: String = "Egyszeri") {
+data class Transaction(val amount: Int, val date: String, val name: String, val comment: String = "", val frequency: String = "Egyszeri") {
     var id: Long = -1
 
-    constructor(id: Long = -1, amount: Int, date: String, name: String, frequency: String) :
-            this(amount, date, name, frequency) {
+    constructor(id: Long = -1, amount: Int, date: String, name: String, comment: String = "", frequency: String) :
+            this(amount, date, name, comment, frequency) {
         this.id = id
     }
 
@@ -18,6 +18,7 @@ data class Transaction(val amount: Int, val date: String, val name: String, val 
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
                 "${DatabaseHandler.BASE_DATE} TEXT, " +
                 "${DatabaseHandler.BASE_NAME} TEXT, " +
+                "${DatabaseHandler.BASE_COMMENT} TEXT, " +
                 "${DatabaseHandler.FREQUENCY_TRANSACTION} TEXT)"
     }
 }

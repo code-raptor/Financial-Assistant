@@ -159,9 +159,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
                 val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val comment = cursor.getString(cursor.getColumnIndex(BASE_COMMENT))
                 val frequency = cursor.getString(cursor.getColumnIndex(FREQUENCY_TRANSACTION))
 
-                val transaction = Transaction(id, amount, date, name, frequency)
+                val transaction = Transaction(id, amount, date, name, comment, frequency)
                 transactionList.add(transaction)
             }
         }
@@ -276,9 +277,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
                 val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val comment = cursor.getString(cursor.getColumnIndex(BASE_COMMENT))
                 val productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_RECEIPT))
 
-                val receipt = Receipt(id, date, amount, productId)
+                val receipt = Receipt(id, date, amount, comment, productId)
                 receiptList.add(receipt)
             }
         }
@@ -457,6 +459,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(BASE_AMOUNT, it.amount)
         values.put(BASE_DATE, it.date)
         values.put(BASE_NAME, it.name)
+        values.put(BASE_COMMENT, it.comment)
         values.put(FREQUENCY_TRANSACTION, it.frequency)
         return values
     }
@@ -496,6 +499,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val values = ContentValues()
         values.put(BASE_DATE, it.date)
         values.put(BASE_AMOUNT, it.amount)
+        values.put(BASE_COMMENT, it.comment)
         values.put(PRODUCT_ID_RECEIPT, it.productId)
         return values
     }
@@ -562,24 +566,24 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         var transaction = Transaction(1000, "2019-04-25", "Zsebpénz")
         insert(transaction)
-        transaction = Transaction(1000, "2019-04-16", "Bor")
+        transaction = Transaction(1000, "2019-04-16", "Bor", "Elfogyott :(")
         insert(transaction)
-        transaction = Transaction(100000, "2019-04-10", "Fizetés", "Havonta")
+        transaction = Transaction(100000, "2019-04-10", "Fizetés", frequency = "Havonta")
         insert(transaction)
-        transaction = Transaction(-2000, "2019-04-11", "Gyerektartás", "Heti")
+        transaction = Transaction(-2000, "2019-04-11", "Gyerektartás", frequency = "Heti")
         insert(transaction)
-        transaction = Transaction(1030, "2019-04-15", "Gáz", "Havonta")
+        transaction = Transaction(1030, "2019-04-15", "Gáz", frequency = "Havonta")
         insert(transaction)
-        transaction = Transaction(1500, "2019-04-15", "Kutya kaja", "Heti")
+        transaction = Transaction(1500, "2019-04-15", "Kutya kaja", frequency = "Heti")
         insert(transaction)
         Log.i("testData", "Transaction: ")
         findAllTransaction().forEach {
             Log.i("testData", it.toString())
         }
 
-        var receipt = Receipt(1, "2019-04-28", 13000, 1)
+        var receipt = Receipt(1, "2019-04-28", 13000, "Ikea", 1)
         insert(receipt)
-        receipt = Receipt(2, "2019-03-13", 5000, 2)
+        receipt = Receipt(2, "2019-05-03", 5000, "asd", 2)
         insert(receipt)
         Log.i("testData", "Receipt: ")
         findAllReceipt().forEach {
@@ -623,6 +627,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         const val BASE_AMOUNT = "amount"
         const val BASE_QUANTITY = "quantity"
         const val BASE_DATE = "date"
+        const val BASE_COMMENT = "comment"
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
