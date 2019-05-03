@@ -8,7 +8,7 @@ fun getOneWeekData(dbHandler: DatabaseHandler): MutableList<Any> {
     val transactions = dbHandler.findAllTransaction(selection)
     Log.i("oneWeek", "t list size: ${transactions.size}")
 
-    val receipts = dbHandler.findAllReceipt(selection)
+    val receipts = dbHandler.findAllReceipt("WHERE " + selection + "GROUP BY ${DatabaseHandler.RECEIPT_ID}")
     Log.i("oneWeek", "r list size: ${receipts.size}")
 
     val list = mutableListOf<Any>()
