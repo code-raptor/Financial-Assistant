@@ -96,7 +96,7 @@ class HistoryActivity : AppCompatActivity() {
                     if (item is Transaction) {
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
                     } else if (item is Receipt) {
-                        dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_RECEIPT)
+                        dbHandler.deleteByReceiptByReceiptId(item.baseID, DatabaseHandler.TABLE_NAME_RECEIPT)
                     }
                     true
                 }

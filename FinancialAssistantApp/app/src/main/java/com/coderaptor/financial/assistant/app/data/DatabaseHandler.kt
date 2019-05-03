@@ -446,6 +446,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.delete(TABLE_NAME, selection, selectionArgs)
     }
 
+    fun deleteByReceiptByReceiptId(receiptID: Long, TABLE_NAME: String) {
+        val db = readableDatabase
+        val selection = "$RECEIPT_ID = ?"
+        val selectionArgs = arrayOf("$receiptID")
+        Log.i("db", "DELETE: $receiptID")
+        db.delete(TABLE_NAME, selection, selectionArgs)
+    }
+
     fun deleteTableContent(TABLE_NAME: String) {
         readableDatabase.execSQL("DELETE FROM $TABLE_NAME")
     }
