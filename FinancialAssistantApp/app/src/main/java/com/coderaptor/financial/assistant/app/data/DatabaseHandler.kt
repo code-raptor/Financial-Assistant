@@ -299,8 +299,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val db = writableDatabase
         val success = db.update(TABLE_NAME_RECEIPT,
             insertValuesReceipt(receipt),
-            "$RECEIPT_ID = ?",
-            arrayOf(receipt.baseID.toString()))
+            "$RECEIPT_ID = ? AND $PRODUCT_ID_RECEIPT = ?",
+            arrayOf(receipt.baseID.toString(), receipt.productId.toString()))
         Log.i("Receipt", "db: updated row = $success")
         return success > -1
     }

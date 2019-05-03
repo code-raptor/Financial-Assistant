@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.recyclical.datasource.DataSource
-import com.afollestad.recyclical.datasource.dataSourceOf
+import com.afollestad.recyclical.datasource.emptyDataSource
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.swipe.SwipeLocation
 import com.afollestad.recyclical.swipe.withSwipeAction
@@ -56,7 +56,9 @@ class MainActivity : AppCompatActivity(){
         setupSms(dbHandler.findMaxSMS())
         checkDayChanged(dbHandler)
 
-        val list = getOneWeekData(dbHandler)
+        val dataSource: DataSource<Any> = emptyDataSource()
+        getOneWeekData(dbHandler).forEach { dataSource.add(it) }
+
 
         addNewButton.setOnClickListener {
             MaterialDialog(this).show {
@@ -87,7 +89,7 @@ class MainActivity : AppCompatActivity(){
                         }
 
                         dbHandler.insert(transaction)
-                        list.add(transaction)
+                        dataSource.add(transaction)
                         if (dbHandler.getCurrentLimit() < 0) {
                             toast("Napi limit összeg meghaladva")
                         }
@@ -130,8 +132,6 @@ class MainActivity : AppCompatActivity(){
             val intent = Intent(this, ShoppingListActivity::class.java)
             startActivity(intent)
         }
-
-        val dataSource: DataSource<Any> = dataSourceOf(list)
 
         recyclerView.setup {
 
