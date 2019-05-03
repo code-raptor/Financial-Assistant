@@ -1,14 +1,13 @@
 package com.coderaptor.financial.assistant.app.gui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -17,11 +16,12 @@ import com.afollestad.recyclical.swipe.withSwipeAction
 import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.MainActivity
 import com.coderaptor.financial.assistant.app.R
-import com.coderaptor.financial.assistant.app.ReceiptActivity
 import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.fieldsEmpty
 import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.openCalendar
 import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_repeats.*
 import kotlinx.android.synthetic.main.dialog_add_repeat.*
@@ -31,6 +31,7 @@ class RepeatActivity : AppCompatActivity() {
 
     val dbHandler = DatabaseHandler(this)
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repeats)
@@ -53,7 +54,7 @@ class RepeatActivity : AppCompatActivity() {
                 datefield.isClickable = true
                 datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
                 datefield.setOnClickListener {
-                    dateClick(datefield)
+                    openCalendar(it.dateField)
                 }
 
                 positiveButton(R.string.save) { dialog ->
@@ -65,8 +66,11 @@ class RepeatActivity : AppCompatActivity() {
                         val date = dialog.getCustomView().dateField.text.toString()
                         val category = dialog.getCustomView().categoryField.selectedItem.toString()
                         val frequency = dialog.getCustomView().frequencyField.selectedItem.toString()
-
-                        val transaction = Transaction(amount, date, category, frequency)
+                        val comment = descript.text.toString()
+                        var transaction = Transaction(amount, date, category, frequency)
+                        if (comment.isNotEmpty()) {
+                            transaction = Transaction(amount, date, category, comment, frequency)
+                        }
 
                         dbHandler.insert(transaction)
                         dataSource.add(transaction)
@@ -136,25 +140,6 @@ class RepeatActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    fun dateClick(field: EditText) {
-        MaterialDialog(this).show {
-            setTheme(R.style.AppTheme)
-            datePicker { _, innerDate ->
-                field.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
-            }
-        }
-    }
-
-
-    private fun fieldsEmpty(vararg fields: Editable):Boolean{
-        for (data in fields){
-            if(data.isEmpty()){
-                return false
-            }
-        }
-        return true
     }
 }
 

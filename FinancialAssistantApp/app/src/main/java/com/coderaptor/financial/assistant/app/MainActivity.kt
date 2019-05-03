@@ -5,12 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -28,9 +26,7 @@ import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
 import com.coderaptor.financial.assistant.app.gui.DreamActivity
 import com.coderaptor.financial.assistant.app.gui.RepeatActivity
-import com.coderaptor.financial.assistant.app.util.SharedPreference
-import com.coderaptor.financial.assistant.app.util.formatDate
-import com.coderaptor.financial.assistant.app.util.toast
+import com.coderaptor.financial.assistant.app.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_add_income.*
 import kotlinx.android.synthetic.main.dialog_add_income.view.*
@@ -51,6 +47,7 @@ class MainActivity : AppCompatActivity(){
         if (!SharedPreference.firstRun) {
             SharedPreference.firstRun = true
             SharedPreference.currentDate = Calendar.getInstance().formatDate()
+            dbHandler.insertTestdata()
         }else {
             Log.i("first", "Nem először value: ${SharedPreference.firstRun}")
                 SharedPreference.currentDate = Calendar.getInstance().formatDate()
@@ -60,8 +57,6 @@ class MainActivity : AppCompatActivity(){
         checkDayChanged(dbHandler)
 
         val list = getOneWeekData(dbHandler)
-
-        dbHandler.insertTestdata()
 
         addNewButton.setOnClickListener {
             MaterialDialog(this).show {
@@ -73,7 +68,7 @@ class MainActivity : AppCompatActivity(){
                 datefield.isClickable = true
                 datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
                 datefield.setOnClickListener {
-                    dateClick(datefield)
+                    openCalendar(it.dateField)
                 }
 
                 positiveButton(R.string.save) { dialog ->
@@ -85,8 +80,11 @@ class MainActivity : AppCompatActivity(){
                         if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
                         val date = dateField.text.toString()
                         val category: String = categoryField.selectedItem.toString()
-
-                        val transaction = Transaction(amount, date, category)
+                        val comment = descript.text.toString()
+                        var transaction = Transaction(amount, date, category)
+                        if (comment.isNotEmpty()) {
+                            transaction = Transaction(amount, date, comment, category)
+                        }
 
                         dbHandler.insert(transaction)
                         list.add(transaction)
@@ -214,23 +212,5 @@ class MainActivity : AppCompatActivity(){
                 egyenleg.setText("${dbHandler.getSmsAmount()} ft")
             }
         }
-    }
-
-    fun dateClick(field: EditText) {
-        MaterialDialog(this).show {
-            setTheme(R.style.AppTheme)
-            datePicker { _, innerDate ->
-                field.text = Editable.Factory.getInstance().newEditable(innerDate.formatDate())
-            }
-        }
-    }
-
-    fun fieldsEmpty(vararg fields: Editable):Boolean{
-        for (data in fields){
-            if(data.isEmpty()){
-                return false
-            }
-        }
-        return true
     }
 }

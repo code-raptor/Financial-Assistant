@@ -2,7 +2,6 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -19,6 +18,7 @@ import com.coderaptor.financial.assistant.app.core.ShoppingList
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.SharedPreference
+import com.coderaptor.financial.assistant.app.util.fieldsEmpty
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
 import com.coderaptor.financial.assistant.app.util.toast
@@ -125,14 +125,5 @@ class ShoppingListActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dbHandler.close()
-    }
-
-    fun fieldsEmpty(vararg fields: Editable):Boolean{
-        for (data in fields){
-            if(data.isEmpty()){
-                return false
-            }
-        }
-        return true
     }
 }

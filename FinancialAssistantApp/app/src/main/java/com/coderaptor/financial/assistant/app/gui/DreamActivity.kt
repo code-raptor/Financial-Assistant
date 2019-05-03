@@ -2,7 +2,6 @@ package com.coderaptor.financial.assistant.app.gui
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
@@ -18,6 +17,7 @@ import com.coderaptor.financial.assistant.app.R
 import com.coderaptor.financial.assistant.app.adapters.DreamViewHolder
 import com.coderaptor.financial.assistant.app.core.Dream
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.fieldsEmpty
 import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_dreams.*
 import kotlinx.android.synthetic.main.dialog_add_dream.*
@@ -115,14 +115,5 @@ class DreamActivity : AppCompatActivity() {
             Dream("Fűnyíró", 100000, "OBI")
         )
         dbHandler.inserts(dreamsList)
-    }
-
-    private fun fieldsEmpty(vararg fields: Editable):Boolean{
-        for (data in fields){
-            if(data.isEmpty()){
-                return false
-            }
-        }
-        return true
     }
 }

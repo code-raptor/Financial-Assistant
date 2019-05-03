@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.features.limit.setupLimit
 import com.coderaptor.financial.assistant.app.util.SharedPreference
+import com.coderaptor.financial.assistant.app.util.fieldsEmpty
 import kotlinx.android.synthetic.main.activity_settings.*
 
 
@@ -30,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        if (editText.text.isNotEmpty()) {
+        if (fieldsEmpty(editText.text)) {
             val limitAmount = editText.text.toString().toInt()
             setupLimit(limitAmount, dbHandler)
         }
