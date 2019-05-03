@@ -54,7 +54,8 @@
                 android:layout_marginEnd="50dp"
                 android:layout_marginTop="150dp"
                 android:textSize="24sp"
-                android:id="@+id/bevasarlas"/>
+                android:id="@+id/bevasarlas"
+                android:theme="@style/SCBSwitch"/>
         <Switch
                 android:text="@string/setting_sporolas"
                 android:textColor="#000000"
@@ -64,7 +65,8 @@
                 android:layout_marginEnd="50dp"
                 android:layout_marginTop="200dp"
                 android:textSize="24sp"
-                android:id="@+id/sporolas"/>
+                android:id="@+id/sporolas"
+                android:theme="@style/SCBSwitch"/>
 
         <TextView
                 android:text="@string/setting_limit"
@@ -91,7 +93,8 @@
                 android:hint="@string/setting_hint"
                 android:singleLine="true"
                 android:autofillHints="@string/setting_hint"
-                tools:targetApi="o"/>
+                tools:targetApi="o"
+                android:backgroundTint="@color/colorPrimary"/>
 
         <Button
                 android:text="@string/setting_button_about"
@@ -103,7 +106,8 @@
                 android:contentDescription="@android:string/unknownName"
                 android:layout_gravity="bottom|center"
                 android:layout_marginBottom="50dp"
-                android:textSize="23sp" android:textColor="@android:color/white"/>
+                android:textSize="23sp"
+                android:textColor="@android:color/white"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

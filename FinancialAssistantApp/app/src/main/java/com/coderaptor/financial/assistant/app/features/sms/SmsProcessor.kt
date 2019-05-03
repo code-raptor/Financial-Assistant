@@ -72,5 +72,5 @@ fun getSmsMessages(context: Context, readSmsId: Long, dbHandler: DatabaseHandler
     return result
 }
 
-const val SELECTION = "read=0 AND body LIKE 'K&H%' AND body LIKE '%HUF%'"
+const val SELECTION = "body LIKE 'K&H%' AND body LIKE '%HUF%'"
 const val PERMISSION_CODE = 1

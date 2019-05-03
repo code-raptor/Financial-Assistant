@@ -9,19 +9,16 @@
 
     <!-- TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
-            android:layout_width="0dp"
+            android:layout_width="411dp"
             android:layout_height="wrap_content"
             android:background="@color/toolbar"
             android:theme="@style/AppTheme"
             android:minHeight="?attr/actionBarSize"
             android:id="@+id/toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-            app:layout_constraintVertical_chainStyle="spread_inside">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
                 android:id="@+id/back"
@@ -40,25 +37,57 @@
 
             android:background="@color/background"
             android:id="@+id/frameLayout"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <include layout="@layout/content_receipt"/>
+
+        <include
+                layout="@layout/content_receipt"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+        <TextView
+                android:id="@+id/nodata"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:text="@string/nodata_receipt"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="7dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="364dp"
+                android:layout_height="335dp"
                 android:scrollbars="vertical"
-                android:layout_marginTop="300dp"
+                android:layout_marginTop="255dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView"
                 tools:context=".ReceiptActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="20dp"
+                app:srcCompat="@drawable/check"
+                android:backgroundTint="@color/closed_fab"
+                app:fab_colorNormal="@color/closed_fab"
+                app:fab_colorPressed="@color/open_fab"
+                app:fab_colorRipple="@color/ripple_fab"
+                app:rippleColor="@color/ripple_fab"
+                android:id="@+id/savefab"
+                android:focusable="true"/>
+
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

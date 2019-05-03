@@ -11,8 +11,11 @@
 
     <color name="colorPrimary">#EF6C00</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#FFF3E0</color>
+    <color name="colorAccent">#C1FFF3E0</color>
 
     <color name="amount_plus">#198330</color>
     <color name="amount_minus">#A00810</color>
+
+    <color name="edit">#107dac</color>
+    <color name="delete">#9F0000</color>
 </resources>
