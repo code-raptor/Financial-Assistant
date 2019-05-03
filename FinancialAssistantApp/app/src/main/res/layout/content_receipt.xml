@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".IncomeActivity"
+        tools:context=".ReceiptActivity"
         tools:showIn="@layout/activity_receipt"
         android:background="@android:color/transparent">
 
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             app:srcCompat="@drawable/add"
-            android:id="@+id/addnewproduct"
+            android:id="@+id/fab"
             app:backgroundTint="@color/closed_fab"
             android:layout_marginTop="17dp"
             app:layout_constraintTop_toBottomOf="@+id/amountField"
