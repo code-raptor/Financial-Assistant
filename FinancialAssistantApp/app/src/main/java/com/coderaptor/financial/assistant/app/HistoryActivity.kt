@@ -28,6 +28,10 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        receiptButton.colorNormal = receiptButton.colorDisabled
+        repeatButton.colorNormal = repeatButton.colorDisabled
+        onceButton.colorNormal = onceButton.colorDisabled
+
         var list = mutableListOf<Any>()
         val receipts = dbHandler.findAllReceipt("GROUP BY ${DatabaseHandler.RECEIPT_ID}")
         val onceTransactions = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} = 'Egyszeri'")
@@ -67,12 +71,12 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun onClick(fab : FloatingActionButton, historyList : MutableList<Any>, list: List<Any>): MutableList<Any> {
-        if(fab.colorNormal == fab.colorDisabled){
-            fab.colorNormal = resources.getColor(R.color.closed_fab, null)
+        if(fab.colorNormal != fab.colorDisabled){
+            fab.colorNormal = fab.colorDisabled
             historyList.addAll(list)
         }
         else{
-            fab.colorNormal = fab.colorDisabled
+            fab.colorNormal = resources.getColor(R.color.closed_fab, null)
             historyList.removeAll(list)
         }
         return historyList

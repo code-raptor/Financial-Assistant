@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(){
         addNewButton.setOnClickListener {
             MaterialDialog(this).show {
                 setTheme(R.style.AppTheme)
-                title(R.string.newDream)
+                title(R.string.onceNewtransaction)
                 customView(R.layout.dialog_add_income, scrollable = true)
 
                 val datefield = getCustomView().dateField

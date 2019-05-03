@@ -74,7 +74,6 @@
     <string name="receipt_amount">Összeg:</string>
     <string name="receipt_newproduct">Új termék:</string>
     <string name="receipt_descString">Megjegyzés:</string>
-    <string name="descString_hint">Megjegyzés</string>
     <!--Blokk termékek-->
     <string name="receiptproduct_name">Kenyér</string>
     <string name="receiptproduct_mennyiseg">3</string>

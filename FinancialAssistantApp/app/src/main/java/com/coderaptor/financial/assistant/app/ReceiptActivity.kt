@@ -133,7 +133,7 @@ class ReceiptActivity: AppCompatActivity() {
         fab.setOnClickListener {
             MaterialDialog(this).show {
                 setTheme(R.style.AppTheme)
-                title(R.string.newDream)
+                title(R.string.product_string)
                 customView(R.layout.dialog_add_product, scrollable = true)
 
                 categoryField.adapter = adapter

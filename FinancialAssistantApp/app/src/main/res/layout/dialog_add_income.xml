@@ -127,9 +127,7 @@
             tools:targetApi="o"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginTop="8dp"
-            android:textSize="@dimen/customTitle"
-            app:layout_constraintTop_toBottomOf="@+id/dateField"
-            android:hint="@string/descString_hint"/>
+            android:textSize="@dimen/customTitle" app:layout_constraintTop_toBottomOf="@+id/dateField"/>
     <!--Kategória-->
     <TextView
             android:text="@string/income_category"
