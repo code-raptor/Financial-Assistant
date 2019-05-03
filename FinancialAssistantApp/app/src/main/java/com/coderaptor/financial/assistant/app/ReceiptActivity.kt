@@ -3,6 +3,7 @@ package com.coderaptor.financial.assistant.app
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -43,17 +44,21 @@ class ReceiptActivity: AppCompatActivity() {
         val dataSource: DataSource<Product> = emptyDataSourceTyped()
         var bundleReceipt: Receipt? = null
         val bundle = intent.extras
-        var productIds = "("
+        val productList = ArrayList<Product>()
+
         if (bundle != null) {
             val baseId = bundle.getLong("id")
-
+            var productIds = "("
             val receipts = dbHandler.findAllReceipt("WHERE ${DatabaseHandler.RECEIPT_ID} = $baseId")
-            receipts.forEach { productIds += "${it.productId}, " }
+            receipts.forEach {
+                productIds += "${it.productId}, "
+            }
 
             productIds = productIds.substring(0, productIds.length-2)
             productIds += ")"
             dbHandler.findAllProduct("${DatabaseHandler.BASE_ID} IN $productIds").forEach {
                 dataSource.add(it)
+                productList.add(it)
             }
 
             bundleReceipt = receipts.first()
@@ -79,8 +84,6 @@ class ReceiptActivity: AppCompatActivity() {
                 val comment = descriptField.text.toString()
                 val idTime = java.util.Calendar.getInstance().timeInMillis
                 val receiptID = amount + idTime
-                val NumberOldIDs = productIds.filter { ch -> ch == ',' }.count()+1
-                var counter = 1
                 dataSource.forEach {
                     if (bundle == null) {
                     val id = dbHandler.insert(it)
@@ -89,19 +92,31 @@ class ReceiptActivity: AppCompatActivity() {
                         receipt = Receipt(receiptID, date, amount, comment, id)
                     }
                         dbHandler.insert(receipt)
-                    }else {
-//                        var nextUpdatedId = bundleReceipt!!.id
-//                        var receipt = Receipt(nextUpdatedId,bundleReceipt.baseID, date, amount, productId = id)
-//                        if (comment.isNotEmpty()) {
-//                            receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, comment, id)
-//                        }
-//                        val result = dbHandler.updateReceipt(receipt)
-//                        nextUpdatedId += 1
-//                        Log.i("Receipt", result.toString())
-//                        Log.i("receipt", receipt.toString())
                     }
-
-                    counter++
+                }
+                if(bundle != null) {
+                    productList.forEach {
+                        var nextUpdatedId = bundleReceipt!!.id
+                        var receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, productId = it.id)
+                        if (comment.isNotEmpty()) {
+                            receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, comment, it.id)
+                        }
+                         dbHandler.updateReceipt(receipt)
+                        nextUpdatedId += 1
+                        Log.i("receipt", receipt.toString())
+                    }
+                    if (productList.size < dataSource.size()) {
+                        dataSource.forEach {
+                            if (!productList.contains(it)) {
+                                val id = dbHandler.insert(it)
+                                var receipt = Receipt(bundleReceipt!!.baseID, date, amount, productId = id)
+                                if (comment.isNotEmpty()) {
+                                    receipt = Receipt(bundleReceipt.baseID, date, amount, comment, id)
+                                }
+                                dbHandler.insert(receipt)
+                            }
+                        }
+                    }
                 }
                 toast("sikeres hozzáadás")
                 val intent = Intent(this, MainActivity::class.java)
