@@ -36,10 +36,9 @@
 
     <FrameLayout
             xmlns:fab="http://schemas.android.com/apk/res-auto"
-
             android:background="@color/background"
             android:id="@+id/frameLayout"
-            android:layout_width="411dp"
+            android:layout_width="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintVertical_bias="0.0"
@@ -48,14 +47,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0">
 
+        <TextView
+                android:id="@+id/nodata"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/nodata_history"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                android:visibility="invisible"
+                android:layout_marginEnd="7dp"
+                android:layout_marginTop="100dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginBottom="95dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="85dp"
                 android:id="@+id/recyclerView"
 
                 tools:context=".HistoryActivity">
@@ -108,7 +119,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/receipt"
                     app:fab_size="mini"
-                    app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
                     app:fab_colorRipple="@color/ripple_fab"
                     app:fab_label="@string/fab_history_receipt"
@@ -120,7 +130,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/repeat"
                     app:fab_size="mini"
-                    app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
                     app:fab_colorRipple="@color/ripple_fab"
                     app:fab_label="@string/fab_history_repeats"
@@ -132,7 +141,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/addnew"
                     app:fab_size="mini"
-                    app:fab_colorNormal="@color/closed_fab"
                     app:fab_colorPressed="@color/open_fab"
                     app:fab_colorRipple="@color/ripple_fab"
                     app:fab_label="@string/fab_history_once"

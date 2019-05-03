@@ -61,14 +61,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="335dp"
+                android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:layout_marginTop="255dp"
+                android:layout_marginTop="290dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginBottom="110dp"
                 android:id="@+id/recyclerView"
-                tools:context=".ReceiptActivity">
+                tools:context=".ReceiptActivity" android:layout_marginBottom="80dp">
 
         </androidx.recyclerview.widget.RecyclerView>
 
