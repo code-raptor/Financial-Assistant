@@ -11,7 +11,6 @@
         <item name="md_color_title">@color/colorPrimaryDark</item>
         <item name="md_color_content">@color/toolbar</item>
         <item name="md_color_button_text">@color/colorPrimary</item>
-
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -32,5 +31,4 @@
         <item name="android:colorForeground">#42221f1f
         </item>
     </style>
-
 </resources>

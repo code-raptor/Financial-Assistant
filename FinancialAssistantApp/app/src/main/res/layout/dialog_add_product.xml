@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/categoryString"
             android:textSize="@dimen/customTitle"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -37,7 +37,7 @@
             android:textSize="@dimen/customTitle"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/categoryString"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
     />
     <EditText
@@ -65,7 +65,7 @@
             android:textSize="@dimen/customTitle"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/product_name"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
     />
     <EditText
@@ -93,7 +93,7 @@
             android:textSize="@dimen/customTitle"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/mennyiseg"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
     />
     <Spinner
@@ -114,7 +114,7 @@
             android:id="@+id/egysegar"
             android:textColor="?android:textColorSecondary"
             android:textSize="@dimen/customTitle"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/egyseg"
@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/label"
             android:textSize="@dimen/customTitle"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/warranty"
