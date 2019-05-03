@@ -29,11 +29,15 @@ class HistoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         var list = mutableListOf<Any>()
-        val transactions = dbHandler.findAllTransaction()
+        //val transactions = dbHandler.findAllTransaction()
         val receipts = dbHandler.findAllReceipt()
+        val onceTransactions = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} = 'Egyszeri'")
+        val repeatTransactons = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} != 'Egyszeri'")
 
-        list.addAll(transactions)
+        //list.addAll(transactions)
         list.addAll(receipts)
+        list.addAll(onceTransactions)
+        list.addAll(repeatTransactons)
 
         var dataSource: DataSource<Any> = dataSourceOf(list)
 
@@ -49,13 +53,13 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         repeatButton.setOnClickListener {
-            list = onClick(repeatButton, list, transactions)
+            list = onClick(repeatButton, list, repeatTransactons)
             dataSource = dataSourceOf(list)
             recyclerViewSetup(dataSource)
         }
 
         onceButton.setOnClickListener {
-            list = onClick(onceButton, list, transactions)
+            list = onClick(onceButton, list, onceTransactions)
             dataSource = dataSourceOf(list)
             recyclerViewSetup(dataSource)
         }
