@@ -582,6 +582,20 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         insert(product)
         product = Product("Csőfogó", "db", 1, 1500, categoryId = 7)
         insert(product)
+
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-25", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-24", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-26", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-23", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-22", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-21", categoryId = 4)
+        insert(product)
+
         Log.i("testData", "Product: ")
         findAllProduct().forEach {
             Log.i("testData", it.toString())
@@ -617,7 +631,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         var shoppingList = ShoppingList("kenyér", 2, "Db", true, 2)
         insert(shoppingList)
-        shoppingList = ShoppingList("alma",5, "kg", productId = 1)
+        shoppingList = ShoppingList("alma_db",5, "kg", productId = 1)
         insert(shoppingList)
         shoppingList = ShoppingList("bor", 10, "l", true,3)
         insert(shoppingList)

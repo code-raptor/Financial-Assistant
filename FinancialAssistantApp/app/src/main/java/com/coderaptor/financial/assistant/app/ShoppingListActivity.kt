@@ -2,6 +2,7 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,6 +17,7 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.coderaptor.financial.assistant.app.adapters.ShoppingListAdapter
 import com.coderaptor.financial.assistant.app.core.ShoppingList
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.features.estimate.getProductToShoppingList
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.fieldsEmpty
@@ -36,7 +38,15 @@ class ShoppingListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shoppinglist)
 
-        setUpRecyclerView(dbHandler.findAllShopping())
+        val findAll = dbHandler.findAllShopping()
+        val estimate = findAll
+        estimate.addAll(getProductToShoppingList(dbHandler))
+
+
+        val x = getProductToShoppingList(dbHandler)
+        Log.i("shp", "findall:${findAll.size}, estimate: ${estimate.size}")
+
+        setUpRecyclerView(estimate)
         val categoryAdapter = setupDialogCategorySpinner(dbHandler)
 
         back.setOnClickListener {
