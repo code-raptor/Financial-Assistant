@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.recyclical.datasource.DataSource
-import com.afollestad.recyclical.datasource.dataSourceOf
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.swipe.SwipeLocation
 import com.afollestad.recyclical.swipe.withSwipeAction
@@ -31,7 +31,7 @@ class DreamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dreams)
 
-        setupDatabase()
+        val dataSource: DataSource<Dream> = dataSourceTypedOf(dbHandler.findAllDream())
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -55,6 +55,7 @@ class DreamActivity : AppCompatActivity() {
                         val dream = Dream(name, amount, where)
 
                         dbHandler.insert(dream)
+                        dataSource.add(dream)
                         toast("Sikeres hozzáadás!")
                     }
                     else{
@@ -64,8 +65,6 @@ class DreamActivity : AppCompatActivity() {
                 negativeButton(R.string.cancel)
             }
         }
-
-        val dataSource: DataSource<Any> = dataSourceOf(dbHandler.findAllDream())
 
         recyclerView.setup {
 
@@ -107,13 +106,5 @@ class DreamActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun setupDatabase() {
-        val dreamsList = arrayListOf(
-            Dream("Samsung HD Tv", 55000, "Media Markt"),
-            Dream("Fűnyíró", 100000, "OBI")
-        )
-        dbHandler.inserts(dreamsList)
     }
 }

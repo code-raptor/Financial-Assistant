@@ -540,6 +540,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         deleteTableContent(TABLE_NAME_SHOPPING)
         deleteTableContent(TABLE_NAME_TRANSACTION)
         deleteTableContent(TABLE_NAME_RECEIPT)
+        deleteTableContent(TABLE_NAME_DREAM)
 
 
         ProductPropertyEnum.values().forEach {
@@ -635,6 +636,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         insert(shoppingList)
         shoppingList = ShoppingList("bor", 10, "l", true,3)
         insert(shoppingList)
+
+        val dreamsList = arrayListOf(
+            Dream("Samsung HD Tv", 55000, "Media Markt"),
+            Dream("Fűnyíró", 100000, "OBI")
+        )
+        inserts(dreamsList)
     }
 
     fun categoriesWithWarrantyAndHarmful(): ArrayList<Long> {
