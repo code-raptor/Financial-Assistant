@@ -224,7 +224,7 @@ class ReceiptActivity: AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Product) {
                         //edit layout
                     }
@@ -243,7 +243,7 @@ class ReceiptActivity: AppCompatActivity() {
                     amount.text  = "${(item.unitPrice * item.quantity)}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
         }

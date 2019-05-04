@@ -244,7 +244,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     fun findAllShopping(condition: String = ""): MutableList<ShoppingList> {
         val shoppingList = mutableListOf<ShoppingList>()
         val db = readableDatabase
-        var selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING"
+        var selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING ORDER BY $BOUGHT, $BASE_NAME"
         if (condition.isNotEmpty()) {
             selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING WHERE $condition"
         }

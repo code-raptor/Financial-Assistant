@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(){
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: ${item}")
                     if (item is Transaction) {
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
                     } else if (item is Receipt) {
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity(){
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
                         //edit layout
                     } else if (item is Receipt) {
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(){
                     }
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
             withItem<Receipt>(R.layout.list_receipt) {
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity(){
                     amount.text = "-${item.amount}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item}")
+                    //toast("Clicked $index: ${item}")
                 }
             }
         }
@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity(){
             val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
             if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
                 dbHandler.insertSms(idAndAmount)
-                egyenleg.setText("${dbHandler.getSmsAmount()} ft")
+                egyenleg.setText("~ ${dbHandler.getSmsAmount()} ft")
             }
         }
     }

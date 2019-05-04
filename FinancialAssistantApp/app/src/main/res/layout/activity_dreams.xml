@@ -42,13 +42,13 @@
                 android:id="@+id/nodata"
                 android:layout_width="300dp"
                 android:layout_height="70dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/nodata_dream"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:visibility="invisible"
-                android:layout_marginTop="100dp"
-                android:layout_marginEnd="7dp"/>
+                android:layout_marginEnd="7dp"
+                android:layout_marginTop="100dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

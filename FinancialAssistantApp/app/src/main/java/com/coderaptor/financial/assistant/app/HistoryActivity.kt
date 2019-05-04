@@ -92,7 +92,7 @@ class HistoryActivity : AppCompatActivity() {
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: ${item}")
                     if (item is Transaction) {
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
                     } else if (item is Receipt) {
@@ -107,7 +107,7 @@ class HistoryActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
                         //edit layout
                     } else if (item is Receipt) {
@@ -116,7 +116,7 @@ class HistoryActivity : AppCompatActivity() {
                     false
                 }
             }
-
+            withEmptyView(nodata)
             withDataSource(dataSource)
 
             withItem<Transaction>(R.layout.list_income) {
@@ -138,7 +138,7 @@ class HistoryActivity : AppCompatActivity() {
                     }
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
 
@@ -150,7 +150,7 @@ class HistoryActivity : AppCompatActivity() {
                     amount.text = "-${item.amount}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item}")
+                    //toast("Clicked $index: ${item}")
                 }
             }
         }
