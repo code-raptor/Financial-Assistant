@@ -79,51 +79,54 @@ class ReceiptActivity: AppCompatActivity() {
         savefab.setOnClickListener {
             val result = fieldsEmpty(amountField.text, dateField.text)
             if (result) {
-                val amount: Int = amountField.text.toString().toInt()
-                val date = dateField.text.toString()
-                val comment = descriptField.text.toString()
-                val idTime = java.util.Calendar.getInstance().timeInMillis
-                val receiptID = amount + idTime
-                dataSource.forEach {
-                    if (bundle == null) {
-                        it.receiptDate = date
-                    val id = dbHandler.insert(it)
-                    var receipt = Receipt(receiptID, date, amount, productId = id)
-                    if (comment.isNotEmpty()) {
-                        receipt = Receipt(receiptID, date, amount, comment, id)
-                    }
-                        dbHandler.insert(receipt)
-                    }
-                }
-                if(bundle != null) {
-                    productList.forEach {
-                        var nextUpdatedId = bundleReceipt!!.id
-                        var receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, productId = it.id)
-                        if (comment.isNotEmpty()) {
-                            receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, comment, it.id)
+                if (dataSource.isNotEmpty()) {
+                    val amount: Int = amountField.text.toString().toInt()
+                    val date = dateField.text.toString()
+                    val comment = descriptField.text.toString()
+                    val idTime = java.util.Calendar.getInstance().timeInMillis
+                    val receiptID = amount + idTime
+                    dataSource.forEach {
+                        if (bundle == null) {
+                            it.receiptDate = date
+                            val id = dbHandler.insert(it)
+                            var receipt = Receipt(receiptID, date, amount, productId = id)
+                            if (comment.isNotEmpty()) {
+                                receipt = Receipt(receiptID, date, amount, comment, id)
+                            }
+                            dbHandler.insert(receipt)
                         }
-                         dbHandler.updateReceipt(receipt)
-                        nextUpdatedId += 1
-                        Log.i("receipt", receipt.toString())
                     }
-                    if (productList.size < dataSource.size()) {
-                        dataSource.forEach {
-                            if (!productList.contains(it)) {
-                                val id = dbHandler.insert(it)
-                                var receipt = Receipt(bundleReceipt!!.baseID, date, amount, productId = id)
-                                if (comment.isNotEmpty()) {
-                                    receipt = Receipt(bundleReceipt.baseID, date, amount, comment, id)
+                    if (bundle != null) {
+                        productList.forEach {
+                            var nextUpdatedId = bundleReceipt!!.id
+                            var receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, productId = it.id)
+                            if (comment.isNotEmpty()) {
+                                receipt = Receipt(nextUpdatedId, bundleReceipt.baseID, date, amount, comment, it.id)
+                            }
+                            dbHandler.updateReceipt(receipt)
+                            nextUpdatedId += 1
+                            Log.i("receipt", receipt.toString())
+                        }
+                        if (productList.size < dataSource.size()) {
+                            dataSource.forEach {
+                                if (!productList.contains(it)) {
+                                    val id = dbHandler.insert(it)
+                                    var receipt = Receipt(bundleReceipt!!.baseID, date, amount, productId = id)
+                                    if (comment.isNotEmpty()) {
+                                        receipt = Receipt(bundleReceipt.baseID, date, amount, comment, id)
+                                    }
+                                    dbHandler.insert(receipt)
                                 }
-                                dbHandler.insert(receipt)
                             }
                         }
                     }
+                    toast("sikeres hozzáadás")
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    toast("Adjon meg legalább egy terméket!")
                 }
-                toast("sikeres hozzáadás")
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
-            else{
+            } else{
                 toast("Hiányzó adat!")
             }
         }
@@ -212,7 +215,7 @@ class ReceiptActivity: AppCompatActivity() {
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: $item")
+                    //toast("delete $index: $item")
                     if (item is Product)
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_PRODUCT)
                     true
@@ -224,7 +227,7 @@ class ReceiptActivity: AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: $item")
+                    //toast("edit $index: $item")
                     if (item is Product) {
                         //edit layout
                     }
@@ -243,9 +246,13 @@ class ReceiptActivity: AppCompatActivity() {
                     amount.text  = "${(item.unitPrice * item.quantity)}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
         }
+    }
+    override fun onStop() {
+        super.onStop()
+        dbHandler.close()
     }
 }

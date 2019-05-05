@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,14 +38,14 @@ class ShoppingListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_shoppinglist)
 
         val findAll = dbHandler.findAllShopping()
-        val estimate = findAll
-        estimate.addAll(getProductToShoppingList(dbHandler))
+        val currentDay = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+        if (SharedPreference.estimate && currentDay == "Sunday") {
+            findAll.addAll(getProductToShoppingList(dbHandler))
+        }
 
+        Log.i("shp", "findall:${findAll.size}, estimate: ${findAll.size}")
 
-        val x = getProductToShoppingList(dbHandler)
-        Log.i("shp", "findall:${findAll.size}, estimate: ${estimate.size}")
-
-        setUpRecyclerView(estimate)
+        setUpRecyclerView(findAll)
         val categoryAdapter = setupDialogCategorySpinner(dbHandler)
 
         back.setOnClickListener {
@@ -74,9 +73,6 @@ class ShoppingListActivity : AppCompatActivity() {
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
-
-
-
                     positiveButton(R.string.save) { dialog ->
                         val result = fieldsEmpty(product_name.text, product_quantity.text)
                         
@@ -87,11 +83,9 @@ class ShoppingListActivity : AppCompatActivity() {
 
                             dbHandler.insert(ShoppingList(name, quantity, unit))
                             setUpRecyclerView(dbHandler.findAllShopping())
-
                         }else{
                                 toast("Hiányzó adat!")
                         }
-
                 }
                 negativeButton(R.string.cancel)
             }
@@ -109,11 +103,13 @@ class ShoppingListActivity : AppCompatActivity() {
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+
     }
 
     private fun shoppingElementClicked(element : ShoppingList) {
         element.isBought = !element.isBought
         dbHandler.changeShoppingBought(element)
+        setUpRecyclerView(dbHandler.findAllShopping())
     }
 
     private fun setupDialogCategorySpinner(dbHandler: DatabaseHandler): ArrayAdapter<StringWithId> {
@@ -127,7 +123,7 @@ class ShoppingListActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val shoppingListAdapter = ShoppingListAdapter(findAllShopping as ArrayList<ShoppingList>) { element: ShoppingList ->shoppingElementClicked(element)}
         recyclerView.hasFixedSize()
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        //recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = shoppingListAdapter
     }

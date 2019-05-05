@@ -64,7 +64,9 @@
             tools:targetApi="o"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-            android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"/>
+            android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"
+            android:textColorHighlight="@color/toolbar" android:textColorLink="@color/toolbar"
+            android:textCursorDrawable="@color/toolbar"/>
     <!--Dátum-->
     <TextView
             android:text="@string/base_date_string"
@@ -93,9 +95,9 @@
             android:inputType="date"
             tools:targetApi="o"
             android:backgroundTint="@color/colorPrimary"
-            android:textCursorDrawable="@color/closed_fab"
-            android:textColorHighlight="@color/closed_fab"
-            android:textColorLink="@color/closed_fab"
+            android:textCursorDrawable="@color/toolbar"
+            android:textColorHighlight="@color/toolbar"
+            android:textColorLink="@color/toolbar"
             android:focusable="false"
             tools:ignore="KeyboardInaccessibleWidget" android:textSize="@dimen/customTitle"/>
     <!--Megjegyzés-->
@@ -123,7 +125,8 @@
             tools:targetApi="o"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/dateField"
-            android:textSize="@dimen/customTitle"/>
+            android:textSize="@dimen/customTitle" android:textColorHighlight="@color/toolbar"
+            android:textCursorDrawable="@color/toolbar" android:textColorLink="@color/toolbar"/>
 
     <!--Kategória-->
     <TextView

@@ -38,7 +38,8 @@
                 android:contentDescription="@android:string/unknownName"
                 android:background="@android:color/transparent"
                 android:layout_gravity="end"
-                android:layout_marginEnd="18dp"/>
+                android:layout_marginEnd="18dp"
+                android:visibility="invisible"/>
 
     </androidx.appcompat.widget.Toolbar>
 

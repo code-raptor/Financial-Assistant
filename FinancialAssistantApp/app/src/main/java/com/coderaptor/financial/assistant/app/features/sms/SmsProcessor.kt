@@ -8,12 +8,11 @@ import android.database.Cursor
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.SharedPreference
 
 fun askPermission(context: Context, activity: Activity): Boolean {
     if (!hasPermission(context, Manifest.permission.READ_SMS)) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_SMS)) {
-            Toast.makeText(context, "Jogosultság megtagadva! Kérlek engedélyezd a beállításokban", Toast.LENGTH_LONG).show()
             return false
         } else {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_SMS), PERMISSION_CODE)
@@ -30,8 +29,7 @@ private fun hasPermission(context: Context, permission: String): Boolean {
 }
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-fun getSmsMessages(context: Context, readSmsId: Long, dbHandler: DatabaseHandler
-): Pair<Long, Int> {
+fun getSmsMessages(context: Context): Boolean {
     val smsList = ArrayList<SmsData>()
     val cursor: Cursor = context.contentResolver.query(
         Uri.parse("content://sms/inbox"),
@@ -40,7 +38,7 @@ fun getSmsMessages(context: Context, readSmsId: Long, dbHandler: DatabaseHandler
         null,
         "date DESC"
     )
-    var result: Pair<Long, Int> = (-1).toLong() to -1
+    var hasNew = false
     if (cursor.moveToFirst()) {
         val idColumn = cursor.getColumnIndex("_id")
         val addressColumn = cursor.getColumnIndex("address")
@@ -51,25 +49,18 @@ fun getSmsMessages(context: Context, readSmsId: Long, dbHandler: DatabaseHandler
         } while (cursor.moveToNext())
     }
 
-    val rowCount = cursor.count
     cursor.close()
-    if (rowCount < readSmsId) {
-        dbHandler.deleteTableContent(DatabaseHandler.TABLE_NAME_SMS)
-    }
     if (smsList.isNotEmpty()) {
-        if (smsList.size == 1) {
+        smsList.filter { it.id > SharedPreference.smsId }.forEach {
             val amount = findAmount(smsList[0].message)
-            result = smsList[0].id to amount
-        }else {
-            for(sms in smsList) {
-                if (sms.id >= readSmsId) {
-                    val amount = findAmount(smsList[0].message)
-                    result = sms.id to amount
-                }
+            if (amount != -1) {
+                SharedPreference.smsId = smsList[0].id
+                SharedPreference.balance = amount
+                hasNew = true
             }
         }
     }
-    return result
+    return hasNew
 }
 
 const val SELECTION = "body LIKE 'K&H%' AND body LIKE '%HUF%'"

@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.recyclical.datasource.DataSource
-import com.afollestad.recyclical.datasource.emptyDataSource
+import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.swipe.SwipeLocation
 import com.afollestad.recyclical.swipe.withSwipeAction
@@ -45,20 +45,18 @@ class MainActivity : AppCompatActivity(){
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         if (!SharedPreference.firstRun) {
+            dbHandler.insertTestdata()
             SharedPreference.firstRun = true
             SharedPreference.currentDate = Calendar.getInstance().formatDate()
-            dbHandler.insertTestdata()
         }else {
             Log.i("first", "Nem először value: ${SharedPreference.firstRun}")
-                SharedPreference.currentDate = Calendar.getInstance().formatDate()
+            SharedPreference.currentDate = Calendar.getInstance().formatDate()
         }
 
-        setupSms(dbHandler.findMaxSMS())
+        setupSms()
         checkDayChanged(dbHandler)
 
-        val dataSource: DataSource<Any> = emptyDataSource()
-        getOneWeekData(dbHandler).forEach { dataSource.add(it) }
-
+        val dataSource: DataSource<Any> = dataSourceOf(getOneWeekData(dbHandler))
 
         addNewButton.setOnClickListener {
             MaterialDialog(this).show {
@@ -140,7 +138,7 @@ class MainActivity : AppCompatActivity(){
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: ${item}")
                     if (item is Transaction) {
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
                     } else if (item is Receipt) {
@@ -155,7 +153,7 @@ class MainActivity : AppCompatActivity(){
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
                         //edit layout
                     } else if (item is Receipt) {
@@ -187,7 +185,7 @@ class MainActivity : AppCompatActivity(){
                     }
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
             withItem<Receipt>(R.layout.list_receipt) {
@@ -198,21 +196,26 @@ class MainActivity : AppCompatActivity(){
                     amount.text = "-${item.amount}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item}")
+                    //toast("Clicked $index: ${item}")
                 }
             }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupSms(findMaxSMS: Long) {
+    private fun setupSms() {
         val permissionGranted = askPermission(this, this)
-        if(permissionGranted) {
-            val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
-            if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
-                dbHandler.insertSms(idAndAmount)
-                egyenleg.setText("${dbHandler.getSmsAmount()} ft")
-            }
+        if (permissionGranted) {
+            val hasNew = getSmsMessages(this)
+            Log.i("sms", "hasNew: $hasNew")
+            egyenleg.setText("~ ${SharedPreference.balance} ft")
+        }else {
+            egyenleg.setText(R.string.main_No_Amount)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dbHandler.close()
     }
 }
