@@ -86,6 +86,7 @@ class ReceiptActivity: AppCompatActivity() {
                 val receiptID = amount + idTime
                 dataSource.forEach {
                     if (bundle == null) {
+                        it.receiptDate = date
                     val id = dbHandler.insert(it)
                     var receipt = Receipt(receiptID, date, amount, productId = id)
                     if (comment.isNotEmpty()) {
@@ -194,7 +195,6 @@ class ReceiptActivity: AppCompatActivity() {
                                 product = Product(name, unit, quantity, price, endDate, categoryId)
                             }
                         }
-
                         dataSource.add(product)
                         toast("Sikeres hozzáadás")
                     } else {
@@ -212,7 +212,7 @@ class ReceiptActivity: AppCompatActivity() {
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: $item")
                     if (item is Product)
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_PRODUCT)
                     true
@@ -224,7 +224,7 @@ class ReceiptActivity: AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    //toast("edit $index: ${item}")
+                    //toast("edit $index: $item")
                     if (item is Product) {
                         //edit layout
                     }

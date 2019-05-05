@@ -229,10 +229,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val unit = cursor.getString(cursor.getColumnIndex(UNIT))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
                 val unitPrice = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
+                val receiptDate = cursor.getString(cursor.getColumnIndex(RECEIPT_DATE))
                 val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val categoryId = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
 
-                val product = Product(id, name, unit, quantity, unitPrice, date, categoryId)
+                val product = Product(id, name, unit, quantity, unitPrice, receiptDate, date, categoryId)
                 productList.add(product)
             }
         }
@@ -502,6 +503,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(UNIT, it.unit)
         values.put(BASE_QUANTITY, it.quantity)
         values.put(UNIT_PRICE, it.unitPrice)
+        values.put(RECEIPT_DATE, it.receiptDate)
         values.put(BASE_DATE, it.date)
         values.put(PRODUCT_CATEGORY_ID_PRODUCT, it.categoryId)
         return values
@@ -538,6 +540,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         deleteTableContent(TABLE_NAME_SHOPPING)
         deleteTableContent(TABLE_NAME_TRANSACTION)
         deleteTableContent(TABLE_NAME_RECEIPT)
+        deleteTableContent(TABLE_NAME_DREAM)
 
 
         ProductPropertyEnum.values().forEach {
@@ -560,8 +563,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         var product = Product("alma", "db", 3, 120, categoryId = 4)
         insert(product)
-        product = Product("kenyer", "db", 3, 120, "2020-01-01", 2)
-        insert(product)
         product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
         insert(product)
         product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
@@ -574,18 +575,28 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         insert(product)
         product = Product("Hagyma", "db", 4, 50, categoryId = 1)
         insert(product)
-        product = Product("Egér", "db", 1, 1500, "2021-03-01", 6)
-        insert(product)
         product = Product("Mackó nadrág", "db", 1, 2500, categoryId = 5)
         insert(product)
         product = Product("Ropi", "db", 1, 500, categoryId = 2)
         insert(product)
         product = Product("Pepsi", "db", 1, 500, categoryId = 3)
         insert(product)
-        product = Product("Szék", "db", 1, 1500, "2023-02-04", 9)
-        insert(product)
         product = Product("Csőfogó", "db", 1, 1500, categoryId = 7)
         insert(product)
+
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-25", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-24", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-26", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-23", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-22", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-21", categoryId = 4)
+        insert(product)
+
         Log.i("testData", "Product: ")
         findAllProduct().forEach {
             Log.i("testData", it.toString())
@@ -621,10 +632,16 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         var shoppingList = ShoppingList("kenyér", 2, "Db", true, 2)
         insert(shoppingList)
-        shoppingList = ShoppingList("alma",5, "kg", productId = 1)
+        shoppingList = ShoppingList("alma_db",5, "kg", productId = 1)
         insert(shoppingList)
         shoppingList = ShoppingList("bor", 10, "l", true,3)
         insert(shoppingList)
+
+        val dreamsList = arrayListOf(
+            Dream("Samsung HD Tv", 55000, "Media Markt"),
+            Dream("Fűnyíró", 100000, "OBI")
+        )
+        inserts(dreamsList)
     }
 
     fun categoriesWithWarrantyAndHarmful(): ArrayList<Long> {
@@ -657,6 +674,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         const val BASE_QUANTITY = "quantity"
         const val BASE_DATE = "date"
         const val BASE_COMMENT = "comment"
+        const val RECEIPT_DATE = "receipt_date"
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
