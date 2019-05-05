@@ -7,15 +7,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isEmpty
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.afollestad.recyclical.setup
 import com.coderaptor.financial.assistant.app.adapters.ShoppingListAdapter
 import com.coderaptor.financial.assistant.app.core.ShoppingList
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
@@ -41,14 +38,14 @@ class ShoppingListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_shoppinglist)
 
         val findAll = dbHandler.findAllShopping()
-        val estimate = findAll
-        estimate.addAll(getProductToShoppingList(dbHandler))
+        val currentDay = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+        if (SharedPreference.estimate && currentDay == "Sunday") {
+            findAll.addAll(getProductToShoppingList(dbHandler))
+        }
 
+        Log.i("shp", "findall:${findAll.size}, estimate: ${findAll.size}")
 
-        val x = getProductToShoppingList(dbHandler)
-        Log.i("shp", "findall:${findAll.size}, estimate: ${estimate.size}")
-
-        setUpRecyclerView(estimate)
+        setUpRecyclerView(findAll)
         val categoryAdapter = setupDialogCategorySpinner(dbHandler)
 
         back.setOnClickListener {

@@ -9,6 +9,7 @@ object SharedPreference {
     private val IS_FIRST_RUN_PREF = "is_first_run" to false
     private val SAVING = "saving" to false
     private val SHOPPING_MONITOR = "monitor" to false
+    private val ESTIMATE = "estimate" to false
     private val CURRENT_DATE = "cdate" to ""
 
     fun init(context: Context) {
@@ -37,6 +38,11 @@ object SharedPreference {
         get() = sharedPref.getBoolean(SHOPPING_MONITOR.first, SHOPPING_MONITOR.second)
         set(value) = sharedPref.edit {
             it.putBoolean(SHOPPING_MONITOR.first, value)
+        }
+    var estimate: Boolean
+        get() = sharedPref.getBoolean(ESTIMATE.first, ESTIMATE.second)
+        set(value) = sharedPref.edit {
+            it.putBoolean(ESTIMATE.first, value)
         }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
