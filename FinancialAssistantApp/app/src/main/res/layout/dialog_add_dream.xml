@@ -34,7 +34,9 @@
             tools:targetApi="o"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/nameField"
-            android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"/>
+            android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"
+            android:textColorLink="@color/toolbar" android:textCursorDrawable="@color/toolbar"
+            android:textColorHighlight="@color/toolbar"/>
     <!--Termék-->
 
     <TextView
@@ -60,7 +62,9 @@
             android:inputType="text"
             tools:targetApi="o"
             android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"/>
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"
+            android:textColorLink="@color/toolbar" android:textColorHighlight="@color/toolbar"
+            android:textCursorDrawable="@color/toolbar"/>
     <!--Hol-->
     <TextView
             android:text="@string/where"
@@ -88,7 +92,9 @@
             tools:targetApi="o"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/amountField"
-            android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"/>
+            android:backgroundTint="@color/colorPrimary" android:textSize="@dimen/customTitle"
+            android:textColorLink="@color/toolbar" android:textColorHighlight="@color/toolbar"
+            android:textCursorDrawable="@color/toolbar"/>
 
     <!--Rögzítés-->
 

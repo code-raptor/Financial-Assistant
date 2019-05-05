@@ -25,8 +25,6 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        aboutButton.setOnClickListener {
-        }
     }
 
     override fun onStop() {

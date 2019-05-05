@@ -2,6 +2,7 @@
     <string name="app_name">AssistoRaptor</string>
     <string name="settings">Beállítások</string>
     <string name="setting_bev_figyel">Bevásárlás figyelő</string>
+    <string name="setting_joslas">Bevásárlólista jóslás</string>
     <string name="setting_sporolas">Spórolás</string>
     <string name="setting_limit">Napi limit</string>
     <string name="setting_hint">10000</string>
