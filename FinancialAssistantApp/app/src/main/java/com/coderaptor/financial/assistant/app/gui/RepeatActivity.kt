@@ -1,70 +1,145 @@
 package com.coderaptor.financial.assistant.app.gui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.coderaptor.financial.assistant.app.AddNewRepeatActivity
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.recyclical.datasource.DataSource
+import com.afollestad.recyclical.datasource.dataSourceOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.swipe.SwipeLocation
+import com.afollestad.recyclical.swipe.withSwipeAction
+import com.afollestad.recyclical.withItem
 import com.coderaptor.financial.assistant.app.MainActivity
 import com.coderaptor.financial.assistant.app.R
-import com.coderaptor.financial.assistant.app.adapters.TransactionListAdapter
+import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.util.fieldsEmpty
+import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.util.openCalendar
+import com.coderaptor.financial.assistant.app.util.toast
 import kotlinx.android.synthetic.main.activity_repeats.*
+import kotlinx.android.synthetic.main.dialog_add_repeat.*
+import kotlinx.android.synthetic.main.dialog_add_repeat.view.*
 
 class RepeatActivity : AppCompatActivity() {
 
     val dbHandler = DatabaseHandler(this)
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repeats)
-
-        setupDatabase()
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-        addnewRepeats.setOnClickListener{
-            val intent = Intent(this, AddNewRepeatActivity::class.java)
-            startActivity(intent)
-        }
+        val list = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} != 'Egyszeri'")
+        val dataSource: DataSource<Any> = dataSourceOf(list)
 
-        val swipeHandler = object : SwipeToDeleteCallback(this) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = recyclerView.adapter as TransactionListAdapter
-                adapter.removeTransaction(viewHolder.adapterPosition, dbHandler)
+        savefab.setOnClickListener{
+            MaterialDialog(this).show {
+                setTheme(R.style.AppTheme)
+                title(R.string.newRepeatTransaction)
+                customView(R.layout.dialog_add_repeat, scrollable = true)
+
+                val datefield = getCustomView().dateField
+                datefield.isClickable = true
+                datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+                datefield.setOnClickListener {
+                    openCalendar(it.dateField)
+                }
+
+                positiveButton(R.string.save) { dialog ->
+                    val result = fieldsEmpty(amountField.text)
+
+                    if(result) {
+                        var amount = dialog.getCustomView().amountField.text.toString().toInt()
+                        if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
+                        val date = dialog.getCustomView().dateField.text.toString()
+                        val category = dialog.getCustomView().categoryField.selectedItem.toString()
+                        val frequency = dialog.getCustomView().frequencyField.selectedItem.toString()
+                        val comment = descriptField.text.toString()
+                        var transaction = Transaction(amount, date, category, frequency)
+                        if (comment.isNotEmpty()) {
+                            transaction = Transaction(amount, date, category, comment, frequency)
+                        }
+
+                        dbHandler.insert(transaction)
+                        dataSource.add(transaction)
+                        toast("Sikeres hozzáadás!")
+                        if (dbHandler.getCurrentLimit() < 0) {
+                            toast("Napi limit meghaladva!")
+                        }
+                    }
+                    else{
+                        toast("Hiányzó adat!")
+                    }
+                }
+                negativeButton(R.string.cancel)
             }
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                                target: RecyclerView.ViewHolder): Boolean = false
         }
-        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
 
-    private fun setUpRecyclerView(findAllTransaction: MutableList<Transaction>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val transactionListAdapter = TransactionListAdapter(findAllTransaction as ArrayList<Transaction>)
-        recyclerView.hasFixedSize()
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = transactionListAdapter
-    }
+        recyclerView.setup {
 
-    private fun setupDatabase() {
-        val transactionList = arrayListOf(
-            Transaction(255000, "2019.01.01", "Fízetés", "Havonta"),
-            Transaction(-15000, "2019.01.01", "Kutya oltás", "Évente")
-        )
-        //dbHandler.dropTable(DatabaseHandler.TABLE_NAME_TRANSACTION)
-        dbHandler.inserts(transactionList)
+            withSwipeAction(SwipeLocation.LEFT) {
+                icon(R.drawable.ic_delete_white_24dp)
+                text(R.string.delete)
+                color(R.color.delete)
+                callback { index, item ->
+                    toast("delete $index: ${item}")
+                    if (item is Transaction) {
+                        dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
+                    }
+                    true
+                }
+            }
 
-        setUpRecyclerView(dbHandler.findAllTransaction())
+            withSwipeAction(SwipeLocation.RIGHT) {
+                icon(R.drawable.ic_edit_white_24dp)
+                text(R.string.edit)
+                color(R.color.edit)
+                callback { index, item ->
+                    toast("edit $index: ${item}")
+                    if (item is Transaction) {
+                        //edit layout
+                    }
+                    false
+                }
+            }
+            withEmptyView(nodata)
+            withDataSource(dataSource)
+            withItem<Transaction>(R.layout.list_income) {
+                onBind(::TransactionViewHolder) { _, item ->
+                    name.text = item.name
+
+                    if (item.hasFrequency()) {
+                        date.text = item.date + getString(R.string.tab) + item.frequency
+                    }else {
+                        date.text = item.date
+                    }
+
+                    if (item.amount > 0) {
+                        amount.setTextColor(resources.getColor(R.color.amount_plus, null))
+                        amount.text = "+${item.amount}"
+                    }else {
+                        amount.setTextColor(resources.getColor(R.color.amount_minus, null))
+                        amount.text = item.amount.toString()
+                    }
+                }
+                onClick { index ->
+                    toast("Clicked $index: ${item.name}")
+                }
+            }
+        }
     }
 }
+

@@ -2,6 +2,7 @@ package com.coderaptor.financial.assistant.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,12 +17,16 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.coderaptor.financial.assistant.app.adapters.ShoppingListAdapter
 import com.coderaptor.financial.assistant.app.core.ShoppingList
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.features.estimate.getProductToShoppingList
 import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
 import com.coderaptor.financial.assistant.app.util.SharedPreference
+import com.coderaptor.financial.assistant.app.util.fieldsEmpty
 import com.coderaptor.financial.assistant.app.util.spinner.StringWithId
 import com.coderaptor.financial.assistant.app.util.spinner.getCategoryStringWithIdList
+import com.coderaptor.financial.assistant.app.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_shoppinglist.*
+import kotlinx.android.synthetic.main.dialog_add_shopping.*
 import kotlinx.android.synthetic.main.dialog_add_shopping.view.*
 import java.util.*
 
@@ -33,7 +38,15 @@ class ShoppingListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shoppinglist)
 
-        setUpRecyclerView(dbHandler.findAllShopping())
+        val findAll = dbHandler.findAllShopping()
+        val estimate = findAll
+        estimate.addAll(getProductToShoppingList(dbHandler))
+
+
+        val x = getProductToShoppingList(dbHandler)
+        Log.i("shp", "findall:${findAll.size}, estimate: ${estimate.size}")
+
+        setUpRecyclerView(estimate)
         val categoryAdapter = setupDialogCategorySpinner(dbHandler)
 
         back.setOnClickListener {
@@ -41,7 +54,7 @@ class ShoppingListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fab.setOnClickListener {
+        savefab.setOnClickListener {
             MaterialDialog(this).show {
                 setTheme(R.style.AppTheme)
                 title(R.string.product_string)
@@ -62,15 +75,25 @@ class ShoppingListActivity : AppCompatActivity() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
 
-                positiveButton(R.string.income_button) { dialog ->
-                    val name = dialog.getCustomView().product_name.text.toString()
-                    val quantity = dialog.getCustomView().product_quantity.text.toString().toInt()
-                    val unit = dialog.getCustomView().unitField.selectedItem.toString()
 
-                    dbHandler.insert(ShoppingList(name, quantity, unit))
-                    setUpRecyclerView(dbHandler.findAllShopping())
+
+                    positiveButton(R.string.save) { dialog ->
+                        val result = fieldsEmpty(product_name.text, product_quantity.text)
+                        
+                        if(result) {
+                            val name = dialog.getCustomView().product_name.text.toString()
+                            val quantity = dialog.getCustomView().product_quantity.text.toString().toInt()
+                            val unit = dialog.getCustomView().unitField.selectedItem.toString()
+
+                            dbHandler.insert(ShoppingList(name, quantity, unit))
+                            setUpRecyclerView(dbHandler.findAllShopping())
+
+                        }else{
+                                toast("Hiányzó adat!")
+                        }
+
                 }
-                negativeButton(android.R.string.cancel)
+                negativeButton(R.string.cancel)
             }
         }
 
@@ -88,6 +111,11 @@ class ShoppingListActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
+    private fun shoppingElementClicked(element : ShoppingList) {
+        element.isBought = !element.isBought
+        dbHandler.changeShoppingBought(element)
+    }
+
     private fun setupDialogCategorySpinner(dbHandler: DatabaseHandler): ArrayAdapter<StringWithId> {
         val adapter = ArrayAdapter<StringWithId>(this, android.R.layout.simple_spinner_item, getCategoryStringWithIdList(dbHandler, SharedPreference.saving))
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -95,12 +123,17 @@ class ShoppingListActivity : AppCompatActivity() {
         return adapter
     }
 
-    private fun setUpRecyclerView(findAllTransaction: MutableList<ShoppingList>) {
+    private fun setUpRecyclerView(findAllShopping: MutableList<ShoppingList>) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val shoppingListAdapter = ShoppingListAdapter(findAllTransaction as ArrayList<ShoppingList>)
+        val shoppingListAdapter = ShoppingListAdapter(findAllShopping as ArrayList<ShoppingList>) { element: ShoppingList ->shoppingElementClicked(element)}
         recyclerView.hasFixedSize()
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = shoppingListAdapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHandler.close()
     }
 }

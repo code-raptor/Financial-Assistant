@@ -53,36 +53,38 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         onCreate(db)
     }
 
-    fun <T> insert(it: T) {
+    fun <T> insert(it: T): Long {
         val db = this.writableDatabase
+        var id = (-1).toLong()
         when (it) {
             is Transaction -> {
-                db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
+                id = db.insert(TABLE_NAME_TRANSACTION, null, insertValuesTransaction(it))
                 if (it.amount < 0) {
                     limitReduction(it.amount)
                 }
             }
             is ProductProperty -> {
-                db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
+                id = db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
             }
             is Dream -> {
-                db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
+                id = db.insert(TABLE_NAME_DREAM, null, insertValuesDream(it))
             }
             is ProductCategory -> {
-                db.insert(TABLE_NAME_PRODUCT_CATEGORY, null, insertValuesProductCategory(it))
+                id = db.insert(TABLE_NAME_PRODUCT_CATEGORY, null, insertValuesProductCategory(it))
             }
             is Product -> {
-                db.insert(TABLE_NAME_PRODUCT, null, insertValuesProduct(it))
+                id = db.insert(TABLE_NAME_PRODUCT, null, insertValuesProduct(it))
             }
             is ShoppingList -> {
-                db.insert(TABLE_NAME_SHOPPING, null, insertValuesShoppingList(it))
+                id = db.insert(TABLE_NAME_SHOPPING, null, insertValuesShoppingList(it))
             }
             is Receipt -> {
-                db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
+                id = db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
                 limitReduction(-it.amount)
             }
         }
         db.close()
+        return id
     }
 
     fun <T> inserts(myList: ArrayList<T>) {
@@ -159,9 +161,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
                 val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
+                val comment = cursor.getString(cursor.getColumnIndex(BASE_COMMENT))
                 val frequency = cursor.getString(cursor.getColumnIndex(FREQUENCY_TRANSACTION))
 
-                val transaction = Transaction(id, amount, date, name, frequency)
+                val transaction = Transaction(id, amount, date, name, comment, frequency)
                 transactionList.add(transaction)
             }
         }
@@ -170,7 +173,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return transactionList
     }
 
-    fun findAllProductProperty(): MutableList<ProductProperty> {
+    private fun findAllProductProperty(): MutableList<ProductProperty> {
         val propertyList = mutableListOf<ProductProperty>()
         val db = readableDatabase
         val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT_PROPERTY"
@@ -211,10 +214,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return productCategoryList
     }
 
-    fun findAllProduct(): MutableList<Product> {
+    fun findAllProduct(condition: String = ""): MutableList<Product> {
         val productList = mutableListOf<Product>()
         val db = readableDatabase
-        val selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT"
+        var selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT"
+        if (condition.isNotEmpty()) {
+            selectALLQuery = "SELECT * FROM $TABLE_NAME_PRODUCT WHERE $condition"
+        }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {
@@ -223,10 +229,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val unit = cursor.getString(cursor.getColumnIndex(UNIT))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
                 val unitPrice = cursor.getInt(cursor.getColumnIndex(UNIT_PRICE))
+                val receiptDate = cursor.getString(cursor.getColumnIndex(RECEIPT_DATE))
                 val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val categoryId = cursor.getLong(cursor.getColumnIndex(PRODUCT_CATEGORY_ID_PRODUCT))
 
-                val product = Product(id, name, unit, quantity, unitPrice, date, categoryId)
+                val product = Product(id, name, unit, quantity, unitPrice, receiptDate, date, categoryId)
                 productList.add(product)
             }
         }
@@ -235,10 +242,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return productList
     }
 
-    fun findAllShopping(): MutableList<ShoppingList> {
+    fun findAllShopping(condition: String = ""): MutableList<ShoppingList> {
         val shoppingList = mutableListOf<ShoppingList>()
         val db = readableDatabase
-        val selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING"
+        var selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING"
+        if (condition.isNotEmpty()) {
+            selectALLQuery = "SELECT * FROM $TABLE_NAME_SHOPPING WHERE $condition"
+        }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {
@@ -246,11 +256,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 val name = cursor.getString(cursor.getColumnIndex(BASE_NAME))
                 val quantity = cursor.getInt(cursor.getColumnIndex(BASE_QUANTITY))
                 val unit = cursor.getString(cursor.getColumnIndex(UNIT))
+                val bought = cursor.getString(cursor.getColumnIndex(BOUGHT))!!.toBoolean()
                 var productId = (-1).toLong()
                 if (!cursor.isNull(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))) {
                     productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_SHOPPING))
                 }
-                val shopping = ShoppingList(id, name, quantity, unit, productId)
+                val shopping = ShoppingList(id, name, quantity, unit, bought, productId)
                 shoppingList.add(shopping)
             }
         }
@@ -264,23 +275,40 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val db = readableDatabase
         var selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT"
         if (condition.isNotEmpty()) {
-            selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT WHERE $condition"
+            selectALLQuery = "SELECT * FROM $TABLE_NAME_RECEIPT $condition"
         }
         val cursor = db.rawQuery(selectALLQuery, null)
         with(cursor) {
             while (moveToNext()) {
                 val id = cursor.getLong(cursor.getColumnIndex(BASE_ID))
+                val receiptId = cursor.getLong(cursor.getColumnIndex(RECEIPT_ID))
                 val date = cursor.getString(cursor.getColumnIndex(BASE_DATE))
                 val amount = cursor.getInt(cursor.getColumnIndex(BASE_AMOUNT))
+                val comment = cursor.getString(cursor.getColumnIndex(BASE_COMMENT))
                 val productId = cursor.getLong(cursor.getColumnIndex(PRODUCT_ID_RECEIPT))
 
-                val receipt = Receipt(id, date, amount, productId)
+                val receipt = Receipt(id, receiptId, date, amount, comment, productId)
                 receiptList.add(receipt)
             }
         }
         cursor.close()
         db.close()
         return receiptList
+    }
+    fun updateReceipt(receipt: Receipt): Boolean {
+        Log.i("Receipt", "db: $receipt")
+        val db = writableDatabase
+        val success = db.update(TABLE_NAME_RECEIPT,
+            insertValuesReceipt(receipt),
+            "$RECEIPT_ID = ? AND $PRODUCT_ID_RECEIPT = ?",
+            arrayOf(receipt.baseID.toString(), receipt.productId.toString()))
+        Log.i("Receipt", "db: updated row = $success")
+        return success > -1
+    }
+
+    fun changeShoppingBought(element: ShoppingList) {
+        val db = writableDatabase
+        db.execSQL("UPDATE $TABLE_NAME_SHOPPING SET $BOUGHT='${element.isBought}' WHERE id=${element.id}")
     }
 
     fun findMaxSMS(): Long {
@@ -375,7 +403,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         }
     }
 
-    fun limitLogger() {
+    private fun limitLogger() {
         val db = readableDatabase
         val selectALLQuery = "SELECT * FROM $TABLE_NAME_LIMIT"
         val cursor = db.rawQuery(selectALLQuery, null)
@@ -419,11 +447,19 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.delete(TABLE_NAME, selection, selectionArgs)
     }
 
+    fun deleteByReceiptByReceiptId(receiptID: Long, TABLE_NAME: String) {
+        val db = readableDatabase
+        val selection = "$RECEIPT_ID = ?"
+        val selectionArgs = arrayOf("$receiptID")
+        Log.i("db", "DELETE: $receiptID")
+        db.delete(TABLE_NAME, selection, selectionArgs)
+    }
+
     fun deleteTableContent(TABLE_NAME: String) {
         readableDatabase.execSQL("DELETE FROM $TABLE_NAME")
     }
 
-    fun dropTable(TABLE_NAME: String) {
+    private fun dropTable(TABLE_NAME: String) {
         readableDatabase.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(readableDatabase)
     }
@@ -448,6 +484,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(BASE_AMOUNT, it.amount)
         values.put(BASE_DATE, it.date)
         values.put(BASE_NAME, it.name)
+        values.put(BASE_COMMENT, it.comment)
         values.put(FREQUENCY_TRANSACTION, it.frequency)
         return values
     }
@@ -466,6 +503,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(UNIT, it.unit)
         values.put(BASE_QUANTITY, it.quantity)
         values.put(UNIT_PRICE, it.unitPrice)
+        values.put(RECEIPT_DATE, it.receiptDate)
         values.put(BASE_DATE, it.date)
         values.put(PRODUCT_CATEGORY_ID_PRODUCT, it.categoryId)
         return values
@@ -476,6 +514,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(BASE_NAME, it.name)
         values.put(BASE_QUANTITY, it.quantity)
         values.put(UNIT, it.unit)
+        values.put(BOUGHT, it.isBought)
         if(it.productId != (-1).toLong()) {
             values.put(PRODUCT_ID_SHOPPING, it.productId)
         }
@@ -485,8 +524,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     private fun insertValuesReceipt(it: Receipt): ContentValues {
         val values = ContentValues()
         values.put(BASE_DATE, it.date)
+        values.put(RECEIPT_ID, it.baseID)
         values.put(BASE_AMOUNT, it.amount)
-        values.put(PRODUCT_ID_RECEIPT, it.productId)
+        values.put(BASE_COMMENT, it.comment)
+        if (it.productId != (-1).toLong()) {
+            values.put(PRODUCT_ID_RECEIPT, it.productId)
+        }
         return values
     }
 
@@ -497,6 +540,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         deleteTableContent(TABLE_NAME_SHOPPING)
         deleteTableContent(TABLE_NAME_TRANSACTION)
         deleteTableContent(TABLE_NAME_RECEIPT)
+        deleteTableContent(TABLE_NAME_DREAM)
 
 
         ProductPropertyEnum.values().forEach {
@@ -519,8 +563,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         var product = Product("alma", "db", 3, 120, categoryId = 4)
         insert(product)
-        product = Product("kenyer", "db", 3, 120, "2020-01-01", 2)
-        insert(product)
         product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
         insert(product)
         product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
@@ -533,55 +575,73 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         insert(product)
         product = Product("Hagyma", "db", 4, 50, categoryId = 1)
         insert(product)
-        product = Product("Egér", "db", 1, 1500, "2021-03-01", 6)
-        insert(product)
         product = Product("Mackó nadrág", "db", 1, 2500, categoryId = 5)
         insert(product)
         product = Product("Ropi", "db", 1, 500, categoryId = 2)
         insert(product)
         product = Product("Pepsi", "db", 1, 500, categoryId = 3)
         insert(product)
-        product = Product("Szék", "db", 1, 1500, "2023-02-04", 9)
-        insert(product)
         product = Product("Csőfogó", "db", 1, 1500, categoryId = 7)
         insert(product)
+
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-25", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-24", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-26", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-23", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-22", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-21", categoryId = 4)
+        insert(product)
+
         Log.i("testData", "Product: ")
         findAllProduct().forEach {
             Log.i("testData", it.toString())
         }
 
-        var transaction = Transaction(1000, "2019-04-15", "Zsebpénz")
+        var transaction = Transaction(1000, "2019-04-25", "Zsebpénz")
         insert(transaction)
-        transaction = Transaction(1000, "2019-04-16", "Bor")
+        transaction = Transaction(1000, "2019-04-16", "Bor", "Elfogyott :(")
         insert(transaction)
-        transaction = Transaction(100000, "2019-04-10", "Fizetés", "Havonta")
+        transaction = Transaction(100000, "2019-04-10", "Fizetés", frequency = "Havonta")
         insert(transaction)
-        transaction = Transaction(-2000, "2019-04-11", "Gyerektartás", "Heti")
+        transaction = Transaction(-2000, "2019-04-11", "Gyerektartás", frequency = "Heti")
         insert(transaction)
-        transaction = Transaction(1030, "2019-04-15", "Gáz", "Havonta")
+        transaction = Transaction(1030, "2019-04-15", "Gáz", frequency = "Havonta")
         insert(transaction)
-        transaction = Transaction(1500, "2019-04-15", "Kutya kaja", "Heti")
+        transaction = Transaction(1500, "2019-04-15", "Kutya kaja", frequency = "Heti")
         insert(transaction)
         Log.i("testData", "Transaction: ")
         findAllTransaction().forEach {
             Log.i("testData", it.toString())
         }
 
-        var receipt = Receipt(1, "2019-04-18", 13000, 1)
+        var receipt = Receipt(1, "2019-05-03", 13000, "Ikea", 1)
         insert(receipt)
-        receipt = Receipt(2, "2019-03-13", 5000, 2)
+        receipt = Receipt(1, "2019-05-03", 13000, "Ikea", 2)
+        insert(receipt)
+        receipt = Receipt(2, "2019-05-02", 5000, "asd", 3)
         insert(receipt)
         Log.i("testData", "Receipt: ")
         findAllReceipt().forEach {
             Log.i("testData", it.toString())
         }
 
-        var shoppingList = ShoppingList("kenyér", 2, "Db", 2)
+        var shoppingList = ShoppingList("kenyér", 2, "Db", true, 2)
         insert(shoppingList)
-        shoppingList = ShoppingList("alma",5, "kg",1)
+        shoppingList = ShoppingList("alma_db",5, "kg", productId = 1)
         insert(shoppingList)
-        shoppingList = ShoppingList("bor", 10, "l",3)
+        shoppingList = ShoppingList("bor", 10, "l", true,3)
         insert(shoppingList)
+
+        val dreamsList = arrayListOf(
+            Dream("Samsung HD Tv", 55000, "Media Markt"),
+            Dream("Fűnyíró", 100000, "OBI")
+        )
+        inserts(dreamsList)
     }
 
     fun categoriesWithWarrantyAndHarmful(): ArrayList<Long> {
@@ -613,6 +673,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         const val BASE_AMOUNT = "amount"
         const val BASE_QUANTITY = "quantity"
         const val BASE_DATE = "date"
+        const val BASE_COMMENT = "comment"
+        const val RECEIPT_DATE = "receipt_date"
 
         //transaction
         const val TABLE_NAME_TRANSACTION = "trans"
@@ -640,24 +702,26 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         //receipt
         const val TABLE_NAME_RECEIPT = "receipt"
+        const val RECEIPT_ID = "receipt_ID"
         const val PRODUCT_ID_RECEIPT = "product_id"
 
         //shopping_list
         const val TABLE_NAME_SHOPPING = "shopping_list"
         const val PRODUCT_ID_SHOPPING = "product_id"
+        const val BOUGHT = "bought"
 
-        val TABLE_NAME_SMS = "sms"
-        val CREATE_TABLE_SMS = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
+        const val TABLE_NAME_SMS = "sms"
+        const val CREATE_TABLE_SMS = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY," +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER)"
 
         //limit
-        val TABLE_NAME_LIMIT = "day_limit"
-        val CURRENT_DAY_LIMIT = "day"
-        val CREATE_TABLE_LIMIT = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_LIMIT} " +
+        const val TABLE_NAME_LIMIT = "day_limit"
+        const val CURRENT_DAY_LIMIT = "day"
+        const val CREATE_TABLE_LIMIT = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_LIMIT} " +
                 "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY, " +
                 "${DatabaseHandler.BASE_AMOUNT} INTEGER, " +
                 "${DatabaseHandler.CURRENT_DAY_LIMIT} INTEGER)"
-        val DEFAULT_LIMIT_AMOUNT = 25000
+        const val DEFAULT_LIMIT_AMOUNT = 25000
     }
 }

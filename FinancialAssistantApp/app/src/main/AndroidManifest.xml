@@ -7,9 +7,9 @@
             android:name=".util.Globals"
             android:allowBackup="true"
             android:fullBackupContent="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/raptoricon1"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/raptoricon1"
             android:supportsRtl="true"
             tools:ignore="GoogleAppIndexingWarning"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -25,11 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".IncomeActivity"/>
-        <activity android:name=".AddNewRepeatActivity"/>
-        <activity android:name=".AddNewDreamActivity"/>
         <activity android:name=".gui.DreamActivity"/>
         <activity android:name=".gui.RepeatActivity"/>
-        <activity android:name=".AddNewProductActivity"/>
         <activity android:name=".ReceiptActivity"/>
         <activity android:name=".HistoryActivity"/>
         <activity android:name=".ShoppingListActivity"/>

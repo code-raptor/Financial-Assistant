@@ -3,22 +3,33 @@ package com.coderaptor.financial.assistant.app
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.coderaptor.financial.assistant.app.adapters.TransactionAndReceiptAdapter
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.recyclical.datasource.DataSource
+import com.afollestad.recyclical.datasource.emptyDataSource
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.swipe.SwipeLocation
+import com.afollestad.recyclical.swipe.withSwipeAction
+import com.afollestad.recyclical.withItem
+import com.coderaptor.financial.assistant.app.adapters.ReceiptViewHolder
+import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
+import com.coderaptor.financial.assistant.app.core.Receipt
+import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
 import com.coderaptor.financial.assistant.app.features.limit.checkDayChanged
 import com.coderaptor.financial.assistant.app.features.oneweek.getOneWeekData
 import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
-import com.coderaptor.financial.assistant.app.gui.SwipeToDeleteCallback
-import com.coderaptor.financial.assistant.app.util.SharedPreference
-import com.coderaptor.financial.assistant.app.util.formatDate
+import com.coderaptor.financial.assistant.app.gui.DreamActivity
+import com.coderaptor.financial.assistant.app.gui.RepeatActivity
+import com.coderaptor.financial.assistant.app.util.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_add_income.*
+import kotlinx.android.synthetic.main.dialog_add_income.view.*
 import java.util.*
 
 
@@ -36,6 +47,7 @@ class MainActivity : AppCompatActivity(){
         if (!SharedPreference.firstRun) {
             SharedPreference.firstRun = true
             SharedPreference.currentDate = Calendar.getInstance().formatDate()
+            dbHandler.insertTestdata()
         }else {
             Log.i("first", "Nem először value: ${SharedPreference.firstRun}")
                 SharedPreference.currentDate = Calendar.getInstance().formatDate()
@@ -43,21 +55,62 @@ class MainActivity : AppCompatActivity(){
 
         setupSms(dbHandler.findMaxSMS())
         checkDayChanged(dbHandler)
-        setUpRecyclerView(getOneWeekData(dbHandler))
-        dbHandler.insertTestdata()
+
+        val dataSource: DataSource<Any> = emptyDataSource()
+        getOneWeekData(dbHandler).forEach { dataSource.add(it) }
+
 
         addNewButton.setOnClickListener {
-            val intent = Intent(this, IncomeActivity::class.java)
-            startActivity(intent)
+            MaterialDialog(this).show {
+                setTheme(R.style.AppTheme)
+                title(R.string.onceNewtransaction)
+                customView(R.layout.dialog_add_income, scrollable = true)
+
+                val datefield = getCustomView().dateField
+                datefield.isClickable = true
+                datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
+                datefield.setOnClickListener {
+                    openCalendar(it.dateField)
+                }
+
+                positiveButton(R.string.save) {
+                    val result = fieldsEmpty(amountField.text)
+
+                    if (result){
+
+                        var amount: Int = amountField.text.toString().toInt()
+                        if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
+                        val date = dateField.text.toString()
+                        val category: String = categoryField.selectedItem.toString()
+                        val comment = descriptField.text.toString()
+                        var transaction = Transaction(amount, date, category)
+                        if (comment.isNotEmpty()) {
+                            transaction = Transaction(amount, date, comment, category)
+                        }
+
+                        dbHandler.insert(transaction)
+                        dataSource.add(transaction)
+                        if (dbHandler.getCurrentLimit() < 0) {
+                            toast("Napi limit összeg meghaladva")
+                        }
+
+                        toast("sikeres hozzáadás")
+                        }
+                        else{
+                            toast("Hiányzó adat!")
+                        }
+                    }
+                negativeButton(R.string.cancel)
+            }
         }
 
         repeatButton.setOnClickListener {
-            val intent = Intent(this, AddNewRepeatActivity::class.java)
+            val intent = Intent(this, RepeatActivity::class.java)
             startActivity(intent)
         }
 
         dreamButton.setOnClickListener {
-            val intent = Intent(this, AddNewDreamActivity::class.java)
+            val intent = Intent(this, DreamActivity::class.java)
             startActivity(intent)
         }
 
@@ -80,25 +133,75 @@ class MainActivity : AppCompatActivity(){
             startActivity(intent)
         }
 
-        val swipeHandler = object : SwipeToDeleteCallback(this) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = recyclerView.adapter as TransactionAndReceiptAdapter
-                adapter.remove(viewHolder.adapterPosition, dbHandler)
+        recyclerView.setup {
+
+            withSwipeAction(SwipeLocation.LEFT) {
+                icon(R.drawable.ic_delete_white_24dp)
+                text(R.string.delete)
+                color(R.color.delete)
+                callback { index, item ->
+                    toast("delete $index: ${item}")
+                    if (item is Transaction) {
+                        dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
+                    } else if (item is Receipt) {
+                        dbHandler.deleteByReceiptByReceiptId(item.baseID, DatabaseHandler.TABLE_NAME_RECEIPT)
+                    }
+                    true
+                }
             }
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                                target: RecyclerView.ViewHolder): Boolean = false
-        }
-        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
+            withSwipeAction(SwipeLocation.RIGHT) {
+                icon(R.drawable.ic_edit_white_24dp)
+                text(R.string.edit)
+                color(R.color.edit)
+                callback { index, item ->
+                    toast("edit $index: ${item}")
+                    if (item is Transaction) {
+                        //edit layout
+                    } else if (item is Receipt) {
+                        val intent = Intent(this@MainActivity, ReceiptActivity::class.java)
+                        intent.putExtra("id", item.baseID)
+                        startActivity(intent)
+                    }
+                    false
+                }
+            }
+            withEmptyView(nodata)
+            withDataSource(dataSource)
+            withItem<Transaction>(R.layout.list_income) {
+                onBind(::TransactionViewHolder) { _, item ->
+                    name.text = item.name
 
-    private fun setUpRecyclerView(oneWeekList: MutableList<Any>) {
-        val tAndRAdapter = TransactionAndReceiptAdapter(oneWeekList as ArrayList<Any>)
-        recyclerView.hasFixedSize()
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = tAndRAdapter
+                    if (item.hasFrequency()) {
+                        date.text = item.date + getString(R.string.tab) + item.frequency
+                    }else {
+                        date.text = item.date
+                    }
+
+                    if (item.amount > 0) {
+                        amount.setTextColor(resources.getColor(R.color.amount_plus, null))
+                        amount.text = "+${item.amount}"
+                    }else {
+                        amount.setTextColor(resources.getColor(R.color.amount_minus, null))
+                        amount.text = item.amount.toString()
+                    }
+                }
+                onClick { index ->
+                    toast("Clicked $index: ${item.name}")
+                }
+            }
+            withItem<Receipt>(R.layout.list_receipt) {
+                onBind(::ReceiptViewHolder) { _, item ->
+                    name.text = getString(R.string.receipt_string)
+                    date.text = item.date
+                    amount.setTextColor(resources.getColor(R.color.amount_minus, null))
+                    amount.text = "-${item.amount}"
+                }
+                onClick { index ->
+                    toast("Clicked $index: ${item}")
+                }
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -108,7 +211,7 @@ class MainActivity : AppCompatActivity(){
             val idAndAmount = getSmsMessages(this, findMaxSMS, dbHandler)
             if (idAndAmount.first != (-1).toLong() && idAndAmount.second != -1) {
                 dbHandler.insertSms(idAndAmount)
-                editText2.setText("${dbHandler.getSmsAmount()} ft")
+                egyenleg.setText("${dbHandler.getSmsAmount()} ft")
             }
         }
     }
