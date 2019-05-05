@@ -3,6 +3,7 @@ package com.coderaptor.financial.assistant.app
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
@@ -15,13 +16,14 @@ import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
 import com.coderaptor.financial.assistant.app.core.Receipt
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.coderaptor.financial.assistant.app.util.toast
 import com.github.clans.fab.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_history.*
+import kotlinx.android.synthetic.main.activity_history.view.*
 
 class HistoryActivity : AppCompatActivity() {
     private val dbHandler = DatabaseHandler(this)
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
@@ -32,17 +34,16 @@ class HistoryActivity : AppCompatActivity() {
         repeatButton.colorNormal = repeatButton.colorDisabled
         onceButton.colorNormal = onceButton.colorDisabled
 
-        var list = mutableListOf<Any>()
+        val list = ArrayList<Any>()
         val receipts = dbHandler.findAllReceipt("GROUP BY ${DatabaseHandler.RECEIPT_ID}")
         val onceTransactions = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} = 'Egyszeri'")
-        val repeatTransactons = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} != 'Egyszeri'")
+        val repeatTransactions = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} != 'Egyszeri'")
 
-        //list.addAll(transactions)
         list.addAll(receipts)
         list.addAll(onceTransactions)
-        list.addAll(repeatTransactons)
+        list.addAll(repeatTransactions)
 
-        var dataSource: DataSource<Any> = dataSourceOf(list)
+        val dataSource: DataSource<Any> = dataSourceOf(list)
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -50,54 +51,36 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         receiptButton.setOnClickListener {
-            list = onClick(receiptButton, list, receipts)
-            dataSource = dataSourceOf(list)
-            recyclerViewSetup(dataSource)
+            Log.i("htr", "list a: ${dataSource.size()}")
+            it.receiptButton.onClick(dataSource, receipts)
+            Log.i("htr", "list b: ${dataSource.size()}")
         }
 
         repeatButton.setOnClickListener {
-            list = onClick(repeatButton, list, repeatTransactons)
-            dataSource = dataSourceOf(list)
-            recyclerViewSetup(dataSource)
+            Log.i("htr", "list a: ${dataSource.size()}")
+            it.repeatButton.onClick(dataSource, repeatTransactions)
+            Log.i("htr", "list b: ${dataSource.size()}")
         }
 
         onceButton.setOnClickListener {
-            list = onClick(onceButton, list, onceTransactions)
-            dataSource = dataSourceOf(list)
-            recyclerViewSetup(dataSource)
+            Log.i("htr", "list a: ${dataSource.size()}")
+            it.onceButton.onClick(dataSource, onceTransactions)
+            Log.i("htr", "list b: ${dataSource.size()}")
         }
-
-        recyclerViewSetup(dataSource)
-    }
-
-    private fun onClick(fab : FloatingActionButton, historyList : MutableList<Any>, list: List<Any>): MutableList<Any> {
-        if(fab.colorNormal != fab.colorDisabled){
-            fab.colorNormal = fab.colorDisabled
-            historyList.addAll(list)
-        }
-        else{
-            fab.colorNormal = resources.getColor(R.color.closed_fab, null)
-            historyList.removeAll(list)
-        }
-        return historyList
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun recyclerViewSetup(dataSource : DataSource<Any>){
 
         recyclerView.setup {
-
             withSwipeAction(SwipeLocation.LEFT) {
                 icon(R.drawable.ic_delete_white_24dp)
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: ${item}")
                     if (item is Transaction) {
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
                     } else if (item is Receipt) {
                         dbHandler.deleteByReceiptByReceiptId(item.baseID, DatabaseHandler.TABLE_NAME_RECEIPT)
                     }
+                    dbHandler.close()
                     true
                 }
             }
@@ -107,7 +90,7 @@ class HistoryActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
                         //edit layout
                     } else if (item is Receipt) {
@@ -116,7 +99,7 @@ class HistoryActivity : AppCompatActivity() {
                     false
                 }
             }
-
+            withEmptyView(nodata)
             withDataSource(dataSource)
 
             withItem<Transaction>(R.layout.list_income) {
@@ -138,7 +121,7 @@ class HistoryActivity : AppCompatActivity() {
                     }
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
 
@@ -150,10 +133,27 @@ class HistoryActivity : AppCompatActivity() {
                     amount.text = "-${item.amount}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item}")
+                    //toast("Clicked $index: ${item}")
                 }
             }
         }
+
+    }
+
+    private fun FloatingActionButton.onClick(dataSource: DataSource<Any>, typeList: List<Any>) {
+        if(colorNormal != colorDisabled){
+            colorNormal = colorDisabled
+            typeList.forEach { dataSource.add(it) }
+        }
+        else{
+            colorNormal = resources.getColor(R.color.closed_fab, null)
+            typeList.forEach { dataSource.remove(it) }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dbHandler.close()
     }
 }
 

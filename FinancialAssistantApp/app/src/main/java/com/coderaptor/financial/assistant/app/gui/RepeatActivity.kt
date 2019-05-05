@@ -76,7 +76,7 @@ class RepeatActivity : AppCompatActivity() {
                         dataSource.add(transaction)
                         toast("Sikeres hozzáadás!")
                         if (dbHandler.getCurrentLimit() < 0) {
-                            toast("Napi limit meghaladva!")
+                            //toast("Napi limit meghaladva!")
                         }
                     }
                     else{
@@ -95,7 +95,7 @@ class RepeatActivity : AppCompatActivity() {
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: ${item}")
                     if (item is Transaction) {
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_TRANSACTION)
                     }
@@ -108,7 +108,7 @@ class RepeatActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
                         //edit layout
                     }
@@ -136,7 +136,7 @@ class RepeatActivity : AppCompatActivity() {
                     }
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
         }

@@ -73,7 +73,7 @@ class DreamActivity : AppCompatActivity() {
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    toast("delete $index: ${item}")
+                    //toast("delete $index: ${item}")
                     if (item is Dream)
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_DREAM)
                     true
@@ -85,7 +85,7 @@ class DreamActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    toast("edit $index: ${item}")
+                    //toast("edit $index: ${item}")
                     if (item is Dream) {
                         //edit layout
                     }
@@ -102,7 +102,7 @@ class DreamActivity : AppCompatActivity() {
                     amount.text = "${item.amount}"
                 }
                 onClick { index ->
-                    toast("Clicked $index: ${item.name}")
+                    //toast("Clicked $index: ${item.name}")
                 }
             }
         }
