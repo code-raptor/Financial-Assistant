@@ -3,9 +3,6 @@ package com.coderaptor.financial.assistant.app.gui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
@@ -17,11 +14,8 @@ import com.coderaptor.financial.assistant.app.R
 import com.coderaptor.financial.assistant.app.adapters.DreamViewHolder
 import com.coderaptor.financial.assistant.app.core.Dream
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.coderaptor.financial.assistant.app.util.fieldsEmpty
-import com.coderaptor.financial.assistant.app.util.toast
+import com.coderaptor.financial.assistant.app.gui.dialogs.openDreamDialog
 import kotlinx.android.synthetic.main.activity_dreams.*
-import kotlinx.android.synthetic.main.dialog_add_dream.*
-import kotlinx.android.synthetic.main.dialog_add_dream.view.*
 
 class DreamActivity : AppCompatActivity() {
 
@@ -31,7 +25,7 @@ class DreamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dreams)
 
-        val dataSource: DataSource<Dream> = dataSourceTypedOf(dbHandler.findAllDream())
+        val dataSource: DataSource<Any> = dataSourceTypedOf(dbHandler.findAllDream())
 
         back.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -39,31 +33,7 @@ class DreamActivity : AppCompatActivity() {
         }
 
         savefab.setOnClickListener{
-            MaterialDialog(this).show {
-                setTheme(R.style.AppTheme)
-                title(R.string.newDream)
-                customView(R.layout.dialog_add_dream, scrollable = true)
-
-                positiveButton(R.string.save) { dialog ->
-                    val result = fieldsEmpty(nameField.text, amountField.text, whereField.text)
-
-                    if(result) {
-                        val amount = dialog.getCustomView().amountField.text.toString().toInt()
-                        val name = dialog.getCustomView().nameField.text.toString()
-                        val where = dialog.getCustomView().whereField.text.toString()
-
-                        val dream = Dream(name, amount, where)
-
-                        dbHandler.insert(dream)
-                        dataSource.add(dream)
-                        toast("Sikeres hozzáadás!")
-                    }
-                    else{
-                        toast("Hiányzó adat!")
-                    }
-                }
-                negativeButton(R.string.cancel)
-            }
+            openDreamDialog(dataSource, dbHandler)
         }
 
         recyclerView.setup {
@@ -73,7 +43,6 @@ class DreamActivity : AppCompatActivity() {
                 text(R.string.delete)
                 color(R.color.delete)
                 callback { index, item ->
-                    //toast("delete $index: ${item}")
                     if (item is Dream)
                         dbHandler.deleteByPosition(item.id, DatabaseHandler.TABLE_NAME_DREAM)
                     true
@@ -85,9 +54,8 @@ class DreamActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    //toast("edit $index: ${item}")
                     if (item is Dream) {
-                        //edit layout
+                        openDreamDialog(dataSource, dbHandler, item)
                     }
                     false
                 }

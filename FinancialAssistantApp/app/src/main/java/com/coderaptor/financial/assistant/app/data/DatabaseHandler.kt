@@ -290,13 +290,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     }
 
     fun updateReceipt(receipt: Receipt): Boolean {
-        Log.i("Receipt", "db: $receipt")
         val db = writableDatabase
         val success = db.update(TABLE_NAME_RECEIPT,
             insertValuesReceipt(receipt),
             "$RECEIPT_ID = ? AND $PRODUCT_ID_RECEIPT = ?",
             arrayOf(receipt.baseID.toString(), receipt.productId.toString()))
-        Log.i("Receipt", "db: updated row = $success")
         return success > -1
     }
 
@@ -305,6 +303,16 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val success = db.update(
             TABLE_NAME_TRANSACTION,
             insertValuesTransaction(transaction),
+            "$BASE_ID = ?",
+            arrayOf(id.toString()))
+        return success > -1
+    }
+
+    fun updateDream(dream: Dream, id: Long): Boolean {
+        val db = writableDatabase
+        val success = db.update(
+            TABLE_NAME_DREAM,
+            insertValuesDream(dream),
             "$BASE_ID = ?",
             arrayOf(id.toString()))
         return success > -1
