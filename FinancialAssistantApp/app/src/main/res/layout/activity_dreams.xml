@@ -77,7 +77,7 @@
                 app:fab_colorPressed="@color/open_fab"
                 app:rippleColor="@color/ripple_fab"
                 android:id="@+id/savefab"
-                android:focusable="true"/>
+                android:focusable="true" app:backgroundTint="@color/closed_fab"/>
 
     </FrameLayout>
 
