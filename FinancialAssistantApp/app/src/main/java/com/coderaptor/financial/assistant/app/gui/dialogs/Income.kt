@@ -1,4 +1,4 @@
-package com.coderaptor.financial.assistant.app.gui
+package com.coderaptor.financial.assistant.app.gui.dialogs
 
 import android.app.Activity
 import android.text.Editable
@@ -70,7 +70,7 @@ fun Activity.openOnceTransactionDialog(dataSource: DataSource<Any>, dbHandler: D
                         toast("Napi limit összeg meghaladva")
                     }
                 }else {
-                    //dataSource.remove(editData)
+                    dataSource.remove(editData)
                     dbHandler.updateTransaction(transaction, editData.id)
                     dataSource.add(transaction)
                 }

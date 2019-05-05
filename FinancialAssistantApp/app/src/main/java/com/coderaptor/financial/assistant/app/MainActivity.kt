@@ -22,7 +22,8 @@ import com.coderaptor.financial.assistant.app.features.sms.askPermission
 import com.coderaptor.financial.assistant.app.features.sms.getSmsMessages
 import com.coderaptor.financial.assistant.app.gui.DreamActivity
 import com.coderaptor.financial.assistant.app.gui.RepeatActivity
-import com.coderaptor.financial.assistant.app.gui.openOnceTransactionDialog
+import com.coderaptor.financial.assistant.app.gui.dialogs.openOnceTransactionDialog
+import com.coderaptor.financial.assistant.app.gui.dialogs.openRepeatDialog
 import com.coderaptor.financial.assistant.app.util.SharedPreference
 import com.coderaptor.financial.assistant.app.util.formatDate
 import kotlinx.android.synthetic.main.activity_main.*
@@ -112,6 +113,8 @@ class MainActivity : AppCompatActivity(){
                         if (!item.hasFrequency()) {
                             Log.i("dialog", "hass: true")
                             openOnceTransactionDialog(dataSource, dbHandler, item)
+                        }else {
+                            openRepeatDialog(dataSource, dbHandler, item)
                         }
                     } else if (item is Receipt) {
                         val intent = Intent(this@MainActivity, ReceiptActivity::class.java)
