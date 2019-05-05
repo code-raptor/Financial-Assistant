@@ -16,6 +16,8 @@ import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
 import com.coderaptor.financial.assistant.app.core.Receipt
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
+import com.coderaptor.financial.assistant.app.gui.dialogs.openOnceTransactionDialog
+import com.coderaptor.financial.assistant.app.gui.dialogs.openRepeatDialog
 import com.github.clans.fab.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_history.view.*
@@ -51,21 +53,15 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         receiptButton.setOnClickListener {
-            Log.i("htr", "list a: ${dataSource.size()}")
             it.receiptButton.onClick(dataSource, receipts)
-            Log.i("htr", "list b: ${dataSource.size()}")
         }
 
         repeatButton.setOnClickListener {
-            Log.i("htr", "list a: ${dataSource.size()}")
             it.repeatButton.onClick(dataSource, repeatTransactions)
-            Log.i("htr", "list b: ${dataSource.size()}")
         }
 
         onceButton.setOnClickListener {
-            Log.i("htr", "list a: ${dataSource.size()}")
             it.onceButton.onClick(dataSource, onceTransactions)
-            Log.i("htr", "list b: ${dataSource.size()}")
         }
 
         recyclerView.setup {
@@ -90,11 +86,17 @@ class HistoryActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
-                        //edit layout
+                        if (!item.hasFrequency()) {
+                            Log.i("dialog", "hass: true")
+                            openOnceTransactionDialog(dataSource, dbHandler, item)
+                        }else {
+                            openRepeatDialog(dataSource, dbHandler, item)
+                        }
                     } else if (item is Receipt) {
-                        //edit layout
+                        val intent = Intent(this@HistoryActivity, ReceiptActivity::class.java)
+                        intent.putExtra("id", item.baseID)
+                        startActivity(intent)
                     }
                     false
                 }
