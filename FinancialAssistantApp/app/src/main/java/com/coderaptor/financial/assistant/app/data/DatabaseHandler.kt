@@ -10,6 +10,7 @@ import com.coderaptor.financial.assistant.app.core.Dream.Companion.CREATE_TABLE_
 import com.coderaptor.financial.assistant.app.core.ProductProperty.Companion.CREATE_TABLE_PRODUCT_PROPERTY
 import com.coderaptor.financial.assistant.app.core.Transaction.Companion.CREATE_TABLE_TRANSACTION
 import com.coderaptor.financial.assistant.app.features.limit.getCurrentDay
+import com.coderaptor.financial.assistant.app.util.SharedPreference
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
@@ -34,11 +35,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         //RECEIPT
         db.execSQL(Receipt.CREATE_TABLE_RECEIPT)
         Log.i("db", "Create Receipt table done!")
-        //SMS
-        db.execSQL(CREATE_TABLE_SMS)
-        Log.i("db", "Create SMS table done!")
-        db.execSQL("INSERT INTO $TABLE_NAME_SMS($BASE_ID, $BASE_AMOUNT) VALUES (0, 0)")
-        Log.i("db", "insert to $TABLE_NAME_SMS complete")
         //Limit
         db.execSQL(CREATE_TABLE_LIMIT)
         Log.i("db", "Create LIMIT table done!")
@@ -62,6 +58,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 if (it.amount < 0) {
                     limitReduction(it.amount)
                 }
+                if (SharedPreference.firstRun) {
+                    SharedPreference.balance += it.amount
+                }
             }
             is ProductProperty -> {
                 id = db.insert(TABLE_NAME_PRODUCT_PROPERTY, null, insertValuesProductProperty(it))
@@ -81,6 +80,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             is Receipt -> {
                 id = db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
                 limitReduction(-it.amount)
+                if (SharedPreference.firstRun) {
+                    SharedPreference.balance += it.amount
+                }
             }
         }
         db.close()
@@ -114,15 +116,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
             }
         }
-        db.close()
-    }
-
-    fun insertSms(idAndAmount: Pair<Long, Int>) {
-        val db = this.writableDatabase
-        val values = ContentValues()
-        values.put(BASE_ID, idAndAmount.first)
-        values.put(BASE_AMOUNT, idAndAmount.second)
-        db.replace(TABLE_NAME_SMS, null, values)
         db.close()
     }
 
@@ -309,36 +302,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     fun changeShoppingBought(element: ShoppingList) {
         val db = writableDatabase
         db.execSQL("UPDATE $TABLE_NAME_SHOPPING SET $BOUGHT='${element.isBought}' WHERE id=${element.id}")
-    }
-
-    fun findMaxSMS(): Long {
-        val db = readableDatabase
-        val selectMaxQuery = "SELECT MAX(id) FROM $TABLE_NAME_SMS"
-        val cursor = db.rawQuery(selectMaxQuery, null)
-        var id = 0.toLong()
-        with(cursor) {
-            while (moveToNext()) {
-                id = cursor.getLong(0)
-            }
-        }
-        cursor.close()
-        db.close()
-        return id
-    }
-
-    fun getSmsAmount(): Int {
-        val db = readableDatabase
-        val selectMaxQuery = "SELECT $BASE_AMOUNT FROM $TABLE_NAME_SMS"
-        val cursor = db.rawQuery(selectMaxQuery, null)
-        var amount = 0
-        with(cursor) {
-            while (moveToNext()) {
-                amount = cursor.getInt(0)
-            }
-        }
-        cursor.close()
-        db.close()
-        return amount
     }
 
     fun insertLimit(amount: Int, day: Int) {
@@ -709,11 +672,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         const val TABLE_NAME_SHOPPING = "shopping_list"
         const val PRODUCT_ID_SHOPPING = "product_id"
         const val BOUGHT = "bought"
-
-        const val TABLE_NAME_SMS = "sms"
-        const val CREATE_TABLE_SMS = "CREATE TABLE IF NOT EXISTS ${DatabaseHandler.TABLE_NAME_SMS} " +
-                "(${DatabaseHandler.BASE_ID} INTEGER PRIMARY KEY," +
-                "${DatabaseHandler.BASE_AMOUNT} INTEGER)"
 
         //limit
         const val TABLE_NAME_LIMIT = "day_limit"

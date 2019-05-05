@@ -11,6 +11,8 @@ object SharedPreference {
     private val SHOPPING_MONITOR = "monitor" to false
     private val ESTIMATE = "estimate" to false
     private val CURRENT_DATE = "cdate" to ""
+    private val CURRENT_SMS_ID = "sms" to 0.toLong()
+    private val BALANCE = "balance" to 0
 
     fun init(context: Context) {
         sharedPref = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -53,15 +55,24 @@ object SharedPreference {
                 it.putString(CURRENT_DATE.first, value)
             }
         }
-    fun save(KEY_NAME: String, status: Boolean) {
-        val editor: SharedPreferences.Editor = sharedPref.edit()
-        editor.putBoolean(KEY_NAME, status)
-        editor.apply()
-    }
 
-    fun getValueBoolean(KEY_NAME: String): Boolean {
-        return sharedPref.getBoolean(KEY_NAME, false)
-    }
+    var smsId: Long
+        get() = sharedPref.getLong(CURRENT_SMS_ID.first, CURRENT_SMS_ID.second)
+        set(value) = sharedPref.edit {
+            if (value > CURRENT_SMS_ID.second) {
+                it.putLong(CURRENT_SMS_ID.first, value)
+            }
+        }
+
+    var balance: Int
+        get() = sharedPref.getInt(BALANCE.first, BALANCE.second)
+        set(value) = sharedPref.edit {
+            if (value >= 0) {
+                it.putInt(BALANCE.first, value)
+            }else {
+                it.putInt(BALANCE.first, 0)
+            }
+        }
 
     fun clearSharedPreference() {
         val editor: SharedPreferences.Editor = sharedPref.edit()
