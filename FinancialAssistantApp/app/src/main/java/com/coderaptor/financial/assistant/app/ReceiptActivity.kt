@@ -251,4 +251,8 @@ class ReceiptActivity: AppCompatActivity() {
             }
         }
     }
+    override fun onStop() {
+        super.onStop()
+        dbHandler.close()
+    }
 }

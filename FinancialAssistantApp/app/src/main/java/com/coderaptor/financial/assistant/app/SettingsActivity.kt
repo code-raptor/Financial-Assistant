@@ -37,6 +37,7 @@ class SettingsActivity : AppCompatActivity() {
         SharedPreference.saving = sporolas.isChecked
         SharedPreference.shoppingMonitor = bevasarlas.isChecked
         SharedPreference.estimate = joslas.isChecked
+        dbHandler.close()
     }
 }
 
