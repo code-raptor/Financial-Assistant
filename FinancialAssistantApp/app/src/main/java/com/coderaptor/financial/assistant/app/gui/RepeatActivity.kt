@@ -3,13 +3,9 @@ package com.coderaptor.financial.assistant.app.gui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.recyclical.datasource.DataSource
-import com.afollestad.recyclical.datasource.dataSourceOf
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.swipe.SwipeLocation
 import com.afollestad.recyclical.swipe.withSwipeAction
@@ -19,13 +15,8 @@ import com.coderaptor.financial.assistant.app.R
 import com.coderaptor.financial.assistant.app.adapters.TransactionViewHolder
 import com.coderaptor.financial.assistant.app.core.Transaction
 import com.coderaptor.financial.assistant.app.data.DatabaseHandler
-import com.coderaptor.financial.assistant.app.util.fieldsEmpty
-import com.coderaptor.financial.assistant.app.util.formatDate
-import com.coderaptor.financial.assistant.app.util.openCalendar
-import com.coderaptor.financial.assistant.app.util.toast
+import com.coderaptor.financial.assistant.app.gui.dialogs.openRepeatDialog
 import kotlinx.android.synthetic.main.activity_repeats.*
-import kotlinx.android.synthetic.main.dialog_add_repeat.*
-import kotlinx.android.synthetic.main.dialog_add_repeat.view.*
 
 class RepeatActivity : AppCompatActivity() {
 
@@ -42,50 +33,10 @@ class RepeatActivity : AppCompatActivity() {
         }
 
         val list = dbHandler.findAllTransaction("${DatabaseHandler.FREQUENCY_TRANSACTION} != 'Egyszeri'")
-        val dataSource: DataSource<Any> = dataSourceOf(list)
+        val dataSource: DataSource<Any> = dataSourceTypedOf(list)
 
         savefab.setOnClickListener{
-            MaterialDialog(this).show {
-                setTheme(R.style.AppTheme)
-                title(R.string.newRepeatTransaction)
-                customView(R.layout.dialog_add_repeat, scrollable = true)
-
-                val datefield = getCustomView().dateField
-                datefield.isClickable = true
-                datefield.text = Editable.Factory.getInstance().newEditable(java.util.Calendar.getInstance().formatDate())
-                datefield.setOnClickListener {
-                    openCalendar(it.dateField)
-                }
-
-                positiveButton(R.string.save) { dialog ->
-                    val result = fieldsEmpty(amountField.text)
-
-                    if(result) {
-                        var amount = dialog.getCustomView().amountField.text.toString().toInt()
-                        if (kiadas.isChecked) amount = amountField.text.toString().toInt() * -1
-                        val date = dialog.getCustomView().dateField.text.toString()
-                        val category = dialog.getCustomView().categoryField.selectedItem.toString()
-                        val frequency = dialog.getCustomView().frequencyField.selectedItem.toString()
-                        val comment = descriptField.text.toString()
-                        var transaction = Transaction(amount, date, category, frequency)
-                        if (comment.isNotEmpty()) {
-                            transaction = Transaction(amount, date, category, comment, frequency)
-                        }
-
-                        dbHandler.insert(transaction)
-                        dataSource.add(transaction)
-                        toast("Sikeres hozzáadás!")
-                        if (dbHandler.getCurrentLimit() < 0) {
-                            //toast("Napi limit meghaladva!")
-                        }
-                    }
-                    else{
-                        toast("Hiányzó adat!")
-                    }
-                }
-                negativeButton(R.string.cancel)
-            }
-
+            openRepeatDialog(dataSource, dbHandler)
         }
 
         recyclerView.setup {
@@ -108,9 +59,8 @@ class RepeatActivity : AppCompatActivity() {
                 text(R.string.edit)
                 color(R.color.edit)
                 callback { index, item ->
-                    //toast("edit $index: ${item}")
                     if (item is Transaction) {
-                        //edit layout
+                        openRepeatDialog(dataSource, dbHandler, item)
                     }
                     false
                 }
@@ -120,7 +70,9 @@ class RepeatActivity : AppCompatActivity() {
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->
                     name.text = item.name
-
+                    if(item.comment.isNotEmpty()) {
+                        name.text = item.comment
+                    }
                     if (item.hasFrequency()) {
                         date.text = item.date + getString(R.string.tab) + item.frequency
                     }else {
