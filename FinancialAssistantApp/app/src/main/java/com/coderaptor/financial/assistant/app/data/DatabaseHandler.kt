@@ -79,7 +79,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             }
             is Receipt -> {
                 id = db.insert(TABLE_NAME_RECEIPT, null, insertValuesReceipt(it))
-                limitReduction(-it.amount)
+                limitReduction(it.amount)
                 if (SharedPreference.firstRun) {
                     SharedPreference.balance += it.amount
                 }
@@ -543,7 +543,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
             Log.i("testData", it.toString())
         }
 
-        var product = Product("alma", "db", 3, 120, categoryId = 4)
+        /*var product = Product("alma", "db", 3, 120, categoryId = 4)
         insert(product)
         product = Product("Alkohol", "Liter", 2, 1200, categoryId = 4)
         insert(product)
@@ -577,6 +577,21 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-22", categoryId = 4)
         insert(product)
         product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-21", categoryId = 4)
+        insert(product)*/
+
+        var product = Product("Sör", "Liter", 6, 250, receiptDate = "2019-04-10",categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-10", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-10", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-24", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "db", 3, 120, receiptDate = "2019-04-24", categoryId = 4)
+        insert(product)
+        product = Product("alma", "db", 3, 120, receiptDate = "2019-04-30", categoryId = 4)
+        insert(product)
+        product = Product("kenyer", "kg", 1, 150, receiptDate = "2019-04-30", categoryId = 4)
         insert(product)
 
         Log.i("testData", "Product: ")
@@ -586,31 +601,62 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         var transaction = Transaction(1000, "2019-04-25", "Zsebpénz")
         insert(transaction)
+        transaction = Transaction(100000, "2019-03-10", "Fizetés", frequency = "Havonta")
+        insert(transaction)
         transaction = Transaction(1000, "2019-04-16", "Bor", "Elfogyott :(")
         insert(transaction)
         transaction = Transaction(100000, "2019-04-10", "Fizetés", frequency = "Havonta")
         insert(transaction)
         transaction = Transaction(-2000, "2019-04-11", "Gyerektartás", frequency = "Heti")
         insert(transaction)
-        transaction = Transaction(1030, "2019-04-15", "Gáz", frequency = "Havonta")
+        transaction = Transaction(-1030, "2019-04-15", "Gáz", frequency = "Havonta")
+        insert(transaction)
+        transaction = Transaction(100000, "2019-04-10", "Fizetés","CBA", "Havonta")
+        insert(transaction)
+        transaction = Transaction(-2000, "2019-03-11", "Gyerektartás", frequency = "Heti")
+        insert(transaction)
+        transaction = Transaction(-1030, "2019-03-15", "Gáz", frequency = "Havonta")
         insert(transaction)
         transaction = Transaction(1500, "2019-04-15", "Kutya kaja", frequency = "Heti")
         insert(transaction)
+        transaction = Transaction(15000, "2019-05-02", "Kutya kozm", frequency = "Heti")
+        insert(transaction)
+        transaction = Transaction(1000, "2019-04-25", "Zsebpénz")
+        insert(transaction)
+        transaction = Transaction( 1000, "2019-01-30,","Bor", "", "Heti")
+        insert(transaction)
+
         Log.i("testData", "Transaction: ")
         findAllTransaction().forEach {
             Log.i("testData", it.toString())
         }
 
-        var receipt = Receipt(1, "2019-05-03", 13000, "Ikea", 1)
+        /*var receipt = Receipt(1, "2019-05-03", 13000, "Ikea", 1)
         insert(receipt)
         receipt = Receipt(1, "2019-05-03", 13000, "Ikea", 2)
         insert(receipt)
         receipt = Receipt(2, "2019-05-02", 5000, "asd", 3)
+        insert(receipt)*/
+        /*var receipt = Receipt(9, "2019-04-01", 4000, "Ikea", 32)
+        insert(receipt)
+        receipt = Receipt(10, "2019-04-10", 5000, "Ikea", 33)
+        insert(receipt)
+        receipt = Receipt(10, "2019-04-10", 5000, "Ikea", 34)
+        insert(receipt)
+        receipt = Receipt(10, "2019-04-10", 5000, "Ikea", 35)
+        insert(receipt)
+        receipt = Receipt(11, "2019-04-24", 1200, "Spar", 36)
+        insert(receipt)
+        receipt = Receipt(11, "2019-04-24", 1200, "Spar", 37)
+        insert(receipt)
+        receipt = Receipt(12, "2019-04-30", 720, "Spar", 38)
+        insert(receipt)
+        receipt = Receipt(12, "2019-04-30", 720, "Spar", 39)
         insert(receipt)
         Log.i("testData", "Receipt: ")
         findAllReceipt().forEach {
             Log.i("testData", it.toString())
-        }
+        }*/
 
         var shoppingList = ShoppingList("kenyér", 2, "Db", true, 2)
         insert(shoppingList)

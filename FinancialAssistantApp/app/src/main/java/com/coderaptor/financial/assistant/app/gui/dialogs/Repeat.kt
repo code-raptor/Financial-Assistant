@@ -70,7 +70,7 @@ fun Activity.openRepeatDialog(dataSource: DataSource<Any>, dbHandler: DatabaseHa
                 val category = dialog.getCustomView().categoryField.selectedItem.toString()
                 val frequency = dialog.getCustomView().frequencyField.selectedItem.toString()
                 val comment = descriptField.text.toString()
-                var transaction = Transaction(amount, date, category, frequency)
+                var transaction = Transaction(amount, date, category, frequency = frequency)
                 if (comment.isNotEmpty()) {
                     transaction = Transaction(amount, date, category, comment, frequency)
                 }
@@ -85,7 +85,7 @@ fun Activity.openRepeatDialog(dataSource: DataSource<Any>, dbHandler: DatabaseHa
                     dbHandler.updateTransaction(transaction, editData.id)
                     dataSource.add(transaction)
                 }
-                toast("Sikeres hozzáadás!")
+                //toast("Sikeres hozzáadás!")
             }else {
                 toast("Hiányzó adat!")
             }

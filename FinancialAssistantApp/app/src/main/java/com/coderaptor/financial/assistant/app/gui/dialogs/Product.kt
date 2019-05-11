@@ -109,7 +109,7 @@ fun Activity.openProductDialog(dataSource: DataSource<Product>, dbHandler: Datab
                     dataSource.remove(editData)
                     dataSource.add(product)
                 }
-                toast("Sikeres hozzáadás")
+                //toast("Sikeres hozzáadás")
             } else {
                 toast("Hiányzó adat!")
             }

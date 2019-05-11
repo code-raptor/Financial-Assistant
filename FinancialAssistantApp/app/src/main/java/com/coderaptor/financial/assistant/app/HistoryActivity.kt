@@ -107,6 +107,9 @@ class HistoryActivity : AppCompatActivity() {
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->
                     name.text = item.name
+                    if(item.comment.isNotEmpty()) {
+                        name.text = item.comment
+                    }
 
                     if (item.hasFrequency()) {
                         date.text = item.date + getString(R.string.tab) + item.frequency
@@ -130,6 +133,9 @@ class HistoryActivity : AppCompatActivity() {
             withItem<Receipt>(R.layout.list_receipt) {
                 onBind(::ReceiptViewHolder) { _, item ->
                     name.text = getString(R.string.receipt_string)
+                    if(item.comment.isNotEmpty()) {
+                        name.text = "NYUGTA: ${item.comment}"
+                    }
                     date.text = item.date
                     amount.setTextColor(resources.getColor(R.color.amount_minus, null))
                     amount.text = "-${item.amount}"
