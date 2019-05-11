@@ -113,11 +113,14 @@ class ReceiptActivity: AppCompatActivity() {
                                         receipt = Receipt(bundleReceipt.baseID, date, amount, comment, id)
                                     }
                                     dbHandler.insert(receipt)
+                                    if (dbHandler.getCurrentLimit() < 0) {
+                                        toast("Napi limit meghaladva!")
+                                    }
                                 }
                             }
                         }
                     }
-                    toast("sikeres hozzáadás")
+                    //toast("sikeres hozzáadás")
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 } else {

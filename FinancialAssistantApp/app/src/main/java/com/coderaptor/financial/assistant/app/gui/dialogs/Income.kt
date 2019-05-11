@@ -65,16 +65,16 @@ fun Activity.openOnceTransactionDialog(dataSource: DataSource<Any>, dbHandler: D
                 }
                 if (editData == null) {
                     dbHandler.insert(transaction)
-                    dataSource.add(transaction)
                     if (dbHandler.getCurrentLimit() < 0) {
                         toast("Napi limit összeg meghaladva")
                     }
+                    dataSource.add(transaction)
                 }else {
                     dataSource.remove(editData)
                     dbHandler.updateTransaction(transaction, editData.id)
                     dataSource.add(transaction)
                 }
-                toast("sikeres hozzáadás")
+                //toast("sikeres hozzáadás")
             } else {
                 toast("Hiányzó adat!")
             }

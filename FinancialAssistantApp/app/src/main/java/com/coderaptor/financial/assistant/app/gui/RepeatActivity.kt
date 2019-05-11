@@ -70,7 +70,9 @@ class RepeatActivity : AppCompatActivity() {
             withItem<Transaction>(R.layout.list_income) {
                 onBind(::TransactionViewHolder) { _, item ->
                     name.text = item.name
-
+                    if(item.comment.isNotEmpty()) {
+                        name.text = item.comment
+                    }
                     if (item.hasFrequency()) {
                         date.text = item.date + getString(R.string.tab) + item.frequency
                     }else {
